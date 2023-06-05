@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A426A182A2E845900EE9F46 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A426A172A2E845900EE9F46 /* main.cpp */; };
+		5A426A182A2E845900EE9F46 /* mimosa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A426A172A2E845900EE9F46 /* mimosa.cpp */; };
+		5A426A242A2E84EF00EE9F46 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
+		5A426A2A2A2E856200EE9F46 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
+		5A426A2C2A2E857500EE9F46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +27,10 @@
 
 /* Begin PBXFileReference section */
 		5A426A142A2E845900EE9F46 /* Mimosa */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Mimosa; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A426A172A2E845900EE9F46 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5A426A172A2E845900EE9F46 /* mimosa.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mimosa.cpp; sourceTree = "<group>"; };
+		5A426A1F2A2E84EF00EE9F46 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		5A426A292A2E856200EE9F46 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5A426A2B2A2E857500EE9F46 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +38,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A426A2C2A2E857500EE9F46 /* Foundation.framework in Frameworks */,
+				5A426A2A2A2E856200EE9F46 /* QuartzCore.framework in Frameworks */,
+				5A426A242A2E84EF00EE9F46 /* Metal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +52,7 @@
 			children = (
 				5A426A162A2E845900EE9F46 /* Mimosa */,
 				5A426A152A2E845900EE9F46 /* Products */,
+				5A426A1E2A2E84EF00EE9F46 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,9 +67,19 @@
 		5A426A162A2E845900EE9F46 /* Mimosa */ = {
 			isa = PBXGroup;
 			children = (
-				5A426A172A2E845900EE9F46 /* main.cpp */,
+				5A426A172A2E845900EE9F46 /* mimosa.cpp */,
 			);
 			path = Mimosa;
+			sourceTree = "<group>";
+		};
+		5A426A1E2A2E84EF00EE9F46 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5A426A2B2A2E857500EE9F46 /* Foundation.framework */,
+				5A426A292A2E856200EE9F46 /* QuartzCore.framework */,
+				5A426A1F2A2E84EF00EE9F46 /* Metal.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A426A182A2E845900EE9F46 /* main.cpp in Sources */,
+				5A426A182A2E845900EE9F46 /* mimosa.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,6 +196,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/quinton/Documents/Mimosa/Mimosa;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -228,6 +249,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /Users/quinton/Documents/Mimosa/Mimosa;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -241,6 +263,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/Mimosa/metal-cpp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -251,6 +274,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/Mimosa/metal-cpp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
