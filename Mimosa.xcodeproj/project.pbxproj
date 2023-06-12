@@ -7,14 +7,43 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A087F492A3508C100BDCA99 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
+		5A087F622A350CB300BDCA99 /* helloMetal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */; };
+		5A087F632A350E1300BDCA99 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
+		5A087F642A350E2000BDCA99 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
+		5A087F652A350E2600BDCA99 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
 		5A426A182A2E845900EE9F46 /* mimosa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A426A172A2E845900EE9F46 /* mimosa.cpp */; };
 		5A426A242A2E84EF00EE9F46 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A426A2A2A2E856200EE9F46 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
 		5A426A2C2A2E857500EE9F46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
+		5A43D6F92A37AB5B0048C4B4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A43D6F82A37AB5B0048C4B4 /* main.cpp */; };
+		5A43D6FD2A37ABC60048C4B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
+		5A43D6FE2A37ABCD0048C4B4 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
+		5A43D6FF2A37ABCD0048C4B4 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
+		5A43D7032A37B1CE0048C4B4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
+		5A43D7082A37BB860048C4B4 /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A43D7042A37B4210048C4B4 /* shader.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		5A087F592A350CA000BDCA99 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		5A426A122A2E845900EE9F46 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		5A43D6F42A37AB5A0048C4B4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -26,31 +55,79 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5A087F482A3508C100BDCA99 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helloMetal.cpp; sourceTree = "<group>"; };
+		5A087F5B2A350CA000BDCA99 /* helloMetal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloMetal; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A426A142A2E845900EE9F46 /* Mimosa */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Mimosa; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A426A172A2E845900EE9F46 /* mimosa.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mimosa.cpp; sourceTree = "<group>"; };
 		5A426A1F2A2E84EF00EE9F46 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		5A426A292A2E856200EE9F46 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5A426A2B2A2E857500EE9F46 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5A43D6F62A37AB5A0048C4B4 /* helloRayTracing */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloRayTracing; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A43D6F82A37AB5B0048C4B4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5A43D7002A37AE140048C4B4 /* renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = renderer.cpp; sourceTree = "<group>"; };
+		5A43D7012A37AE140048C4B4 /* renderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = renderer.hpp; sourceTree = "<group>"; };
+		5A43D7042A37B4210048C4B4 /* shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shader.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5A087F582A350CA000BDCA99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A087F632A350E1300BDCA99 /* Metal.framework in Frameworks */,
+				5A087F642A350E2000BDCA99 /* Foundation.framework in Frameworks */,
+				5A087F652A350E2600BDCA99 /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5A426A112A2E845900EE9F46 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				5A426A2C2A2E857500EE9F46 /* Foundation.framework in Frameworks */,
+				5A087F492A3508C100BDCA99 /* MetalKit.framework in Frameworks */,
 				5A426A2A2A2E856200EE9F46 /* QuartzCore.framework in Frameworks */,
 				5A426A242A2E84EF00EE9F46 /* Metal.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A43D6F32A37AB5A0048C4B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A43D7032A37B1CE0048C4B4 /* QuartzCore.framework in Frameworks */,
+				5A43D6FF2A37ABCD0048C4B4 /* MetalKit.framework in Frameworks */,
+				5A43D6FE2A37ABCD0048C4B4 /* Metal.framework in Frameworks */,
+				5A43D6FD2A37ABC60048C4B4 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A087F4A2A350A6E00BDCA99 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				5A43D6F72A37AB5B0048C4B4 /* helloRayTracing */,
+				5A087F5C2A350CA000BDCA99 /* helloMetal */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		5A087F5C2A350CA000BDCA99 /* helloMetal */ = {
+			isa = PBXGroup;
+			children = (
+				5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */,
+			);
+			path = helloMetal;
+			sourceTree = "<group>";
+		};
 		5A426A0B2A2E845900EE9F46 = {
 			isa = PBXGroup;
 			children = (
 				5A426A162A2E845900EE9F46 /* Mimosa */,
+				5A087F4A2A350A6E00BDCA99 /* Tests */,
 				5A426A152A2E845900EE9F46 /* Products */,
 				5A426A1E2A2E84EF00EE9F46 /* Frameworks */,
 			);
@@ -60,6 +137,8 @@
 			isa = PBXGroup;
 			children = (
 				5A426A142A2E845900EE9F46 /* Mimosa */,
+				5A087F5B2A350CA000BDCA99 /* helloMetal */,
+				5A43D6F62A37AB5A0048C4B4 /* helloRayTracing */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -75,6 +154,7 @@
 		5A426A1E2A2E84EF00EE9F46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A087F482A3508C100BDCA99 /* MetalKit.framework */,
 				5A426A2B2A2E857500EE9F46 /* Foundation.framework */,
 				5A426A292A2E856200EE9F46 /* QuartzCore.framework */,
 				5A426A1F2A2E84EF00EE9F46 /* Metal.framework */,
@@ -82,9 +162,37 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5A43D6F72A37AB5B0048C4B4 /* helloRayTracing */ = {
+			isa = PBXGroup;
+			children = (
+				5A43D6F82A37AB5B0048C4B4 /* main.cpp */,
+				5A43D7002A37AE140048C4B4 /* renderer.cpp */,
+				5A43D7012A37AE140048C4B4 /* renderer.hpp */,
+				5A43D7042A37B4210048C4B4 /* shader.metal */,
+			);
+			path = helloRayTracing;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5A087F5A2A350CA000BDCA99 /* helloMetal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A087F5F2A350CA000BDCA99 /* Build configuration list for PBXNativeTarget "helloMetal" */;
+			buildPhases = (
+				5A087F572A350CA000BDCA99 /* Sources */,
+				5A087F582A350CA000BDCA99 /* Frameworks */,
+				5A087F592A350CA000BDCA99 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = helloMetal;
+			productName = helloMetal;
+			productReference = 5A087F5B2A350CA000BDCA99 /* helloMetal */;
+			productType = "com.apple.product-type.tool";
+		};
 		5A426A132A2E845900EE9F46 /* Mimosa */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A426A1B2A2E845900EE9F46 /* Build configuration list for PBXNativeTarget "Mimosa" */;
@@ -102,6 +210,23 @@
 			productReference = 5A426A142A2E845900EE9F46 /* Mimosa */;
 			productType = "com.apple.product-type.tool";
 		};
+		5A43D6F52A37AB5A0048C4B4 /* helloRayTracing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A43D6FC2A37AB5B0048C4B4 /* Build configuration list for PBXNativeTarget "helloRayTracing" */;
+			buildPhases = (
+				5A43D6F22A37AB5A0048C4B4 /* Sources */,
+				5A43D6F32A37AB5A0048C4B4 /* Frameworks */,
+				5A43D6F42A37AB5A0048C4B4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = helloRayTracing;
+			productName = helloRayTracing;
+			productReference = 5A43D6F62A37AB5A0048C4B4 /* helloRayTracing */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -111,7 +236,13 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					5A087F5A2A350CA000BDCA99 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					5A426A132A2E845900EE9F46 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+					5A43D6F52A37AB5A0048C4B4 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
 				};
@@ -130,11 +261,21 @@
 			projectRoot = "";
 			targets = (
 				5A426A132A2E845900EE9F46 /* Mimosa */,
+				5A087F5A2A350CA000BDCA99 /* helloMetal */,
+				5A43D6F52A37AB5A0048C4B4 /* helloRayTracing */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5A087F572A350CA000BDCA99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A087F622A350CB300BDCA99 /* helloMetal.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5A426A102A2E845900EE9F46 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -143,9 +284,40 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5A43D6F22A37AB5A0048C4B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A43D7082A37BB860048C4B4 /* shader.metal in Sources */,
+				5A43D6F92A37AB5B0048C4B4 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		5A087F602A350CA000BDCA99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/metal-cpp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5A087F612A350CA000BDCA99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/metal-cpp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		5A426A192A2E845900EE9F46 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -263,7 +435,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/Mimosa/metal-cpp";
+				HEADER_SEARCH_PATHS = (
+					"/Users/quinton/Documents/Mimosa/metal-cpp",
+					"/Users/quinton/Documents/Mimosa/metal-cpp-extensions",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -274,7 +449,38 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/Mimosa/metal-cpp";
+				HEADER_SEARCH_PATHS = (
+					"/Users/quinton/Documents/Mimosa/metal-cpp",
+					"/Users/quinton/Documents/Mimosa/metal-cpp-extensions",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		5A43D6FA2A37AB5B0048C4B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = (
+					"/Users/quinton/Documents/Mimosa/metal-cpp",
+					"/Users/quinton/Documents/Mimosa/metal-cpp-extensions",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5A43D6FB2A37AB5B0048C4B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = (
+					"/Users/quinton/Documents/Mimosa/metal-cpp",
+					"/Users/quinton/Documents/Mimosa/metal-cpp-extensions",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -282,6 +488,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5A087F5F2A350CA000BDCA99 /* Build configuration list for PBXNativeTarget "helloMetal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A087F602A350CA000BDCA99 /* Debug */,
+				5A087F612A350CA000BDCA99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5A426A0F2A2E845900EE9F46 /* Build configuration list for PBXProject "Mimosa" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -296,6 +511,15 @@
 			buildConfigurations = (
 				5A426A1C2A2E845900EE9F46 /* Debug */,
 				5A426A1D2A2E845900EE9F46 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A43D6FC2A37AB5B0048C4B4 /* Build configuration list for PBXNativeTarget "helloRayTracing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A43D6FA2A37AB5B0048C4B4 /* Debug */,
+				5A43D6FB2A37AB5B0048C4B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

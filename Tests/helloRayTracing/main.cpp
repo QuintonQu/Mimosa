@@ -1,34 +1,13 @@
 //
 //  main.cpp
-//  Mimosa
+//  helloRayTracing
 //
-//  Created by Ziyuan Qu on 2023/6/5.
+//  Created by Ziyuan Qu on 2023/6/12.
 //
 
-#include <cassert>
-
-#define NS_PRIVATE_IMPLEMENTATION
-#define MTL_PRIVATE_IMPLEMENTATION
-#define MTK_PRIVATE_IMPLEMENTATION
-#define CA_PRIVATE_IMPLEMENTATION
-#include <Metal/Metal.hpp>
-#include <AppKit/AppKit.hpp>
-#include <MetalKit/MetalKit.hpp>
-
+#include "renderer.cpp"
 
 #pragma region Declarations {
-
-class Renderer
-{
-    public:
-        Renderer( MTL::Device* pDevice );
-        ~Renderer();
-        void draw( MTK::View* pView );
-
-    private:
-        MTL::Device* _pDevice;
-        MTL::CommandQueue* _pCommandQueue;
-};
 
 class MyMTKViewDelegate : public MTK::ViewDelegate
 {
@@ -153,13 +132,13 @@ void MyAppDelegate::applicationDidFinishLaunching( NS::Notification* pNotificati
 
     _pMtkView = MTK::View::alloc()->init( frame, _pDevice );
     _pMtkView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB );
-    _pMtkView->setClearColor( MTL::ClearColor::Make( 1.0, 1.0, 1.0, 1.0 ) );
+    _pMtkView->setClearColor( MTL::ClearColor::Make( 1.0, 0.0, 0.0, 1.0 ) );
 
     _pViewDelegate = new MyMTKViewDelegate( _pDevice );
     _pMtkView->setDelegate( _pViewDelegate );
 
     _pWindow->setContentView( _pMtkView );
-    _pWindow->setTitle( NS::String::string( "00 - Window", NS::StringEncoding::UTF8StringEncoding ) );
+    _pWindow->setTitle( NS::String::string( "01 - Primitive", NS::StringEncoding::UTF8StringEncoding ) );
 
     _pWindow->makeKeyAndOrderFront( nullptr );
 
@@ -197,33 +176,3 @@ void MyMTKViewDelegate::drawInMTKView( MTK::View* pView )
 #pragma endregion ViewDelegate }
 
 
-#pragma mark - Renderer
-#pragma region Renderer {
-
-Renderer::Renderer( MTL::Device* pDevice )
-: _pDevice( pDevice->retain() )
-{
-    _pCommandQueue = _pDevice->newCommandQueue();
-}
-
-Renderer::~Renderer()
-{
-    _pCommandQueue->release();
-    _pDevice->release();
-}
-
-void Renderer::draw( MTK::View* pView )
-{
-    NS::AutoreleasePool* pPool = NS::AutoreleasePool::alloc()->init();
-
-    MTL::CommandBuffer* pCmd = _pCommandQueue->commandBuffer();
-    MTL::RenderPassDescriptor* pRpd = pView->currentRenderPassDescriptor();
-    MTL::RenderCommandEncoder* pEnc = pCmd->renderCommandEncoder( pRpd );
-    pEnc->endEncoding();
-    pCmd->presentDrawable( pView->currentDrawable() );
-    pCmd->commit();
-
-    pPool->release();
-}
-
-#pragma endregion Renderer }
