@@ -12,6 +12,7 @@
 		5A087F632A350E1300BDCA99 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A087F642A350E2000BDCA99 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A087F652A350E2600BDCA99 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
+		5A15433B2A38F33D00A1D990 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1543382A38F26200A1D990 /* scene.cpp */; };
 		5A426A182A2E845900EE9F46 /* mimosa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A426A172A2E845900EE9F46 /* mimosa.cpp */; };
 		5A426A242A2E84EF00EE9F46 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A426A2A2A2E856200EE9F46 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
@@ -58,6 +59,8 @@
 		5A087F482A3508C100BDCA99 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helloMetal.cpp; sourceTree = "<group>"; };
 		5A087F5B2A350CA000BDCA99 /* helloMetal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloMetal; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A1543382A38F26200A1D990 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
+		5A1543392A38F26200A1D990 /* scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scene.hpp; sourceTree = "<group>"; };
 		5A426A142A2E845900EE9F46 /* Mimosa */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Mimosa; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A426A172A2E845900EE9F46 /* mimosa.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mimosa.cpp; sourceTree = "<group>"; };
 		5A426A1F2A2E84EF00EE9F46 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
@@ -169,6 +172,8 @@
 				5A43D7002A37AE140048C4B4 /* renderer.cpp */,
 				5A43D7012A37AE140048C4B4 /* renderer.hpp */,
 				5A43D7042A37B4210048C4B4 /* shader.metal */,
+				5A1543382A38F26200A1D990 /* scene.cpp */,
+				5A1543392A38F26200A1D990 /* scene.hpp */,
 			);
 			path = helloRayTracing;
 			sourceTree = "<group>";
@@ -288,6 +293,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A15433B2A38F33D00A1D990 /* scene.cpp in Sources */,
 				5A43D7082A37BB860048C4B4 /* shader.metal in Sources */,
 				5A43D6F92A37AB5B0048C4B4 /* main.cpp in Sources */,
 			);

@@ -29,15 +29,15 @@ void Renderer::buildShaders()
     using NS::StringEncoding::UTF8StringEncoding;
 
     NS::Error* pError = nullptr;
-    MTL::Library* pLibrary = _pDevice->newDefaultLibrary();
-    if ( !pLibrary )
+    _pLibrary = _pDevice->newDefaultLibrary();
+    if ( !_pLibrary )
     {
         __builtin_printf( "%s", pError->localizedDescription()->utf8String() );
         assert( false );
     }
 
-    MTL::Function* pVertexFn = pLibrary->newFunction( NS::String::string("vertexMain", UTF8StringEncoding) );
-    MTL::Function* pFragFn = pLibrary->newFunction( NS::String::string("fragmentMain", UTF8StringEncoding) );
+    MTL::Function* pVertexFn = _pLibrary->newFunction( NS::String::string("vertexMain", UTF8StringEncoding) );
+    MTL::Function* pFragFn = _pLibrary->newFunction( NS::String::string("fragmentMain", UTF8StringEncoding) );
 
     MTL::RenderPipelineDescriptor* pDesc = MTL::RenderPipelineDescriptor::alloc()->init();
     pDesc->setVertexFunction( pVertexFn );
@@ -54,7 +54,7 @@ void Renderer::buildShaders()
     pVertexFn->release();
     pFragFn->release();
     pDesc->release();
-    pLibrary->release();
+    _pLibrary->release();
 }
 
 void Renderer::buildBuffers()
