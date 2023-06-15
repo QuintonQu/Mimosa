@@ -7,35 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A087F492A3508C100BDCA99 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
 		5A087F622A350CB300BDCA99 /* helloMetal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */; };
 		5A087F632A350E1300BDCA99 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A087F642A350E2000BDCA99 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A087F652A350E2600BDCA99 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
 		5A15433B2A38F33D00A1D990 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1543382A38F26200A1D990 /* scene.cpp */; };
-		5A426A182A2E845900EE9F46 /* mimosa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A426A172A2E845900EE9F46 /* mimosa.cpp */; };
-		5A426A242A2E84EF00EE9F46 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
-		5A426A2A2A2E856200EE9F46 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
-		5A426A2C2A2E857500EE9F46 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A43D6F92A37AB5B0048C4B4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A43D6F82A37AB5B0048C4B4 /* main.cpp */; };
 		5A43D6FD2A37ABC60048C4B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A43D6FE2A37ABCD0048C4B4 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A43D6FF2A37ABCD0048C4B4 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
 		5A43D7032A37B1CE0048C4B4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
 		5A43D7082A37BB860048C4B4 /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A43D7042A37B4210048C4B4 /* shader.metal */; };
+		5A61A28C2A3B8E0D00D9DA5B /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */; };
+		5A61A28D2A3B8E0D00D9DA5B /* Transforms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FF2A3B85D400D9DA5B /* Transforms.mm */; };
+		5A61A28E2A3B8E0D00D9DA5B /* Scene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2002A3B85D400D9DA5B /* Scene.mm */; };
+		5A61A28F2A3B8E0D00D9DA5B /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2022A3B85D400D9DA5B /* Renderer.mm */; };
+		5A61A2902A3B8E2C00D9DA5B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */; };
+		5A61A2912A3B8E2C00D9DA5B /* mimosa.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2162A3B8A7E00D9DA5B /* mimosa.m */; };
+		5A61A2922A3B8E2C00D9DA5B /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
+		5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */; };
+		5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A2102A3B85FD00D9DA5B /* Main.storyboard */; };
+		5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		5A087F592A350CA000BDCA99 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-		5A426A122A2E845900EE9F46 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -61,8 +57,6 @@
 		5A087F5B2A350CA000BDCA99 /* helloMetal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloMetal; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A1543382A38F26200A1D990 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
 		5A1543392A38F26200A1D990 /* scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scene.hpp; sourceTree = "<group>"; };
-		5A426A142A2E845900EE9F46 /* Mimosa */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Mimosa; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A426A172A2E845900EE9F46 /* mimosa.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mimosa.cpp; sourceTree = "<group>"; };
 		5A426A1F2A2E84EF00EE9F46 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		5A426A292A2E856200EE9F46 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5A426A2B2A2E857500EE9F46 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -71,6 +65,26 @@
 		5A43D7002A37AE140048C4B4 /* renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = renderer.cpp; sourceTree = "<group>"; };
 		5A43D7012A37AE140048C4B4 /* renderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = renderer.hpp; sourceTree = "<group>"; };
 		5A43D7042A37B4210048C4B4 /* shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shader.metal; sourceTree = "<group>"; };
+		5A61A1FC2A3B85D400D9DA5B /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		5A61A1FE2A3B85D400D9DA5B /* ShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		5A61A1FF2A3B85D400D9DA5B /* Transforms.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Transforms.mm; sourceTree = "<group>"; };
+		5A61A2002A3B85D400D9DA5B /* Scene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Scene.mm; sourceTree = "<group>"; };
+		5A61A2012A3B85D400D9DA5B /* Transforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transforms.h; sourceTree = "<group>"; };
+		5A61A2022A3B85D400D9DA5B /* Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Renderer.mm; sourceTree = "<group>"; };
+		5A61A2032A3B85D400D9DA5B /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		5A61A20B2A3B85FD00D9DA5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5A61A20D2A3B85FD00D9DA5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5A61A20E2A3B85FD00D9DA5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A61A2112A3B85FD00D9DA5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5A61A2122A3B85FD00D9DA5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A61A2152A3B8A7E00D9DA5B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		5A61A2162A3B8A7E00D9DA5B /* mimosa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mimosa.m; sourceTree = "<group>"; };
+		5A61A2172A3B8A7E00D9DA5B /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,17 +98,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5A426A112A2E845900EE9F46 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5A426A2C2A2E857500EE9F46 /* Foundation.framework in Frameworks */,
-				5A087F492A3508C100BDCA99 /* MetalKit.framework in Frameworks */,
-				5A426A2A2A2E856200EE9F46 /* QuartzCore.framework in Frameworks */,
-				5A426A242A2E84EF00EE9F46 /* Metal.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5A43D6F32A37AB5A0048C4B4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -103,6 +106,14 @@
 				5A43D6FF2A37ABCD0048C4B4 /* MetalKit.framework in Frameworks */,
 				5A43D6FE2A37ABCD0048C4B4 /* Metal.framework in Frameworks */,
 				5A43D6FD2A37ABC60048C4B4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A61A2762A3B8DBC00D9DA5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +140,7 @@
 		5A426A0B2A2E845900EE9F46 = {
 			isa = PBXGroup;
 			children = (
+				5A61A1FB2A3B85D400D9DA5B /* Renderer */,
 				5A426A162A2E845900EE9F46 /* Mimosa */,
 				5A087F4A2A350A6E00BDCA99 /* Tests */,
 				5A426A152A2E845900EE9F46 /* Products */,
@@ -139,9 +151,9 @@
 		5A426A152A2E845900EE9F46 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A426A142A2E845900EE9F46 /* Mimosa */,
 				5A087F5B2A350CA000BDCA99 /* helloMetal */,
 				5A43D6F62A37AB5A0048C4B4 /* helloRayTracing */,
+				5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -149,7 +161,14 @@
 		5A426A162A2E845900EE9F46 /* Mimosa */ = {
 			isa = PBXGroup;
 			children = (
-				5A426A172A2E845900EE9F46 /* mimosa.cpp */,
+				5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */,
+				5A61A2152A3B8A7E00D9DA5B /* AppDelegate.h */,
+				5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */,
+				5A61A2162A3B8A7E00D9DA5B /* mimosa.m */,
+				5A61A2172A3B8A7E00D9DA5B /* ViewController.h */,
+				5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */,
+				5A61A2092A3B85FD00D9DA5B /* iOS */,
+				5A61A20F2A3B85FD00D9DA5B /* macOS */,
 			);
 			path = Mimosa;
 			sourceTree = "<group>";
@@ -178,6 +197,40 @@
 			path = helloRayTracing;
 			sourceTree = "<group>";
 		};
+		5A61A1FB2A3B85D400D9DA5B /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				5A61A1FC2A3B85D400D9DA5B /* Renderer.h */,
+				5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */,
+				5A61A1FE2A3B85D400D9DA5B /* ShaderTypes.h */,
+				5A61A1FF2A3B85D400D9DA5B /* Transforms.mm */,
+				5A61A2002A3B85D400D9DA5B /* Scene.mm */,
+				5A61A2012A3B85D400D9DA5B /* Transforms.h */,
+				5A61A2022A3B85D400D9DA5B /* Renderer.mm */,
+				5A61A2032A3B85D400D9DA5B /* Scene.h */,
+			);
+			path = Renderer;
+			sourceTree = "<group>";
+		};
+		5A61A2092A3B85FD00D9DA5B /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5A61A20A2A3B85FD00D9DA5B /* LaunchScreen.storyboard */,
+				5A61A20C2A3B85FD00D9DA5B /* Main.storyboard */,
+				5A61A20E2A3B85FD00D9DA5B /* Info.plist */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		5A61A20F2A3B85FD00D9DA5B /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				5A61A2102A3B85FD00D9DA5B /* Main.storyboard */,
+				5A61A2122A3B85FD00D9DA5B /* Info.plist */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -198,23 +251,6 @@
 			productReference = 5A087F5B2A350CA000BDCA99 /* helloMetal */;
 			productType = "com.apple.product-type.tool";
 		};
-		5A426A132A2E845900EE9F46 /* Mimosa */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5A426A1B2A2E845900EE9F46 /* Build configuration list for PBXNativeTarget "Mimosa" */;
-			buildPhases = (
-				5A426A102A2E845900EE9F46 /* Sources */,
-				5A426A112A2E845900EE9F46 /* Frameworks */,
-				5A426A122A2E845900EE9F46 /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Mimosa;
-			productName = Mimosa;
-			productReference = 5A426A142A2E845900EE9F46 /* Mimosa */;
-			productType = "com.apple.product-type.tool";
-		};
 		5A43D6F52A37AB5A0048C4B4 /* helloRayTracing */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5A43D6FC2A37AB5B0048C4B4 /* Build configuration list for PBXNativeTarget "helloRayTracing" */;
@@ -232,6 +268,23 @@
 			productReference = 5A43D6F62A37AB5A0048C4B4 /* helloRayTracing */;
 			productType = "com.apple.product-type.tool";
 		};
+		5A61A2782A3B8DBC00D9DA5B /* Mimosa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A61A2892A3B8DBE00D9DA5B /* Build configuration list for PBXNativeTarget "Mimosa" */;
+			buildPhases = (
+				5A61A2752A3B8DBC00D9DA5B /* Sources */,
+				5A61A2762A3B8DBC00D9DA5B /* Frameworks */,
+				5A61A2772A3B8DBC00D9DA5B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mimosa;
+			productName = Mimosa;
+			productReference = 5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -239,15 +292,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					5A087F5A2A350CA000BDCA99 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
-					5A426A132A2E845900EE9F46 = {
+					5A43D6F52A37AB5A0048C4B4 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
-					5A43D6F52A37AB5A0048C4B4 = {
+					5A61A2782A3B8DBC00D9DA5B = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
 				};
@@ -265,12 +319,24 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5A426A132A2E845900EE9F46 /* Mimosa */,
 				5A087F5A2A350CA000BDCA99 /* helloMetal */,
 				5A43D6F52A37AB5A0048C4B4 /* helloRayTracing */,
+				5A61A2782A3B8DBC00D9DA5B /* Mimosa */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5A61A2772A3B8DBC00D9DA5B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */,
+				5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5A087F572A350CA000BDCA99 /* Sources */ = {
@@ -278,14 +344,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A087F622A350CB300BDCA99 /* helloMetal.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5A426A102A2E845900EE9F46 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5A426A182A2E845900EE9F46 /* mimosa.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +357,48 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5A61A2752A3B8DBC00D9DA5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A61A2902A3B8E2C00D9DA5B /* AppDelegate.m in Sources */,
+				5A61A2912A3B8E2C00D9DA5B /* mimosa.m in Sources */,
+				5A61A2922A3B8E2C00D9DA5B /* ViewController.mm in Sources */,
+				5A61A28C2A3B8E0D00D9DA5B /* Shaders.metal in Sources */,
+				5A61A28D2A3B8E0D00D9DA5B /* Transforms.mm in Sources */,
+				5A61A28E2A3B8E0D00D9DA5B /* Scene.mm in Sources */,
+				5A61A28F2A3B8E0D00D9DA5B /* Renderer.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		5A61A20A2A3B85FD00D9DA5B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A61A20B2A3B85FD00D9DA5B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		5A61A20C2A3B85FD00D9DA5B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A61A20D2A3B85FD00D9DA5B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5A61A2102A3B85FD00D9DA5B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5A61A2112A3B85FD00D9DA5B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5A087F602A350CA000BDCA99 /* Debug */ = {
@@ -435,34 +534,6 @@
 			};
 			name = Release;
 		};
-		5A426A1C2A2E845900EE9F46 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CAB432FF98;
-				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = (
-					"/Users/quinton/Documents/Mimosa/metal-cpp",
-					"/Users/quinton/Documents/Mimosa/metal-cpp-extensions",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		5A426A1D2A2E845900EE9F46 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CAB432FF98;
-				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = (
-					"/Users/quinton/Documents/Mimosa/metal-cpp",
-					"/Users/quinton/Documents/Mimosa/metal-cpp-extensions",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		5A43D6FA2A37AB5B0048C4B4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -491,6 +562,70 @@
 			};
 			name = Release;
 		};
+		5A61A28A2A3B8DBE00D9DA5B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Mimosa/Mimosa.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"SUPPORTS_METAL_3=1",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
+				PRODUCT_BUNDLE_IDENTIFIER = Q.Mimosa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		5A61A28B2A3B8DBE00D9DA5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Mimosa/Mimosa.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
+				PRODUCT_BUNDLE_IDENTIFIER = Q.Mimosa;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -512,20 +647,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5A426A1B2A2E845900EE9F46 /* Build configuration list for PBXNativeTarget "Mimosa" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5A426A1C2A2E845900EE9F46 /* Debug */,
-				5A426A1D2A2E845900EE9F46 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		5A43D6FC2A37AB5B0048C4B4 /* Build configuration list for PBXNativeTarget "helloRayTracing" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5A43D6FA2A37AB5B0048C4B4 /* Debug */,
 				5A43D6FB2A37AB5B0048C4B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A61A2892A3B8DBE00D9DA5B /* Build configuration list for PBXNativeTarget "Mimosa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A61A28A2A3B8DBE00D9DA5B /* Debug */,
+				5A61A28B2A3B8DBE00D9DA5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

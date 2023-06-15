@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "F3BFE7C9-7886-43B3-BC5F-2D06D997A5CD"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "48370D8B-C988-4496-A437-BE95DD85F7B0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Renderer/Shaders.metal"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "404"
+            endingLineNumber = "404"
+            landmarkName = "raytracingKernel( uint2 tid [[thread_position_in_grid]], constant Uniforms &amp; uniforms [[buffer(0)]], texture2d&lt;unsigned int&gt; randomTex [[texture(0)]], texture2d&lt;float&gt; prevTex [[texture(1)]], texture2d&lt;float, access::write&gt; dstTex [[texture(2)]], // device void *resources [[buffer(1), function_constant(useResourcesBuffer)]], constant MTLAccelerationStructureInstanceDescriptor *instances [[buffer(2)]], constant AreaLight *areaLights [[buffer(3)]], instance_acceleration_structure accelerationStructure [[buffer(4)]], intersection_function_table&lt;triangle_data, instancing&gt; intersectionFunctionTable [[buffer(5)]] )"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

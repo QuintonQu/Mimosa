@@ -170,13 +170,7 @@ void Renderer::createAccelerationStructure(){
     MTL::InstanceAccelerationStructureDescriptor* accel_descriptor = MTL::InstanceAccelerationStructureDescriptor::descriptor();
     
     NS::Array* ns_array = NS::Array::alloc();
-    for(NS::UInteger i = 0; i < _primitiveAccelerationStructures->size(); i++){
-        MTL::AccelerationStructure* mtlas= _primitiveAccelerationStructures->at(i);
-//        NS::Value* value = NS::Value::alloc()->init(mtlas, "MTL::AccelerationStructure*");
-        NS::Array* tmp_ns_array = NS::Array::array(_primitiveAccelerationStructures);
-        ns_array->object(i)->
-    }
-    NS::Array::alloc()->init(_primitiveAccelerationStructures->data(), _primitiveAccelerationStructures->size());
+//    NS::Array::alloc()->init(_primitiveAccelerationStructures->data(), _primitiveAccelerationStructures->size());
     accel_descriptor->setInstancedAccelerationStructures(ns_array);
     accel_descriptor->setInstanceCount(_scene->instances->size());
     accel_descriptor->setInstanceDescriptorBuffer(_instanceBuffer);

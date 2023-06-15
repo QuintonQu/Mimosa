@@ -94,7 +94,7 @@ float halton(unsigned int i, unsigned int d) {
 
 #pragma region RandomFunc }
 
-
+#pragma mark GenerateRay
 #pragma region GenerateRay {
 
 ray generate_ray(uint2 tid [[thread_position_in_grid]], constant Uniforms &uniforms [[buffer(0)]], texture2d<unsigned int> randomTex [[texture(0)]]) {
