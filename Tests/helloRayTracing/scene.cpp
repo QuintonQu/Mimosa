@@ -72,6 +72,14 @@ NS::String* SphereGeometry::intersectionFunctionName(){
     return NS::String::string( "sphereIntersectionFunction ", NS::UTF8StringEncoding );
 }
 
+void SphereGeometry::addSphereWithOrigin(simd::float3 origin, float radius, simd::float3 color){
+    Sphere sphere;
+    sphere.origin = origin;
+    sphere.color = color;
+    sphere.radius = radius;
+    this->spheres.push_back(sphere);
+}
+
 #pragma endregion SphereGeometry }
 
 #pragma mark - GeometryInstance
@@ -121,14 +129,14 @@ void Scene::uploadToBuffers(){
 #pragma endregion Scene }
 
 #pragma mark - New Scene
-static Scene* newScene(MTL::Device* device){
-    Scene* scene = Scene::alloc()->init(device);
+Scene* Scene::newScene(MTL::Device* device){
+    Scene* scene = Scene::alloc<Scene>("Scene")->init(device);
     scene->camera.position = {0.0f, 1.0f, -10.0f};
     scene->camera.look_at = {0.0f, 1.0f, 0.0f};
     scene->camera.up = {0.0f, 1.0f, 0.0f};
     
     // Add a sphere.
-    SphereGeometry* sphere = SphereGeometry::alloc()->init(device);
+    SphereGeometry* sphere = SphereGeometry::alloc<SphereGeometry>("SphereGeometry")->init(device);
     sphere->addSphereWithOrigin({0.0f, 1.0f, 10.0f}, 2.0f, {0.725f, 0.71f, 0.68f});
     scene->addGeometry(sphere);
     

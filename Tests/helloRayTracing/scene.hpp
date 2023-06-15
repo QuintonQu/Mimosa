@@ -33,9 +33,6 @@ struct Sphere {
 
 class Geometry : public NS::Object {
 public:
-    // Initializer.
-    static Geometry* alloc();
-    
     Geometry* init(MTL::Device* device);
 
     // Upload the primitives to Metal buffers so the GPU can access them.
@@ -54,7 +51,7 @@ public:
 
     // Name of the intersection function to use for this geometry, or empty
     // for triangles.
-    NS::String* intersectionFunctionName(){return NULL;};
+    static NS::String* intersectionFunctionName(){return NULL;};
     
     // Metal device used to create the acceleration structures.
     MTL::Device* device;
@@ -63,14 +60,12 @@ public:
 class SphereGeometry : public Geometry {
 public:
     void addSphereWithOrigin(simd::float3 origin, float radius, simd::float3 color);
-    
-    static SphereGeometry* alloc();
     SphereGeometry* init(MTL::Device* device);
     void uploadToBuffers();
     void clear();
     MTL::AccelerationStructureGeometryDescriptor* geometryDescriptor();
     NS::Array* resources();
-    NS::String* intersectionFunctionName();
+    static NS::String* intersectionFunctionName();
     
     std::vector<Sphere> spheres;
     MTL::Buffer* sphere_buffer;
@@ -87,8 +82,6 @@ public:
 
 class Scene : public NS::Object {
 public:
-    static Scene* alloc();
-    
     Scene* init(MTL::Device* device);
 
     // Add a piece of geometry to the scene.
@@ -106,6 +99,7 @@ public:
     // Upload all scene data to Metal buffers so the GPU can access the data.
     void uploadToBuffers();
     
+    static Scene* newScene(MTL::Device* device);
     
     MTL::Device* device;
     std::vector<Geometry*>* geometries;
@@ -113,9 +107,6 @@ public:
     MTL::Buffer light_buffer;
     int light_count;
     Camera camera;
-    
 };
-
-static Scene* newScene(MTL::Device* device);
 
 #endif /* scene_hpp */

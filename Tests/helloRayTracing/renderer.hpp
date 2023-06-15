@@ -27,6 +27,13 @@ public:
     void buildShaders();
     void buildBuffers();
     void draw( MTK::View* pView );
+    void loadMetal();
+    MTL::ComputePipelineState* newComputePipelineStateWithFunction(const MTL::Function* function, NS::Array* linkedFunctions);
+    // MTL::Function* specializedFunctionWithName(NS::String name);
+    void createPipelines();
+    void createBuffers();
+    MTL::AccelerationStructure* newAccelerationStructureWithDescriptor(MTL::AccelerationStructureDescriptor* descriptor);
+    void createAccelerationStructure();
 
 private:
     MTL::Device* _pDevice;
