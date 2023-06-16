@@ -55,16 +55,27 @@ struct Uniforms {
     Camera camera;
 };
 
+struct Material {
+    vector_float3 color;
+    bool is_metal = false;
+    bool is_glass = false;
+//    float metallic;
+//    float roughness;
+};
+
 struct Sphere {
     packed_float3 origin;
     float radiusSquared;
     packed_float3 color;
     float radius;
+    Material material;
 };
 
 struct Triangle {
     vector_float3 normals[3];
     vector_float3 colors[3];
+    Material material;
 };
+
 
 #endif

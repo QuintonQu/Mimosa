@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "48370D8B-C988-4496-A437-BE95DD85F7B0"
-            shouldBeEnabled = "No"
+            uuid = "CBDC044E-37EF-4F02-9D80-922751DD4E7A"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Renderer/Shaders.metal"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "404"
-            endingLineNumber = "404"
-            landmarkName = "raytracingKernel( uint2 tid [[thread_position_in_grid]], constant Uniforms &amp; uniforms [[buffer(0)]], texture2d&lt;unsigned int&gt; randomTex [[texture(0)]], texture2d&lt;float&gt; prevTex [[texture(1)]], texture2d&lt;float, access::write&gt; dstTex [[texture(2)]], // device void *resources [[buffer(1), function_constant(useResourcesBuffer)]], constant MTLAccelerationStructureInstanceDescriptor *instances [[buffer(2)]], constant AreaLight *areaLights [[buffer(3)]], instance_acceleration_structure accelerationStructure [[buffer(4)]], intersection_function_table&lt;triangle_data, instancing&gt; intersectionFunctionTable [[buffer(5)]] )"
+            startingLineNumber = "332"
+            endingLineNumber = "332"
+            landmarkName = "sphereIntersectionFunction(// Ray parameters passed to the ray intersector below float3 origin [[origin]], float3 direction [[direction]], float minDistance [[min_distance]], float maxDistance [[max_distance]], // Information about the primitive. unsigned int primitiveIndex [[primitive_id]], unsigned int geometryIndex [[geometry_intersection_function_table_offset]], // Custom resources bound to the intersection function table. // device void *resources [[buffer(0), function_constant(useResourcesBuffer)]] //#if SUPPORTS_METAL_3 const device void* perPrimitiveData [[primitive_data]] //#endif )"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

@@ -29,6 +29,8 @@ struct BoundingBox {
 
 MTLResourceOptions getManagedBufferStorageMode();
 
+#pragma mark - Geometry
+
 // Represents a piece of geometry in a scene, The sample composes Geometry objects
 // from primitives such as triangles or spheres. Each geometry object has its
 // own primitive acceleration structure and, optionally, an intersection function.
@@ -62,6 +64,8 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 @end
 
+#pragma mark - Specific Geometry
+
 // Represents a piece of geometry made of triangles.
 @interface TriangleGeometry : Geometry
 
@@ -69,7 +73,8 @@ MTLResourceOptions getManagedBufferStorageMode();
 - (void)addCubeWithFaces:(unsigned int)faceMask
                    color:(vector_float3)color
                transform:(matrix_float4x4)transform
-           inwardNormals:(bool)inwardNormals;
+           inwardNormals:(bool)inwardNormals
+                material:(Material)material;
 
 @end
 
@@ -78,9 +83,12 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 - (void)addSphereWithOrigin:(vector_float3)origin
                      radius:(float)radius
-                      color:(vector_float3)color;
+                      color:(vector_float3)color
+                   material:(Material)material;
 
 @end
+
+#pragma mark - GeometryInstance
 
 // Represents an instance, or copy, of a piece of geometry in a scene.
 // Each instance has its own transformation matrix that determines
@@ -98,12 +106,19 @@ MTLResourceOptions getManagedBufferStorageMode();
 // types of geometry.
 @property (nonatomic, readonly) unsigned int mask;
 
+// Pointer to the material type of geometry instance
+@property (nonatomic, readonly) Material* material;
+
 // Initializer.
 - (instancetype)initWithGeometry:(Geometry *)geometry
                        transform:(matrix_float4x4)transform
                             mask:(unsigned int)mask;
 
 @end
+
+#pragma mark - Material
+
+#pragma mark - Scene
 
 // Represents an entire scene, including different types of geometry,
 // instances of that geometry, lights, and a camera.
@@ -138,6 +153,10 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 // Create scene with instances of a Cornell box. Each box can optionally
 // contain a sphere primitive that uses an intersection function.
++ (Scene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
+                                useIntersectionFunctions:(BOOL)useIntersectionFunctions;
+
+// Create one Cornell box for test.
 + (Scene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions;
 

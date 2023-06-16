@@ -114,6 +114,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
                                  i2:(uint16_t)i2
                                  i3:(uint16_t)i3
                       inwardNormals:(bool)inwardNormals
+                           material:(Material)material
 {
     const float3 v0 = cubeVertices[i0];
     const float3 v1 = cubeVertices[i1];
@@ -160,6 +161,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
             triangle.normals[i] = _normals[index];
             triangle.colors[i] = _colors[index];
         }
+        triangle.material = material;
         _triangles.push_back(triangle);
     }
 }
@@ -168,6 +170,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
                    color:(vector_float3)color
                transform:(matrix_float4x4)transform
            inwardNormals:(bool)inwardNormals
+                material:(Material)material
 {
     float3 cubeVertices[] = {
         vector3(-0.5f, -0.5f, -0.5f),
@@ -206,7 +209,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
                                            i1:cubeIndices[face][1]
                                            i2:cubeIndices[face][2]
                                            i3:cubeIndices[face][3]
-                                inwardNormals:inwardNormals];
+                                inwardNormals:inwardNormals
+                                     material:(Material)material];
         }
     }
 }
@@ -295,6 +299,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 - (void)addSphereWithOrigin:(vector_float3)origin
                      radius:(float)radius
                       color:(vector_float3)color
+                    material:(Material)material
 {
     Sphere sphere;
 
@@ -302,6 +307,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     sphere.radiusSquared = radius * radius;
     sphere.color = color;
     sphere.radius = radius;
+    sphere.material = material;
 
     _spheres.push_back(sphere);
 }
@@ -424,7 +430,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 #endif
 }
 
-+ (Scene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
++ (Scene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions
 {
     Scene *scene = [[Scene alloc] initWithDevice:device];
@@ -433,6 +439,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     scene.cameraPosition = vector3(0.0f, 1.0f, 10.0f);
     scene.cameraTarget = vector3(0.0f, 1.0f, 0.0f);
     scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    
+    // Add a default material
+    Material* default_material = new Material();
+    default_material->color = vector3(0.8f, 0.8f, 0.8f);
 
     // Create a piece of triangle geometry for the light source.
     TriangleGeometry *lightMesh = [[TriangleGeometry alloc] initWithDevice:device];
@@ -445,7 +455,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     [lightMesh addCubeWithFaces:FACE_MASK_POSITIVE_Y
                           color:vector3(1.0f, 1.0f, 1.0f)
                       transform:transform
-                  inwardNormals:true];
+                  inwardNormals:true
+                    material:*default_material];
 
     // Create a piece of triangle geometry for the Cornell box.
     TriangleGeometry *geometryMesh = [[TriangleGeometry alloc] initWithDevice:device];
@@ -458,19 +469,22 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_Y | FACE_MASK_POSITIVE_Y | FACE_MASK_NEGATIVE_Z
                              color:vector3(0.725f, 0.71f, 0.68f)
                          transform:transform
-                     inwardNormals:true];
+                     inwardNormals:true
+                          material:*default_material];
 
     // Add the left wall.
     [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_X
                              color:vector3(0.63f, 0.065f, 0.05f)
                          transform:transform
-                     inwardNormals:true];
+                     inwardNormals:true
+                          material:*default_material];
 
     // Add the right wall.
     [geometryMesh addCubeWithFaces:FACE_MASK_POSITIVE_X
                              color:vector3(0.14f, 0.45f, 0.091f)
                          transform:transform
-                     inwardNormals:true];
+                     inwardNormals:true
+                          material:*default_material];
 
     transform = matrix4x4_translation(-0.335f, 0.6f, -0.29f) *
                 matrix4x4_rotation(0.3f, vector3(0.0f, 1.0f, 0.0f)) *
@@ -480,7 +494,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     [geometryMesh addCubeWithFaces:FACE_MASK_ALL
                              color:vector3(0.725f, 0.71f, 0.68f)
                          transform:transform
-                     inwardNormals:false];
+                     inwardNormals:false
+                          material:*default_material];
 
     SphereGeometry *sphereGeometry = nil;
 
@@ -493,7 +508,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
         [geometryMesh addCubeWithFaces:FACE_MASK_ALL
                                  color:vector3(0.725f, 0.71f, 0.68f)
                              transform:transform
-                         inwardNormals:false];
+                         inwardNormals:false
+                              material:*default_material];
     }
     else {
         // Otherwise, create a piece of sphere geometry.
@@ -503,7 +519,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
         [sphereGeometry addSphereWithOrigin:vector3(0.3275f, 0.3f, 0.3725f)
                                      radius:0.3f
-                                      color:vector3(0.725f, 0.71f, 0.68f)];
+                                      color:vector3(0.725f, 0.71f, 0.68f)
+                                   material:*default_material];
     }
 
     // Create nine instances of the scene.
@@ -547,6 +564,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
             float b = (float)rand() / (float)RAND_MAX;
 
             light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
+            light.color = vector3(1.0f, 1.0f, 1.0f);
 
             [scene addLight:light];
         }
@@ -555,4 +573,165 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
++ (Scene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
+                        useIntersectionFunctions:(BOOL)useIntersectionFunctions
+{
+    Scene *scene = [[Scene alloc] initWithDevice:device];
+
+    // Set up the camera.
+    scene.cameraPosition = vector3(0.0f, 1.0f, 3.5f);
+    scene.cameraTarget = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    
+    // Add a default material
+    Material* default_material = new Material();
+    default_material->color = vector3(0.8f, 0.8f, 0.8f);
+    
+    // Add multiple materials
+    Material* left_wall_material = new Material();
+    Material* right_wall_material = new Material();
+    Material* tall_box_material = new Material();
+    Material* sphere_material = new Material();
+    Material* back_wall_material  = new Material();
+    
+    left_wall_material->color = vector3(0.63f, 0.065f, 0.05f);
+    right_wall_material->color = vector3(0.14f, 0.45f, 0.091f);
+    tall_box_material->color = vector3(1.0f, 1.0f, 1.0f);
+    tall_box_material->is_metal = true;
+    sphere_material->color = vector3(1.0f, 1.0f, 1.0f);
+    sphere_material->is_glass = true;
+    back_wall_material->color = vector3(0.4f, 0.3f, 0.68f);
+
+    // Create a piece of triangle geometry for the light source.
+    TriangleGeometry *lightMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:lightMesh];
+
+    matrix_float4x4 transform = matrix4x4_translation(0.0f, 1.0f, 0.0f) * matrix4x4_scale(0.5f, 1.98f, 0.5f);
+
+    // Add the light source.
+    [lightMesh addCubeWithFaces:FACE_MASK_POSITIVE_Y
+                          color:vector3(1.0f, 1.0f, 1.0f)
+                      transform:transform
+                  inwardNormals:true
+                    material:*default_material];
+
+    // Create a piece of triangle geometry for the Cornell box.
+    TriangleGeometry *geometryMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:geometryMesh];
+
+    transform = matrix4x4_translation(0.0f, 1.0f, 0.0f) * matrix4x4_scale(2.0f, 2.0f, 2.0f);
+
+    // Add the top, bottom walls.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_Y | FACE_MASK_POSITIVE_Y
+                             color:vector3(0.725f, 0.71f, 0.68f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*default_material];
+    
+    // Add the back wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_Z
+                             color:vector3(0.725f, 0.71f, 0.68f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*back_wall_material];
+
+    // Add the left wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_X
+                             color:vector3(0.63f, 0.065f, 0.05f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*left_wall_material];
+
+    // Add the right wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_POSITIVE_X
+                             color:vector3(0.14f, 0.45f, 0.091f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*right_wall_material];
+
+    transform = matrix4x4_translation(-0.335f, 0.6f, -0.29f) *
+                matrix4x4_rotation(0.3f, vector3(0.0f, 1.0f, 0.0f)) *
+                matrix4x4_scale(0.6f, 1.2f, 0.6f);
+
+    // Add the tall box.
+    [geometryMesh addCubeWithFaces:FACE_MASK_ALL
+                             color:vector3(0.725f, 0.71f, 0.68f)
+                         transform:transform
+                     inwardNormals:false
+                          material:*tall_box_material];
+
+    SphereGeometry *sphereGeometry = nil;
+
+    if (!useIntersectionFunctions) {
+//        transform = matrix4x4_translation(0.3275f, 0.3f, 0.3725f) *
+//                    matrix4x4_rotation(-0.3f, vector3(0.0f, 1.0f, 0.0f)) *
+//                    matrix4x4_scale(0.6f, 0.6f, 0.6f);
+//
+//        // If the sample isn't using intersection functions, add the short box.
+//        [geometryMesh addCubeWithFaces:FACE_MASK_ALL
+//                                 color:vector3(0.725f, 0.71f, 0.68f)
+//                             transform:transform
+//                         inwardNormals:false
+//                              material:*sphere_material];
+    }
+    else {
+        // Otherwise, create a piece of sphere geometry.
+        sphereGeometry = [[SphereGeometry alloc] initWithDevice:device];
+
+        [scene addGeometry:sphereGeometry];
+
+        [sphereGeometry addSphereWithOrigin:vector3(0.3275f, 0.3f, 0.3725f)
+                                     radius:0.3f
+                                      color:vector3(0.725f, 0.71f, 0.68f)
+                                   material:*sphere_material];
+    }
+
+    transform = matrix4x4_translation(0.0f, 0.0f, 0.0f);
+
+    // Create an instance of the light.
+    GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
+                                                                           transform:transform
+                                                                                mask:GEOMETRY_MASK_LIGHT];
+
+    [scene addInstance:lightMeshInstance];
+
+    // Create an instance of the Cornell box.
+    GeometryInstance *geometryMeshInstance = [[GeometryInstance alloc] initWithGeometry:geometryMesh
+                                                                              transform:transform
+                                                                                   mask:GEOMETRY_MASK_TRIANGLE];
+
+    [scene addInstance:geometryMeshInstance];
+
+    // Create an instance of the sphere.
+    if (useIntersectionFunctions) {
+        GeometryInstance *sphereGeometryInstance = [[GeometryInstance alloc] initWithGeometry:sphereGeometry
+                                                                                    transform:transform
+                                                                                         mask:GEOMETRY_MASK_SPHERE];
+
+        [scene addInstance:sphereGeometryInstance];
+    }
+
+    // Add a light for each box.
+    AreaLight light;
+
+    light.position = vector3(0.0f, 1.98f, 0.0f);
+    light.forward = vector3(0.0f, -1.0f, 0.0f);
+    light.right = vector3(0.25f, 0.0f, 0.0f);
+    light.up = vector3(0.0f, 0.0f, 0.25f);
+
+//    float r = (float)rand() / (float)RAND_MAX;
+//    float g = (float)rand() / (float)RAND_MAX;
+//    float b = (float)rand() / (float)RAND_MAX;
+//
+//    light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
+    light.color = vector3(1.0f, 1.0f, 1.0f);
+
+    [scene addLight:light];
+
+    return scene;
+}
+
 @end
+
