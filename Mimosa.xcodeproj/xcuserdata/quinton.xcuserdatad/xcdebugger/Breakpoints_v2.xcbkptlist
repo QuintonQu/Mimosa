@@ -5,19 +5,15 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.RuntimeIssueBreakpoint">
          <BreakpointContent
-            uuid = "CBDC044E-37EF-4F02-9D80-922751DD4E7A"
+            uuid = "844D70E4-CEBC-4583-9FB6-12E2FC9A8514"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Renderer/Shaders.metal"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "332"
-            endingLineNumber = "332"
-            landmarkName = "sphereIntersectionFunction(// Ray parameters passed to the ray intersector below float3 origin [[origin]], float3 direction [[direction]], float minDistance [[min_distance]], float maxDistance [[max_distance]], // Information about the primitive. unsigned int primitiveIndex [[primitive_id]], unsigned int geometryIndex [[geometry_intersection_function_table_offset]], // Custom resources bound to the intersection function table. // device void *resources [[buffer(0), function_constant(useResourcesBuffer)]] //#if SUPPORTS_METAL_3 const device void* perPrimitiveData [[primitive_data]] //#endif )"
-            landmarkType = "9">
+            breakpointStackSelectionBehavior = "1"
+            type = "8"
+            categories = "Metal Diagnostics">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

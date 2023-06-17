@@ -439,6 +439,8 @@ kernel void raytracingKernel(
 //    }
 
     typename intersector<triangle_data, instancing>::result_type intersection;
+    
+    ScatterRecord scatter_record;
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
@@ -627,7 +629,6 @@ kernel void raytracingKernel(
         ray.origin = worldSpaceIntersectionPoint;
         
         // Deal with scattering.
-        ScatterRecord scatter_record;
         if(material.is_metal){
             scatter_record = metallicScatter(worldSpaceSurfaceNormal, ray.direction);
             if(scatter_record.accept){
