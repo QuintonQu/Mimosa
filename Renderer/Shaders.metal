@@ -163,6 +163,8 @@ struct BoundingBoxIntersection {
     float distance [[distance]];            // Distance from the ray origin to the intersection point.
 };
 
+# pragma mark - Materials' Scatter Methods
+
 // Return the type for Scatter Record for different material.
 struct ScatterRecord {
     bool accept;
@@ -220,7 +222,7 @@ inline float fresnel_dielectric(float cos_theta_i, float eta_i, float eta_t)
 inline ScatterRecord glossyScatter(float3 normal, float3 in_direction, float random_variable) {
     ScatterRecord scatter_record;
     
-    float ior = 1.4f;
+    float ior = 1.5f;
     float cosine = dot(normal, in_direction);
     float reflected = fresnel_dielectric(cosine, ior, 1.0f);
     if (cosine > 0.0f){
@@ -426,7 +428,7 @@ kernel void raytracingKernel(
 
     float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
     
-    float3 background_color = float3(0.1f, 0.1f, 0.1f);
+    float3 background_color = float3(0.0f, 0.0f, 0.0f);
 
     // Create an intersector to test for intersection between the ray and the geometry in the scene.
     intersector<triangle_data, instancing> i;
@@ -469,7 +471,10 @@ kernel void raytracingKernel(
 
         // If the ray hit a light source, set the color to white, and stop immediately.
         if (mask == GEOMETRY_MASK_LIGHT) {
-            accumulatedColor = float3(1.0f, 1.0f, 1.0f) * color * 10;
+            Triangle area_light;
+            area_light = *(const device Triangle*)intersection.primitive_data;
+            float3 light_color = area_light.material.color;
+            accumulatedColor = float3(1.0f, 1.0f, 1.0f) * color * light_color;
             break;
         }
 
@@ -623,9 +628,6 @@ kernel void raytracingKernel(
         r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
                    halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
         
-        float3 worldSpaceSampleDirection = sampleCosineWeightedHemisphere(r);
-        worldSpaceSampleDirection = alignHemisphereWithNormal(worldSpaceSampleDirection, worldSpaceSurfaceNormal);
-        
         ray.origin = worldSpaceIntersectionPoint;
         
         // Deal with scattering.
@@ -649,6 +651,8 @@ kernel void raytracingKernel(
             if(dot(worldSpaceSurfaceNormal, ray.direction) > 0){
                 worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
             }
+            float3 worldSpaceSampleDirection = sampleCosineWeightedHemisphere(r);
+            worldSpaceSampleDirection = alignHemisphereWithNormal(worldSpaceSampleDirection, worldSpaceSurfaceNormal);
             ray.direction = worldSpaceSampleDirection;
         }
 //        ray.direction = reflect(ray.direction, worldSpaceSurfaceNormal);

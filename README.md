@@ -8,8 +8,8 @@ This is an exercise project for writing ray tracing in Metal shader. The project
 ### Geometry
 - [ ] Obj file loader
 - [x] Sphere
-- [x] Triangle
-- [x] Cube with triangle
+- [x] (One side) Triangle
+- [x] (One side) Cube / Plane with triangle
 
 ### Material
 - [ ] Blinn-phong
@@ -34,6 +34,10 @@ This is an exercise project for writing ray tracing in Metal shader. The project
 - [ ] Multiple importance sampling
 - [ ] Volumetric rendering
 - [x] Naive Path tracer
+
+### Other Functions
+- [ ] Moving Camera
+- [ ] Human interaction
 
 ## References
 - [Accelerating ray tracing using Metal](https://developer.apple.com/documentation/metal/accelerating_ray_tracing_using_metal)

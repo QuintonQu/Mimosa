@@ -51,8 +51,10 @@ The implementation of the cross-platform view controller.
 #endif
     _view.colorPixelFormat = MTLPixelFormatRGBA16Float;
 
-    Scene *scene = [Scene newInstancedCornellBoxSceneWithDevice:_view.device
-                                       useIntersectionFunctions:YES];
+//    Scene *scene = [Scene newInstancedCornellBoxSceneWithDevice:_view.device
+//                                       useIntersectionFunctions:YES];
+    
+    Scene *scene = [Scene newTestScene:_view.device];
 
     _renderer = [[Renderer alloc] initWithDevice:_view.device
                                            scene:scene];

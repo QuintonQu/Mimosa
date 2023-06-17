@@ -76,6 +76,12 @@ MTLResourceOptions getManagedBufferStorageMode();
            inwardNormals:(bool)inwardNormals
                 material:(Material)material;
 
+// Add a XY-Plane
+- (void)addXYPlane:(matrix_float4x4)transform
+     inwardNormals:(bool)inwardNormals
+          material:(Material)material;
+            
+
 @end
 
 // Represents a piece of geometry made of spheres.
@@ -159,6 +165,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Create one Cornell box for test.
 + (Scene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions;
+
+// Create test scene from darts.
++ (Scene *)newTestScene:(id <MTLDevice>)device;
 
 // Add a piece of geometry to the scene.
 - (void)addGeometry:(Geometry *)mesh;
