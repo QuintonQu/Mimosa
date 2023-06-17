@@ -85,6 +85,7 @@
 		5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A84AFFA2A3DFD6E00100842 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +141,7 @@
 		5A426A0B2A2E845900EE9F46 = {
 			isa = PBXGroup;
 			children = (
+				5A84AFFA2A3DFD6E00100842 /* README.md */,
 				5A61A1FB2A3B85D400D9DA5B /* Renderer */,
 				5A426A162A2E845900EE9F46 /* Mimosa */,
 				5A087F4A2A350A6E00BDCA99 /* Tests */,
