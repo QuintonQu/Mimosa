@@ -564,7 +564,7 @@ kernel void raytracingKernel(
 
         // Choose a random light source to sample.
         float lightSample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 0);
-        unsigned int lightIndex = min((unsigned int)(lightSample * uniforms.lightCount), uniforms.lightCount - 1);
+//        unsigned int lightIndex = min((unsigned int)(lightSample * uniforms.lightCount), uniforms.lightCount - 1);
 
         // Choose a random point to sample on the light source.
         float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),

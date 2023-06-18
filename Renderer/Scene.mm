@@ -8,6 +8,10 @@ The implementation of the class that describes objects in a scene.
 #import "Scene.h"
 
 #import <vector>
+#import <set>
+#import <iostream>
+
+#import <ModelIO/ModelIO.h>
 
 using namespace simd;
 
@@ -66,7 +70,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     id <MTLBuffer> _vertexColorBuffer;
     id <MTLBuffer> _perPrimitiveDataBuffer;
 
-    std::vector<uint16_t> _indices;
+    std::vector<uint32_t> _indices;
     std::vector<vector_float3> _vertices;
     std::vector<vector_float3> _normals;
     std::vector<vector_float3> _colors;
@@ -78,7 +82,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
     id <MTLDevice> device = self.device;
 
-    _indexBuffer = [device newBufferWithLength:_indices.size() * sizeof(uint16_t) options:options];
+    _indexBuffer = [device newBufferWithLength:_indices.size() * sizeof(uint32_t) options:options];
     _vertexPositionBuffer = [device newBufferWithLength:_vertices.size() * sizeof(vector_float3) options:options];
     _vertexNormalBuffer = [device newBufferWithLength:_normals.size() * sizeof(vector_float3) options:options];
     _vertexColorBuffer = [device newBufferWithLength:_colors.size() * sizeof(vector_float3) options:options];
@@ -109,10 +113,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
 - (void)addCubeFaceWithCubeVertices:(float3 *)cubeVertices
                               color:(float3)color
-                                 i0:(uint16_t)i0
-                                 i1:(uint16_t)i1
-                                 i2:(uint16_t)i2
-                                 i3:(uint16_t)i3
+                                 i0:(uint32_t)i0
+                                 i1:(uint32_t)i1
+                                 i2:(uint32_t)i2
+                                 i3:(uint32_t)i3
                       inwardNormals:(bool)inwardNormals
                            material:(Material)material
 {
@@ -131,7 +135,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     
     const size_t firstIndex = _indices.size();
 
-    const uint16_t baseIndex = (uint16_t)_vertices.size();
+    const uint32_t baseIndex = (uint32_t)_vertices.size();
     _indices.push_back(baseIndex + 0);
     _indices.push_back(baseIndex + 1);
     _indices.push_back(baseIndex + 2);
@@ -152,12 +156,12 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     for (int i = 0; i < 4; i++)
         _colors.push_back(color);
 
-    for (size_t triangleIndex = 0; triangleIndex < 2; triangleIndex ++)
+    for (size_t triangleIndex = 0; triangleIndex < 2; triangleIndex++)
     {
         Triangle triangle;
         for (size_t i = 0; i < 3; i++)
         {
-            const uint16_t index = _indices[firstIndex + triangleIndex * 3 + i];
+            const uint32_t index = _indices[firstIndex + triangleIndex * 3 + i];
             triangle.normals[i] = _normals[index];
             triangle.colors[i] = _colors[index];
         }
@@ -186,7 +190,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     
     const size_t firstIndex = _indices.size();
 
-    const uint16_t baseIndex = (uint16_t)_vertices.size();
+    const uint32_t baseIndex = (uint32_t)_vertices.size();
     _indices.push_back(baseIndex + 0);
     _indices.push_back(baseIndex + 1);
     _indices.push_back(baseIndex + 2);
@@ -205,14 +209,14 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     _normals.push_back(n1);
 
     for (int i = 0; i < 4; i++)
-        _colors.push_back(vector3(20.0f, 20.0f, 20.0f));
+        _colors.push_back(vector3(0.0f, 0.0f, 0.0f));
 
     for (size_t triangleIndex = 0; triangleIndex < 2; triangleIndex ++)
     {
         Triangle triangle;
         for (size_t i = 0; i < 3; i++)
         {
-            const uint16_t index = _indices[firstIndex + triangleIndex * 3 + i];
+            const uint32_t index = _indices[firstIndex + triangleIndex * 3 + i];
             triangle.normals[i] = _normals[index];
             triangle.colors[i] = _colors[index];
         }
@@ -247,7 +251,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
         cubeVertices[i] = transformedVertex.xyz;
     }
 
-    uint16_t cubeIndices[][4] = {
+    uint32_t cubeIndices[][4] = {
         { 0, 4, 6, 2 },
         { 1, 3, 7, 5 },
         { 0, 1, 5, 4 },
@@ -270,6 +274,71 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     }
 }
 
+- (void)addGeometryWithURL:(NSURL *)URL
+                 transform:(matrix_float4x4)transform
+                  material:(Material)material
+{
+    MDLAsset *asset = [[MDLAsset alloc] initWithURL:URL];
+    
+    NSAssert(asset, @"Could not open %@", URL);
+    
+    MDLMesh *mesh = (MDLMesh *)asset[0];
+    
+    // Warning: Need to change with or without uv!
+    struct MeshVertex {
+        float position[3];
+        float normal[3];
+//        float uv[2];
+    };
+    
+    MeshVertex *meshVertices = (MeshVertex *)mesh.vertexBuffers[0].map.bytes;
+    std::set<MeshVertex> mesh_vertices;
+    
+    const size_t firstIndex = _indices.size();
+    const uint32_t baseIndex = (uint32_t)_vertices.size();
+    
+    for (MDLSubmesh *submesh in mesh.submeshes) {
+        uint32_t *indices = (uint32_t *)submesh.indexBuffer.map.bytes;
+        
+        vector_float3 color = [submesh.material propertyWithSemantic:MDLMaterialSemanticBaseColor].float3Value;
+        
+//        for (NSUInteger i = 0; i < submesh.indexCount; i++) {
+//            uint32_t index = indices[i];
+////            _indices.push_back(baseIndex + i);
+//
+//            MeshVertex vertex = meshVertices[index];
+//            mesh_vertices.insert(vertex);
+//        }
+//
+//        std::vector<MeshVertex> v(mesh_vertices.begin(), mesh_vertices.end());
+//
+//        for(MeshVertex vertex : v){
+//            _vertices.push_back((transform * vector4(vertex.position[0], vertex.position[1], vertex.position[2], 1.0f)).xyz);
+//            _normals.push_back(normalize((transpose(inverse(transform)) * vector4(vertex.normal[0], vertex.normal[1], vertex.normal[2], 0.0f)).xyz));
+//            _colors.push_back(color);
+//        }
+        
+        for (size_t triangle_index = 0; triangle_index < submesh.indexCount / 3; triangle_index++) {
+            Triangle triangle;
+            for (size_t i = 0; i < 3; i++)
+            {
+                const uint32_t index = indices[triangle_index * 3 + i];
+                MeshVertex & vertex = meshVertices[index];
+
+                _indices.push_back(baseIndex + (uint32_t)triangle_index * 3 + (uint32_t)i);
+                _vertices.push_back((transform * vector4(vertex.position[0], vertex.position[1], vertex.position[2], 1.0f)).xyz);
+                _normals.push_back(normalize((transpose(inverse(transform)) * vector4(vertex.normal[0], vertex.normal[1], vertex.normal[2], 0.0f)).xyz));
+                _colors.push_back(color);
+
+                triangle.normals[i] = _normals[_indices[firstIndex + triangle_index * 3 + i]];
+                triangle.colors[i] = _colors[_indices[firstIndex + triangle_index * 3 + i]];
+            }
+            triangle.material = material;
+            _triangles.push_back(triangle);
+        }
+    }
+}
+
 - (MTLAccelerationStructureGeometryDescriptor *)geometryDescriptor {
     // Metal represents each piece of piece of geometry in an acceleration structure using
     // a geometry descriptor. The sample uses a triangle geometry descriptor to represent
@@ -279,7 +348,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     MTLAccelerationStructureTriangleGeometryDescriptor *descriptor = [MTLAccelerationStructureTriangleGeometryDescriptor descriptor];
 
     descriptor.indexBuffer = _indexBuffer;
-    descriptor.indexType = MTLIndexTypeUInt16;
+    descriptor.indexType = MTLIndexTypeUInt32;
 
     descriptor.vertexBuffer = _vertexPositionBuffer;
     descriptor.vertexStride = sizeof(float3);
@@ -834,7 +903,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
     [scene addGeometry:geometryMesh];
 
-    // Add quad    
+    // Add quad
     [geometryMesh addXYPlane:matrix4x4_rotation(-90.f/180.f*M_PI, vector3(1.0f, 0.0f, 0.0f)) * matrix4x4_scale(100.0f, 10.0f, 0.0f)
                inwardNormals:false
                     material:*m_white];
@@ -904,6 +973,160 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 //    light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
 //    light.color = vector3(20.0f, 20.0f, 20.0f);
 
+    [scene addLight:light];
+
+    return scene;
+}
+
++ (Scene *)newTestSceneObj:(id <MTLDevice>)device
+{
+    Scene *scene = [[Scene alloc] initWithDevice:device];
+
+    // Set up the camera.
+    scene.cameraPosition = vector3(0.0f, 1.0f, 3.5f);
+    scene.cameraTarget = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    
+    // Add a default material
+    Material* default_material = new Material();
+    default_material->color = vector3(0.8f, 0.8f, 0.8f);
+    
+    // Add multiple materials
+    Material* left_wall_material = new Material();
+    Material* right_wall_material = new Material();
+    Material* tall_box_material = new Material();
+    Material* sphere_material = new Material();
+    Material* back_wall_material  = new Material();
+    Material* light_material = new Material();
+    Material* glass = new Material();
+    
+    left_wall_material->color = vector3(0.63f, 0.065f, 0.05f);
+    right_wall_material->color = vector3(0.14f, 0.45f, 0.091f);
+    tall_box_material->color = vector3(1.0f, 1.0f, 1.0f);
+    tall_box_material->is_metal = true;
+    sphere_material->color = vector3(1.0f, 1.0f, 1.0f);
+    sphere_material->is_glass = true;
+    back_wall_material->color = vector3(0.4f, 0.3f, 0.68f);
+    light_material->color = vector3(20.f, 20.f, 20.f);
+    glass->is_glass = true;
+    glass->color = vector3(1.0f, 1.0f, 1.0f);
+
+    // Create a piece of triangle geometry for the light source.
+    TriangleGeometry *lightMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:lightMesh];
+
+    matrix_float4x4 transform = matrix4x4_translation(0.0f, 1.0f, 0.0f) * matrix4x4_scale(0.5f, 1.98f, 0.5f);
+
+    // Add the light source.
+    [lightMesh addCubeWithFaces:FACE_MASK_POSITIVE_Y
+                          color:vector3(1.0f, 1.0f, 1.0f)
+                      transform:transform
+                  inwardNormals:true
+                    material:*light_material];
+
+    // Create a piece of triangle geometry for the Cornell box.
+    TriangleGeometry *geometryMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:geometryMesh];
+
+    transform = matrix4x4_translation(0.0f, 1.0f, 0.0f) * matrix4x4_scale(2.0f, 2.0f, 2.0f);
+
+    // Add the top, bottom walls.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_Y | FACE_MASK_POSITIVE_Y
+                             color:vector3(0.725f, 0.71f, 0.68f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*default_material];
+    
+    // Add the back wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_Z
+                             color:vector3(0.725f, 0.71f, 0.68f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*back_wall_material];
+
+    // Add the left wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_X
+                             color:vector3(0.63f, 0.065f, 0.05f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*left_wall_material];
+
+    // Add the right wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_POSITIVE_X
+                             color:vector3(0.14f, 0.45f, 0.091f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*right_wall_material];
+    
+    // Import the OBJ File
+    NSURL *URL = [[NSBundle mainBundle] URLForResource:@"bunny-fine" withExtension:@"obj"];
+    [geometryMesh addGeometryWithURL:URL
+                           transform:transform * matrix4x4_scale(0.5f, 0.5f, 0.5f) * matrix4x4_translation(0.0f, -1.0f, 0.0f)
+                            material:*glass];
+
+//    transform = matrix4x4_translation(-0.335f, 0.6f, -0.29f) *
+//                matrix4x4_rotation(0.3f, vector3(0.0f, 1.0f, 0.0f)) *
+//                matrix4x4_scale(0.6f, 1.2f, 0.6f);
+//
+//    // Add the tall box.
+//    [geometryMesh addCubeWithFaces:FACE_MASK_ALL
+//                             color:vector3(0.725f, 0.71f, 0.68f)
+//                         transform:transform
+//                     inwardNormals:false
+//                          material:*tall_box_material];
+
+    SphereGeometry *sphereGeometry = nil;
+
+    // Otherwise, create a piece of sphere geometry.
+    sphereGeometry = [[SphereGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:sphereGeometry];
+
+    [sphereGeometry addSphereWithOrigin:vector3(0.3275f, 0.3f, 0.3725f)
+                                 radius:0.3f
+                                  color:vector3(0.725f, 0.71f, 0.68f)
+                               material:*sphere_material];
+
+    transform = matrix4x4_translation(0.0f, 0.0f, 0.0f);
+
+    // Create an instance of the light.
+    GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
+                                                                           transform:transform
+                                                                                mask:GEOMETRY_MASK_LIGHT];
+
+    [scene addInstance:lightMeshInstance];
+
+    // Create an instance of the Cornell box.
+    GeometryInstance *geometryMeshInstance = [[GeometryInstance alloc] initWithGeometry:geometryMesh
+                                                                              transform:transform
+                                                                                   mask:GEOMETRY_MASK_TRIANGLE];
+
+    [scene addInstance:geometryMeshInstance];
+
+//    // Create an instance of the sphere.
+//    GeometryInstance *sphereGeometryInstance = [[GeometryInstance alloc] initWithGeometry:sphereGeometry
+//                                                                                    transform:transform
+//                                                                                         mask:GEOMETRY_MASK_SPHERE];
+//
+//    [scene addInstance:sphereGeometryInstance];
+
+    // Add a light for each box.
+    AreaLight light;
+//
+//    light.position = vector3(0.0f, 1.98f, 0.0f);
+//    light.forward = vector3(0.0f, -1.0f, 0.0f);
+//    light.right = vector3(0.25f, 0.0f, 0.0f);
+//    light.up = vector3(0.0f, 0.0f, 0.25f);
+//
+//    float r = (float)rand() / (float)RAND_MAX;
+//    float g = (float)rand() / (float)RAND_MAX;
+//    float b = (float)rand() / (float)RAND_MAX;
+//
+//    light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
+//    light.color = vector3(1.0f, 1.0f, 1.0f);
+//
     [scene addLight:light];
 
     return scene;

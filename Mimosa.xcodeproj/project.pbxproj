@@ -28,6 +28,13 @@
 		5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */; };
 		5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A2102A3B85FD00D9DA5B /* Main.storyboard */; };
 		5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
+		5AF235122A3E4E5F00CD623D /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AF235102A3E4C2700CD623D /* ModelIO.framework */; };
+		5AF235132A3F586B00CD623D /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2350F2A3E415F00CD623D /* bunny-fine.obj */; };
+		5AF235152A3F5C7C00CD623D /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235142A3F5C7C00CD623D /* cone.obj */; };
+		5AF235172A3F5EE900CD623D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235162A3F5EE900CD623D /* cube.obj */; };
+		5AF235192A3F6C0900CD623D /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235182A3F6C0900CD623D /* teapot.obj */; };
+		5AF2351B2A3F763500CD623D /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351A2A3F763500CD623D /* cylinder.obj */; };
+		5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351C2A3F7ADB00CD623D /* bunny.obj */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,6 +93,13 @@
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A84AFFA2A3DFD6E00100842 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5AF2350F2A3E415F00CD623D /* bunny-fine.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = "bunny-fine.obj"; sourceTree = "<group>"; };
+		5AF235102A3E4C2700CD623D /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = System/Library/Frameworks/ModelIO.framework; sourceTree = SDKROOT; };
+		5AF235142A3F5C7C00CD623D /* cone.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cone.obj; sourceTree = "<group>"; };
+		5AF235162A3F5EE900CD623D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
+		5AF235182A3F6C0900CD623D /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
+		5AF2351A2A3F763500CD623D /* cylinder.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.obj; sourceTree = "<group>"; };
+		5AF2351C2A3F7ADB00CD623D /* bunny.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bunny.obj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AF235122A3E4E5F00CD623D /* ModelIO.framework in Frameworks */,
 				5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,6 +156,7 @@
 		5A426A0B2A2E845900EE9F46 = {
 			isa = PBXGroup;
 			children = (
+				5AF2350E2A3E415F00CD623D /* Model */,
 				5A84AFFA2A3DFD6E00100842 /* README.md */,
 				5A61A1FB2A3B85D400D9DA5B /* Renderer */,
 				5A426A162A2E845900EE9F46 /* Mimosa */,
@@ -178,6 +194,7 @@
 		5A426A1E2A2E84EF00EE9F46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5AF235102A3E4C2700CD623D /* ModelIO.framework */,
 				5A087F482A3508C100BDCA99 /* MetalKit.framework */,
 				5A426A2B2A2E857500EE9F46 /* Foundation.framework */,
 				5A426A292A2E856200EE9F46 /* QuartzCore.framework */,
@@ -231,6 +248,19 @@
 				5A61A2122A3B85FD00D9DA5B /* Info.plist */,
 			);
 			path = macOS;
+			sourceTree = "<group>";
+		};
+		5AF2350E2A3E415F00CD623D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5AF2351C2A3F7ADB00CD623D /* bunny.obj */,
+				5AF2351A2A3F763500CD623D /* cylinder.obj */,
+				5AF235182A3F6C0900CD623D /* teapot.obj */,
+				5AF235162A3F5EE900CD623D /* cube.obj */,
+				5AF235142A3F5C7C00CD623D /* cone.obj */,
+				5AF2350F2A3E415F00CD623D /* bunny-fine.obj */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,9 +351,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				5A61A2782A3B8DBC00D9DA5B /* Mimosa */,
 				5A087F5A2A350CA000BDCA99 /* helloMetal */,
 				5A43D6F52A37AB5A0048C4B4 /* helloRayTracing */,
-				5A61A2782A3B8DBC00D9DA5B /* Mimosa */,
 			);
 		};
 /* End PBXProject section */
@@ -333,7 +363,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AF2351B2A3F763500CD623D /* cylinder.obj in Resources */,
+				5AF235132A3F586B00CD623D /* bunny-fine.obj in Resources */,
+				5AF235172A3F5EE900CD623D /* cube.obj in Resources */,
+				5AF235192A3F6C0900CD623D /* teapot.obj in Resources */,
 				5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */,
+				5AF235152A3F5C7C00CD623D /* cone.obj in Resources */,
+				5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */,
 				5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -590,6 +626,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = Q.Mimosa;
@@ -620,6 +657,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = Q.Mimosa;

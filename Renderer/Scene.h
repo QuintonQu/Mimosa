@@ -80,8 +80,17 @@ MTLResourceOptions getManagedBufferStorageMode();
 - (void)addXYPlane:(matrix_float4x4)transform
      inwardNormals:(bool)inwardNormals
           material:(Material)material;
-            
 
+// Add a mesh
+//- (void)addMesh:(NSString*)file_name
+//      transform:(matrix_float4x4)transform
+//  inwardNormals:(bool)inwardNormals
+//       material:(Material)material;
+
+- (void)addGeometryWithURL:(NSURL *)URL
+                 transform:(matrix_float4x4)transform
+                  material:(Material)material;
+            
 @end
 
 // Represents a piece of geometry made of spheres.
@@ -113,7 +122,7 @@ MTLResourceOptions getManagedBufferStorageMode();
 @property (nonatomic, readonly) unsigned int mask;
 
 // Pointer to the material type of geometry instance
-@property (nonatomic, readonly) Material* material;
+//@property (nonatomic, readonly) Material* material;
 
 // Initializer.
 - (instancetype)initWithGeometry:(Geometry *)geometry
@@ -168,6 +177,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 // Create test scene from darts.
 + (Scene *)newTestScene:(id <MTLDevice>)device;
+
+// Create test scene from Obj.
++ (Scene *)newTestSceneObj:(id <MTLDevice>)device;
 
 // Add a piece of geometry to the scene.
 - (void)addGeometry:(Geometry *)mesh;
