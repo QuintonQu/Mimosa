@@ -6,21 +6,23 @@ This is an exercise project for writing ray tracing in Metal shader. The project
 
 ## Features
 ### Geometry
-- [ ] Obj file loader
+- [ ] OpenVDB
+- [x] Obj file loader
 - [x] Sphere
 - [x] (One side) Triangle
 - [x] (One side) Cube / Plane with triangle
 
 ### Material
 - [ ] Blinn-phong
-- [x] Lambertian
-- [x] Metal
+- [x] Phong
+- [x] Diffuse
+- [x] Metallic
 - [x] Dielectric
 
 ### Light
 - [ ] Point light
 - [ ] Sky box / Environment map
-- [x] Area light
+- [x] Area light (Mesh light)
 
 ### Texture
 - [ ] Checker texture
@@ -30,14 +32,15 @@ This is an exercise project for writing ray tracing in Metal shader. The project
 - [ ] Displacement mapping
 
 ### Path Tracer
-- [ ] Next event estimation
 - [ ] Multiple importance sampling
 - [ ] Volumetric rendering
 - [x] Naive Path tracer
+- [x] Next event estimation
 
 ### Other Functions
 - [ ] Moving Camera
-- [ ] Human interaction
+- [ ] Choosing different scene
+- [ ] IOS Deployment
 
 ## References
 - [Accelerating ray tracing using Metal](https://developer.apple.com/documentation/metal/accelerating_ray_tracing_using_metal)

@@ -23,6 +23,7 @@ MTLResourceOptions getManagedBufferStorageMode() {
 #endif
 }
 
+#pragma mark - Geometry
 @implementation Geometry
 
 - (instancetype)initWithDevice:(id <MTLDevice>)device
@@ -63,6 +64,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return cross(e1, e2);
 }
 
+#pragma mark - Specific Geometry Triangle
 @implementation TriangleGeometry {
     id <MTLBuffer> _indexBuffer;
     id <MTLBuffer> _vertexPositionBuffer;
@@ -76,6 +78,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     std::vector<vector_float3> _colors;
     std::vector<Triangle> _triangles;
 };
+
+- (NSUInteger)geometryCount{
+    return _triangles.size();
+}
 
 - (void)uploadToBuffers {
     MTLResourceOptions options = getManagedBufferStorageMode();
@@ -372,6 +378,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
 @end
 
+#pragma mark - Specific Geometry Sphere
 @implementation SphereGeometry {
     id <MTLBuffer> _sphereBuffer;
     id <MTLBuffer> _boundingBoxBuffer;
@@ -379,6 +386,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
     std::vector<Sphere> _spheres;
 };
+
+- (NSUInteger)geometryCount{
+    return _spheres.size();
+}
 
 - (void)uploadToBuffers {
     MTLResourceOptions options = getManagedBufferStorageMode();
@@ -469,6 +480,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
 @end
 
+#pragma mark - GeometryInstance
 @implementation GeometryInstance
 
 - (instancetype)initWithGeometry:(Geometry *)geometry
@@ -488,11 +500,14 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
 @end
 
+#pragma mark - Scene
 @implementation Scene {
     NSMutableArray <Geometry *> *_geometries;
     NSMutableArray <GeometryInstance *> *_instances;
 
     std::vector<AreaLight> _lights;
+    std::vector<unsigned int> _light_indexs;
+    std::vector<unsigned int> _light_counts; //_light_indexs.size() = _light_counts.size()
 }
 
 - (NSArray <Geometry *> *)geometries {
@@ -500,7 +515,12 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 }
 
 - (NSUInteger)lightCount {
-    return (NSUInteger)_lights.size();
+    return (NSUInteger)_light_indexs.size();
+
+}
+
+- (NSUInteger)instanceCount {
+    return _instances.count;
 }
 
 - (instancetype)initWithDevice:(id<MTLDevice>)device {
@@ -525,6 +545,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     [_instances removeAllObjects];
 
     _lights.clear();
+    _light_indexs.clear();
+    _light_counts.clear();
 }
 
 - (void)addGeometry:(Geometry *)mesh {
@@ -533,6 +555,11 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
 - (void)addInstance:(GeometryInstance *)instance {
     [_instances addObject:instance];
+    if (instance.mask & GEOMETRY_MASK_LIGHT){
+        _light_indexs.push_back((unsigned int)(_instances.count-1));
+        Geometry* geometry = instance.geometry;
+        _light_counts.push_back((unsigned int)geometry.geometryCount);
+    }
 }
 
 - (void)addLight:(AreaLight)light {
@@ -546,14 +573,23 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     MTLResourceOptions options = getManagedBufferStorageMode();
 
     _lightBuffer = [_device newBufferWithLength:_lights.size() * sizeof(AreaLight) options:options];
+    
+    _lightIndexBuffer = [_device newBufferWithLength:_light_indexs.size() * sizeof(unsigned int) options:options];
+    
+    _lightCountBuffer = [_device newBufferWithLength:_light_counts.size() * sizeof(unsigned int) options:options];
 
     memcpy(_lightBuffer.contents, &_lights[0], _lightBuffer.length);
+    memcpy(_lightIndexBuffer.contents, &_light_indexs[0], _lightIndexBuffer.length);
+    memcpy(_lightCountBuffer.contents, &_light_counts[0], _lightCountBuffer.length);
 
 #if !TARGET_OS_IPHONE
     [_lightBuffer didModifyRange:NSMakeRange(0, _lightBuffer.length)];
+    [_lightIndexBuffer didModifyRange:NSMakeRange(0, _lightIndexBuffer.length)];
+    [_lightCountBuffer didModifyRange:NSMakeRange(0, _lightCountBuffer.length)];
 #endif
 }
 
+#pragma mark - Create Scene
 + (Scene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions
 {
@@ -986,6 +1022,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     scene.cameraPosition = vector3(0.0f, 1.0f, 3.5f);
     scene.cameraTarget = vector3(0.0f, 1.0f, 0.0f);
     scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraFov = 45.0f;
     
     // Add a default material
     Material* default_material = new Material();
@@ -1129,6 +1166,171 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 //
     [scene addLight:light];
 
+    return scene;
+}
+
++ (Scene *)newTestSceneMIS:(id<MTLDevice>)device
+{
+    Scene *scene = [[Scene alloc] initWithDevice:device];
+    
+    // Set up the camera
+    scene.cameraPosition = vector3(0.f, 6.f, 27.5f);
+    scene.cameraTarget = vector3(0.f, -1.5f, 2.5f);
+    scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraFov = 16.0f;
+    
+    // Add materials
+    Material* diffuse_light_1 = new Material;
+    diffuse_light_1->color = vector3(901.f, 901.f, 901.f);
+    
+    Material* diffuse_light_2 = new Material;
+    diffuse_light_2->color = vector3(100.f, 100.f, 100.f);
+    
+    Material* diffuse_light_3 = new Material;
+    diffuse_light_3->color = vector3(11.111f, 11.111f, 11.111f);
+    
+    Material* diffuse_light_4 = new Material;
+    diffuse_light_4->color = vector3(3.111f, 3.111f, 3.111f);
+    
+    Material* plate_1 = new Material;
+    plate_1->color = vector3(0.35f, 0.35f, 0.35f);
+    plate_1->exponent = 100000.f;
+    plate_1->is_phong = true;
+    
+    Material* plate_2 = new Material;
+    plate_2->color = vector3(0.25f, 0.25f, 0.25f);
+    plate_2->exponent = 5000.0f;
+    plate_2->is_phong = true;
+    
+    Material* plate_3 = new Material;
+    plate_3->color = vector3(0.2f, 0.2f, 0.2f);
+    plate_3->exponent = 400.0f;
+    plate_3->is_phong = true;
+    
+    Material* plate_4 = new Material;
+    plate_4->color = vector3(0.2f, 0.2f, 0.2f);
+    plate_4->exponent = 100.0f;
+    plate_4->is_phong = true;
+    
+    Material* diffuse = new Material;
+    diffuse->color = vector3(0.2f, 0.2f, 0.2f);
+    
+    matrix_float4x4 non_transform = matrix4x4_translation(0.0f, 0.0f, 0.0f);
+    
+    SphereGeometry *lightMesh = [[SphereGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:lightMesh];
+
+    // Add the light sources.
+    [lightMesh addSphereWithOrigin:vector3(3.75f, 0.0f, 0.0f)
+                            radius:0.0333f
+                             color:vector3(0.0f, 0.0f, 0.0f)
+                          material:*diffuse_light_1];
+    
+    [lightMesh addSphereWithOrigin:vector3(1.25f, 0.0f, 0.0f)
+                            radius:0.1f
+                             color:vector3(0.0f, 0.0f, 0.0f)
+                          material:*diffuse_light_2];
+    
+    [lightMesh addSphereWithOrigin:vector3(-1.25f, 0.0f, 0.0f)
+                            radius:0.3f
+                             color:vector3(0.0f, 0.0f, 0.0f)
+                          material:*diffuse_light_3];
+    
+    [lightMesh addSphereWithOrigin:vector3(-3.75f, 0.0f, 0.0f)
+                            radius:0.9f
+                             color:vector3(0.0f, 0.0f, 0.0f)
+                          material:*diffuse_light_4];
+    
+//    [lightMesh addSphereWithOrigin:vector3(-3.75f, 0.0f, 0.0f)
+//                            radius:0.89f
+//                             color:vector3(0.0f, 0.0f, 0.0f)
+//                          material:*diffuse_light];
+    
+    // Add plate and floor.
+    TriangleGeometry *geometryMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:geometryMesh];
+    
+    NSURL* URL;
+    
+    URL = [[NSBundle mainBundle] URLForResource:@"plate1" withExtension:@"obj"];
+    [geometryMesh addGeometryWithURL:URL
+                           transform:non_transform
+                            material:*plate_1];
+    
+    URL = [[NSBundle mainBundle] URLForResource:@"plate2" withExtension:@"obj"];
+    [geometryMesh addGeometryWithURL:URL
+                           transform:non_transform
+                            material:*plate_2];
+
+    URL = [[NSBundle mainBundle] URLForResource:@"plate3" withExtension:@"obj"];
+    [geometryMesh addGeometryWithURL:URL
+                           transform:non_transform
+                            material:*plate_3];
+
+    URL = [[NSBundle mainBundle] URLForResource:@"plate4" withExtension:@"obj"];
+    [geometryMesh addGeometryWithURL:URL
+                           transform:non_transform
+                            material:*plate_4];
+
+    URL = [[NSBundle mainBundle] URLForResource:@"floor" withExtension:@"obj"];
+    [geometryMesh addGeometryWithURL:URL
+                           transform:non_transform
+                            material:*diffuse];
+    
+//    SphereGeometry *sphereGeometry = nil;
+
+    // Otherwise, create a piece of sphere geometry.
+//    sphereGeometry = [[SphereGeometry alloc] initWithDevice:device];
+//
+//    [scene addGeometry:sphereGeometry];
+//
+//    [sphereGeometry addSphereWithOrigin:vector3(0.3275f, 0.3f, 0.3725f)
+//                                 radius:0.3f
+//                                  color:vector3(0.725f, 0.71f, 0.68f)
+//                               material:*diffuse];
+
+    // Create an instance of the light.
+    GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
+                                                                           transform:non_transform
+                                                                                mask:GEOMETRY_MASK_SPHERE_LIGHT];
+
+    [scene addInstance:lightMeshInstance];
+
+    // Create an instance of the Cornell box.
+    GeometryInstance *geometryMeshInstance = [[GeometryInstance alloc] initWithGeometry:geometryMesh
+                                                                              transform:non_transform
+                                                                                   mask:GEOMETRY_MASK_TRIANGLE];
+
+    [scene addInstance:geometryMeshInstance];
+
+    // Create an instance of the sphere.
+//    GeometryInstance *sphereGeometryInstance = [[GeometryInstance alloc] initWithGeometry:sphereGeometry
+//                                                                                    transform:non_transform
+//                                                                                         mask:GEOMETRY_MASK_SPHERE];
+//
+//    [scene addInstance:sphereGeometryInstance];
+
+    // Add a light for each box.
+    AreaLight light;
+//
+//    light.position = vector3(0.0f, 1.98f, 0.0f);
+//    light.forward = vector3(0.0f, -1.0f, 0.0f);
+//    light.right = vector3(0.25f, 0.0f, 0.0f);
+//    light.up = vector3(0.0f, 0.0f, 0.25f);
+//
+//    float r = (float)rand() / (float)RAND_MAX;
+//    float g = (float)rand() / (float)RAND_MAX;
+//    float b = (float)rand() / (float)RAND_MAX;
+//
+//    light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
+//    light.color = vector3(1.0f, 1.0f, 1.0f);
+//
+    [scene addLight:light];
+
+    return scene;
+    
     return scene;
 }
 

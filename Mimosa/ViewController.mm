@@ -54,7 +54,7 @@ The implementation of the cross-platform view controller.
 //    Scene *scene = [Scene newInstancedCornellBoxSceneWithDevice:_view.device
 //                                       useIntersectionFunctions:YES];
     
-    Scene *scene = [Scene newTestSceneObj:_view.device];
+    Scene *scene = [Scene newTestSceneMIS:_view.device];
 
     _renderer = [[Renderer alloc] initWithDevice:_view.device
                                            scene:scene];

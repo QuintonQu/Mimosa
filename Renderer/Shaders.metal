@@ -51,7 +51,7 @@ float halton(unsigned int i, unsigned int d) {
     return r;
 }
 
-#pragma mark - Inline Functions
+#pragma mark - Inline Utility Interpolate
 // Interpolates the vertex attribute of an arbitrary type across the surface of a triangle
 // given the barycentric coordinates and triangle index in an intersection structure.
 template<typename T, typename IndexType>
@@ -82,6 +82,19 @@ inline T interpolateVertexAttribute(thread T *attributes, float2 uv) {
     return (1.0f - uv.x - uv.y) * T0 + uv.x * T1 + uv.y * T2;
 }
 
+#pragma mark - Inline Utility Transform
+
+__attribute__((always_inline))
+float3 transformPoint(float3 p, float4x4 transform) {
+    return (transform * float4(p.x, p.y, p.z, 1.0f)).xyz;
+}
+
+__attribute__((always_inline))
+float3 transformDirection(float3 p, float4x4 transform) {
+    return (transform * float4(p.x, p.y, p.z, 0.0f)).xyz;
+}
+
+#pragma mark - Inline Utility Sample
 // Uses the inversion method to map two uniformly random numbers to a 3D
 // unit hemisphere, where the probability of a given sample is proportional to the cosine
 // of the angle between the sample direction and the "up" direction (0, 1, 0).
@@ -92,6 +105,32 @@ inline float3 sampleCosineWeightedHemisphere(float2 u) {
     float sin_phi = sincos(phi, cos_phi);
 
     float cos_theta = sqrt(u.y);
+    float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
+
+    return float3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
+}
+
+// Sample cosine weighted hemisphere with power
+inline float3 sampleCosineWeightedHemisphereWithPower(float2 u, float exponent) {
+    float phi = 2.0f * M_PI_F * u.x;
+
+    float cos_phi;
+    float sin_phi = sincos(phi, cos_phi);
+
+    float cos_theta = pow(u.y, 1/(exponent + 1));
+    float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
+
+    return float3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
+}
+
+// Sample sphere cap
+inline float3 sampleSphereCap(float2 u, float cos_theta_max) {
+    float phi = 2.0f * M_PI_F * u.x;
+
+    float cos_phi;
+    float sin_phi = sincos(phi, cos_phi);
+
+    float cos_theta = mix(cos_theta_max, 1.0f, u.y);
     float sin_theta = sqrt(1.0f - cos_theta * cos_theta);
 
     return float3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
@@ -138,6 +177,16 @@ inline void sampleAreaLight(constant AreaLight & light,
     lightColor *= saturate(dot(-lightDirection, light.forward));
 }
 
+// Return the type for Scatter Record for different light.
+struct EmitterRecord {
+    bool accept;
+    float3 out_direction;
+    float3 emit;
+    float pdf;
+    float distance;
+    bool test = false;
+};
+
 // Aligns a direction on the unit hemisphere such that the hemisphere's "up" direction
 // (0, 1, 0) maps to the given surface normal direction.
 inline float3 alignHemisphereWithNormal(float3 sample, float3 normal) {
@@ -163,6 +212,25 @@ struct BoundingBoxIntersection {
     float distance [[distance]];            // Distance from the ray origin to the intersection point.
 };
 
+// Sample a sphere light
+inline EmitterRecord sampleSphereLight(Sphere sphere, float3 hit_point, float2 random_variable, float4x4 transform){
+    EmitterRecord emitter_record;
+    float3 origin = transformPoint(sphere.origin, transform);
+    float distance = length(hit_point - origin);
+    float radius = sphere.radius;
+    if(distance < radius){
+        emitter_record.accept = false;
+        return emitter_record;
+    }
+    float cos_max = sqrt(distance * distance - radius * radius) / distance;
+    emitter_record.out_direction = alignHemisphereWithNormal(sampleSphereCap(random_variable, cos_max), normalize(origin - hit_point));
+    float area = 2 * M_PI_F * (1-cos_max);
+    emitter_record.pdf = abs(1.f / area);
+    emitter_record.emit = sphere.material.color;
+    emitter_record.distance = distance;
+    return emitter_record;
+}
+
 # pragma mark - Materials' Scatter Methods
 
 // Return the type for Scatter Record for different material.
@@ -170,6 +238,7 @@ struct ScatterRecord {
     bool accept;
     float3 out_direction;
     float3 attenuation;
+    float pdf;
     bool test = false;
 };
 
@@ -242,17 +311,39 @@ inline ScatterRecord glossyScatter(float3 normal, float3 in_direction, float ran
     return scatter_record;
 }
 
-//// Resources for a piece of triangle geometry.
-//struct TriangleResources {
-//    device uint16_t *indices;
-//    device float3 *vertexNormals;
-//    device float3 *vertexColors;
-//};
-//
-//// Resources for a piece of sphere geometry.
-//struct SphereResources {
-//    device Sphere *spheres;
-//};
+// Phong Material
+inline ScatterRecord phongScatter(float3 normal, float3 in_direction, float2 random_variable, Material material ){
+    ScatterRecord scatter_record;
+    
+    float3 reflection_direction = reflect(in_direction, normal);
+    float3 random_sample_direction = sampleCosineWeightedHemisphereWithPower(random_variable, material.exponent);
+    scatter_record.out_direction = alignHemisphereWithNormal(random_sample_direction, reflection_direction);
+    scatter_record.attenuation = material.color;
+    scatter_record.accept = dot(in_direction, normal) < 0.f && dot(scatter_record.out_direction, normal) > 0.f;
+    
+    return scatter_record;
+}
+
+inline float phongPdf(float3 normal, float3 in_direction, float3 out_direction, Material material){
+    if(dot(in_direction, normal) > 0.f || dot(out_direction, normal) < 0.f){
+        return 0.f;
+    }
+    float3 mirror_direction = normalize(reflect(in_direction, normal));
+    float cosine = max(dot(normalize(out_direction), mirror_direction), 0.f);
+    return ((material.exponent + 1.f)/(2.f*M_PI_F))*pow(cosine, material.exponent);
+}
+
+// Resources for a piece of triangle geometry.
+struct TriangleResources {
+    device uint16_t *indices;
+    device float3 *vertexNormals;
+    device float3 *vertexColors;
+};
+
+// Resources for a piece of sphere geometry.
+struct SphereResources {
+    device Sphere *spheres;
+};
 
 #pragma mark - Sphere Intersection
 /*
@@ -340,18 +431,6 @@ BoundingBoxIntersection sphereIntersectionFunction(// Ray parameters passed to t
     return ret;
 }
 
-#pragma mark - Transform
-
-__attribute__((always_inline))
-float3 transformPoint(float3 p, float4x4 transform) {
-    return (transform * float4(p.x, p.y, p.z, 1.0f)).xyz;
-}
-
-__attribute__((always_inline))
-float3 transformDirection(float3 p, float4x4 transform) {
-    return (transform * float4(p.x, p.y, p.z, 0.0f)).xyz;
-}
-
 #pragma mark - Generate Ray
 #pragma region GenerateRay {
 
@@ -394,10 +473,10 @@ ray generate_ray(uint2 tid [[thread_position_in_grid]], constant Uniforms &unifo
 
 #pragma endregion GenerateRay }
 
-#pragma mark - Ray Tracing Kernel
+#pragma mark - Ray Tracing Kernel - Mats
 
 // Main ray tracing kernel.
-kernel void raytracingKernel(
+kernel void raytracingKernelMats(
      uint2                                                  tid                       [[thread_position_in_grid]],
      constant Uniforms &                                    uniforms                  [[buffer(0)]],
      texture2d<unsigned int>                                randomTex                 [[texture(0)]],
@@ -446,7 +525,7 @@ kernel void raytracingKernel(
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
-    for (int bounce = 0; bounce < 8; bounce++) {
+    for (int bounce = 0; bounce < 2; bounce++) {
         // Get the closest intersection, not the first intersection. This is the default, but
         // the sample adjusts this property below when it casts shadow rays.
         i.accept_any_intersection(false);
@@ -470,13 +549,23 @@ kernel void raytracingKernel(
         unsigned int mask = instances[instanceIndex].mask;
 
         // If the ray hit a light source, set the color to white, and stop immediately.
-        if (mask == GEOMETRY_MASK_LIGHT) {
-            Triangle area_light;
-            area_light = *(const device Triangle*)intersection.primitive_data;
-            float3 light_color = area_light.material.color;
-            accumulatedColor = float3(1.0f, 1.0f, 1.0f) * color * light_color;
-            break;
+        if(mask & GEOMETRY_MASK_LIGHT){
+            if(mask & GEOMETRY_MASK_SPHERE_LIGHT){
+                Sphere area_light;
+                area_light = *(const device Sphere*)intersection.primitive_data;
+                float3 light_color = area_light.material.color;
+                accumulatedColor = color * light_color;
+                break;
+            }
+            if(mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
+                Triangle area_light;
+                area_light = *(const device Triangle*)intersection.primitive_data;
+                float3 light_color = area_light.material.color;
+                accumulatedColor = color * light_color;
+                break;
+            }
         }
+
 
         // The ray hit something. Look up the transformation matrix for this instance.
         float4x4 objectToWorldSpaceTransform(1.0f);
@@ -563,7 +652,7 @@ kernel void raytracingKernel(
         }
 
         // Choose a random light source to sample.
-        float lightSample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 0);
+//        float lightSample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 0);
 //        unsigned int lightIndex = min((unsigned int)(lightSample * uniforms.lightCount), uniforms.lightCount - 1);
 
         // Choose a random point to sample on the light source.
@@ -639,9 +728,17 @@ kernel void raytracingKernel(
                 break;
             }
         } else if(material.is_glass){
-            float random_variable = halton(offset + uniforms.frameIndex, 2 + bounce * 3 + 6);
+            float random_variable = r.x;
             scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
             
+            if(scatter_record.accept){
+                ray.direction = scatter_record.out_direction;
+            }else{
+                break;
+            }
+        } else if(material.is_phong){
+            float2 random_variable = r;
+            scatter_record = phongScatter(worldSpaceSurfaceNormal, ray.direction, random_variable, material);
             if(scatter_record.accept){
                 ray.direction = scatter_record.out_direction;
             }else{
@@ -655,7 +752,303 @@ kernel void raytracingKernel(
             worldSpaceSampleDirection = alignHemisphereWithNormal(worldSpaceSampleDirection, worldSpaceSurfaceNormal);
             ray.direction = worldSpaceSampleDirection;
         }
-//        ray.direction = reflect(ray.direction, worldSpaceSurfaceNormal);
+        ray.direction = normalize(ray.direction);
+    }
+
+    // Average this frame's sample with all of the previous frames.
+    if (uniforms.frameIndex > 0) {
+        float3 prevColor = prevTex.read(tid).xyz;
+        prevColor *= uniforms.frameIndex;
+
+        accumulatedColor += prevColor;
+        accumulatedColor /= (uniforms.frameIndex + 1);
+    }
+
+    dstTex.write(float4(accumulatedColor, 1.0f), tid);
+}
+
+#pragma mark - Rat Tracing Kernel - NEE
+
+// Main ray tracing kernel.
+kernel void raytracingKernelNEE(
+     uint2                                                  tid                       [[thread_position_in_grid]],
+     constant Uniforms &                                    uniforms                  [[buffer(0)]],
+     texture2d<unsigned int>                                randomTex                 [[texture(0)]],
+     texture2d<float>                                       prevTex                   [[texture(1)]],
+     texture2d<float, access::write>                        dstTex                    [[texture(2)]],
+     device void                                           *resources                 [[buffer(1)]],
+     constant MTLAccelerationStructureInstanceDescriptor   *instances                 [[buffer(2)]],
+     constant AreaLight                                    *areaLights                [[buffer(3)]],
+     instance_acceleration_structure                        accelerationStructure     [[buffer(4)]],
+     intersection_function_table<triangle_data, instancing> intersectionFunctionTable [[buffer(5)]],
+     constant unsigned int                                 *lightIndexs               [[buffer(6)]],
+     constant unsigned int                                 *lightCounts               [[buffer(7)]]
+)
+{
+    // The sample aligns the thread count to the threadgroup size, which means the thread count
+    // may be different than the bounds of the texture. Test to make sure this thread
+    // is referencing a pixel within the bounds of the texture.
+    if (tid.x > uniforms.width || tid.y > uniforms.height) return;
+    
+    // Apply a random offset to the random number index to decorrelate pixels.
+    unsigned int offset = randomTex.read(tid).x;
+    
+    // Generate Ray.
+    ray ray = generate_ray(tid, uniforms, randomTex);
+
+    // Start with a fully white color. The kernel scales the light each time the
+    // ray bounces off of a surface, based on how much of each light component
+    // the surface absorbs.
+    float3 color = float3(1.0f, 1.0f, 1.0f);
+
+    float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
+    
+    float3 background_color = float3(0.0f, 0.0f, 0.0f);
+
+    // Create an intersector to test for intersection between the ray and the geometry in the scene.
+    intersector<triangle_data, instancing> i;
+
+    typename intersector<triangle_data, instancing>::result_type intersection;
+    
+    ScatterRecord scatter_record;
+
+    // Simulate up to three ray bounces. Each bounce propagates light backward along the
+    // ray's path toward the camera.
+    for (int bounce = 0; bounce < 2; bounce++) {
+        // Get the closest intersection, not the first intersection. This is the default, but
+        // the sample adjusts this property below when it casts shadow rays.
+        i.accept_any_intersection(false);
+
+        // Check for intersection between the ray and the acceleration structure. If the sample
+        // isn't using intersection functions, it doesn't need to include one.
+        intersection = i.intersect(ray, accelerationStructure, bounce == 0 ? RAY_MASK_PRIMARY : RAY_MASK_SECONDARY, intersectionFunctionTable);
+
+        // Stop if the ray didn't hit anything and has bounced out of the scene.
+        if (intersection.type == intersection_type::none) {
+            accumulatedColor = background_color * color;
+            break;
+        }
+            
+        unsigned int instanceIndex = intersection.instance_id;
+
+        // Look up the mask for this instance, which indicates what type of geometry the ray hit.
+        unsigned int mask = instances[instanceIndex].mask;
+
+        // If the ray hit a light source, set the color to white, and stop immediately.
+        if(mask & GEOMETRY_MASK_LIGHT){
+            if(mask & GEOMETRY_MASK_SPHERE_LIGHT){
+                Sphere area_light;
+                area_light = *(const device Sphere*)intersection.primitive_data;
+                float3 light_color = area_light.material.color;
+                accumulatedColor = light_color;
+                break;
+            }
+            if(mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
+                Triangle area_light;
+                area_light = *(const device Triangle*)intersection.primitive_data;
+                float3 light_color = area_light.material.color;
+                accumulatedColor = light_color;
+                break;
+            }
+        }
+
+        // The ray hit something. Look up the transformation matrix for this instance.
+        float4x4 objectToWorldSpaceTransform(1.0f);
+
+        for (int column = 0; column < 4; column++)
+            for (int row = 0; row < 3; row++)
+                objectToWorldSpaceTransform[column][row] = instances[instanceIndex].transformationMatrix[column][row];
+
+        // Compute the intersection point in world space.
+        float3 worldSpaceIntersectionPoint = ray.origin + ray.direction * intersection.distance;
+
+        float2 barycentric_coords = intersection.triangle_barycentric_coord;
+
+        float3 worldSpaceSurfaceNormal = 0.0f;
+        float3 surfaceColor = 0.0f;
+        Material material;
+
+        if (mask & GEOMETRY_MASK_TRIANGLE) {
+            Triangle triangle;
+            
+            float3 objectSpaceSurfaceNormal;
+            
+            triangle = *(const device Triangle*)intersection.primitive_data;
+
+            // Interpolate the vertex normal at the intersection point.
+            objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
+
+            surfaceColor = triangle.material.color;
+            material = triangle.material;
+
+            // Transform the normal from object to world space.
+            worldSpaceSurfaceNormal = normalize(transformDirection(objectSpaceSurfaceNormal, objectToWorldSpaceTransform));
+        }
+        else if (mask & GEOMETRY_MASK_SPHERE) {
+            Sphere sphere;
+            
+            sphere = *(const device Sphere*)intersection.primitive_data;
+
+            // Transform the sphere's origin from object space to world space.
+            float3 worldSpaceOrigin = transformPoint(sphere.origin, objectToWorldSpaceTransform);
+
+            // Compute the surface normal directly in world space.
+            worldSpaceSurfaceNormal = normalize(worldSpaceIntersectionPoint - worldSpaceOrigin);
+
+            // The sphere is a uniform color, so you don't need to interpolate the color across the surface.
+            surfaceColor = sphere.color;
+            surfaceColor = sphere.material.color;
+            material = sphere.material;
+        }
+
+        // Sample a random light instance
+        EmitterRecord emitter_record;
+        float light_instance_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 7);
+        unsigned int light_instance_index = min((unsigned int)(light_instance_sample * uniforms.lightCount), uniforms.lightCount - 1);
+        unsigned int light_instance = lightIndexs[light_instance_index];
+        
+        unsigned int geometries_index = instances[light_instance].accelerationStructureIndex;
+        unsigned int light_mask = instances[light_instance_index].mask;
+        
+        float4x4 lightToWorldSpaceTransform(1.0f);
+
+        for (int column = 0; column < 4; column++)
+            for (int row = 0; row < 3; row++)
+                lightToWorldSpaceTransform[column][row] = instances[instanceIndex].transformationMatrix[column][row];
+        
+        // Sample a random light geometry from one instance.
+        float light_geometry_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 8);
+        unsigned int light_geometry_index = min((unsigned int)(light_geometry_sample * lightCounts[light_instance_index]), lightCounts[light_instance_index] - 1);
+        
+        // Choose a random point to sample on the light source.
+        float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),
+                          halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 2));
+        
+        if(light_mask & GEOMETRY_MASK_SPHERE_LIGHT){
+            device SphereResources & sphereResources = *(device SphereResources *)((device char *)resources + resourcesStride * geometries_index);
+            Sphere sphere = sphereResources.spheres[light_geometry_index];
+            emitter_record = sampleSphereLight(sphere, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
+        }
+        
+//
+//        // Sample the lighting between the intersection point and the point on the area light.
+//        sampleAreaLight(areaLights[lightIndex], r, worldSpaceIntersectionPoint, worldSpaceLightDirection,
+//                        lightColor, lightDistance);
+//
+//        // Scale the light color by the cosine of the angle between the light direction and
+//        // surface normal.
+//        lightColor *= saturate(dot(worldSpaceSurfaceNormal, worldSpaceLightDirection));
+//
+//        // Scale the light color by the number of lights to compensate for the fact that
+//        // the sample samples only one light source at random.
+//        lightColor *= uniforms.lightCount;
+//
+//
+//        // Compute the shadow ray. The shadow ray checks whether the sample position on the
+//        // light source is visible from the current intersection point.
+//        // If it is, the kernel adds lighting to the output image.
+//        struct ray shadowRay;
+//
+//        // Add a small offset to the intersection point to avoid intersecting the same
+//        // triangle again.
+//        shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;
+//
+//        // Travel toward the light source.
+//        shadowRay.direction = worldSpaceLightDirection;
+//
+//        // Don't overshoot the light source.
+//        shadowRay.max_distance = lightDistance - 1e-3f;
+//
+//        // Shadow rays check only whether there is an object between the intersection point
+//        // and the light source. Tell Metal to return after finding any intersection.
+//        i.accept_any_intersection(true);
+//
+//        if (useIntersectionFunctions)
+//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+//        else
+//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW);
+
+//        // If there was no intersection, then the light source is visible from the original
+//        // intersection  point. Add the light's contribution to the image.
+//        if (intersection.type == intersection_type::none)
+//            accumulatedColor += lightColor * color;
+
+        // Choose a random direction to continue the path of the ray. This causes light to
+        // bounce between surfaces. An app might evaluate a more complicated equation to
+        // calculate the amount of light that reflects between intersection points.  However,
+        // all the math in this kernel cancels out because this app assumes a simple diffuse
+        // BRDF and samples the rays with a cosine distribution over the hemisphere (importance
+        // sampling). This requires that the kernel only multiply the colors together. This
+        // sampling strategy also reduces the amount of noise in the output image.
+        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
+                   halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
+        
+        ray.origin = worldSpaceIntersectionPoint;
+        float3 in_direction = ray.direction;
+        
+        // Deal with scattering.
+        if(material.is_metal){
+            scatter_record = metallicScatter(worldSpaceSurfaceNormal, ray.direction);
+            if(scatter_record.accept){
+                ray.direction = scatter_record.out_direction;
+            }else{
+                break;
+            }
+        } else if(material.is_glass){
+            float random_variable = r.x;
+            scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
+            
+            if(scatter_record.accept){
+                ray.direction = scatter_record.out_direction;
+            }else{
+                break;
+            }
+        } else if(material.is_phong){
+            float2 random_variable = r;
+            scatter_record = phongScatter(worldSpaceSurfaceNormal, ray.direction, random_variable, material);
+            if(scatter_record.accept){
+                ray.direction = scatter_record.out_direction;
+            }else{
+                break;
+            }
+        } else{
+            if(dot(worldSpaceSurfaceNormal, ray.direction) > 0){
+//                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
+            }
+            float3 worldSpaceSampleDirection = sampleCosineWeightedHemisphere(r);
+            worldSpaceSampleDirection = alignHemisphereWithNormal(worldSpaceSampleDirection, worldSpaceSurfaceNormal);
+            ray.direction = worldSpaceSampleDirection;
+        }
+        
+        // Deal with light sampling
+        if(material.is_metal){
+
+        }else if(material.is_glass){
+
+        }else{
+            // Sample light for diffuse material
+            struct ray shadowRay;
+            shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
+            shadowRay.direction = emitter_record.out_direction;
+            shadowRay.max_distance = emitter_record.distance - 1e-3f;
+            i.accept_any_intersection(true);
+            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+            if (intersection.type != intersection_type::none){
+                break;
+            }
+            float material_pdf;
+            if(material.is_phong){
+                material_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
+            }else{
+                material_pdf = max(0.f, dot(shadowRay.direction, worldSpaceSurfaceNormal)) / M_PI_F;
+            }
+            accumulatedColor += emitter_record.emit * color * saturate(dot(worldSpaceSurfaceNormal, shadowRay.direction)) * material_pdf / emitter_record.pdf;
+        }
+        
+        // Scale the ray color by the color of the surface to simulate the surface absorbing light.
+        color *= surfaceColor;
+        
+        ray.direction = normalize(ray.direction);
     }
 
     // Average this frame's sample with all of the previous frames.

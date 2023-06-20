@@ -45,6 +45,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 // for triangles.
 @property (nonatomic, readonly) NSString *intersectionFunctionName;
 
+// Number of geometries
+@property (nonatomic, readonly) NSUInteger geometryCount;
+
 // Initializer.
 - (instancetype)initWithDevice:(id <MTLDevice>)device;
 
@@ -148,11 +151,23 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Array of geometry instances in the scene.
 @property (nonatomic, readonly) NSArray <GeometryInstance *> *instances;
 
-// Buffer containing lights.
+// Array of geometry instances in the scene. (NOT USED!)
+@property (nonatomic, readonly) NSArray <GeometryInstance *> *light_instances;
+
+// Buffer containing lights. (NOT USED!)
 @property (nonatomic, readonly) id <MTLBuffer> lightBuffer;
 
-// Number of lights in the light buffer.
+// Buffer containing light instance index
+@property (nonatomic, readonly) id <MTLBuffer> lightIndexBuffer;
+
+// Buffer containing light counts
+@property (nonatomic, readonly) id <MTLBuffer> lightCountBuffer;
+
+// Number of light instances.
 @property (nonatomic, readonly) NSUInteger lightCount;
+
+// Number of instances in the light buffer.
+@property (nonatomic, readonly) NSUInteger instanceCount;
 
 // Camera position vector.
 @property (nonatomic) vector_float3 cameraPosition;
@@ -163,9 +178,14 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Camera up vector.
 @property (nonatomic) vector_float3 cameraUp;
 
+// Camera field of view
+@property (nonatomic) float cameraFov;
+
 // Initializer
 - (instancetype)initWithDevice:(id <MTLDevice>)device;
 
+#pragma mark - Create Scene
+#pragma region CreateScene {
 // Create scene with instances of a Cornell box. Each box can optionally
 // contain a sphere primitive that uses an intersection function.
 + (Scene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
@@ -180,6 +200,11 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 // Create test scene from Obj.
 + (Scene *)newTestSceneObj:(id <MTLDevice>)device;
+
+// Create test scene for MIS Implementation
++ (Scene *)newTestSceneMIS:(id <MTLDevice>)device;
+
+#pragma endregion CreateScene }
 
 // Add a piece of geometry to the scene.
 - (void)addGeometry:(Geometry *)mesh;

@@ -7,17 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A087F622A350CB300BDCA99 /* helloMetal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */; };
 		5A087F632A350E1300BDCA99 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A087F642A350E2000BDCA99 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A087F652A350E2600BDCA99 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
-		5A15433B2A38F33D00A1D990 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1543382A38F26200A1D990 /* scene.cpp */; };
-		5A43D6F92A37AB5B0048C4B4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A43D6F82A37AB5B0048C4B4 /* main.cpp */; };
 		5A43D6FD2A37ABC60048C4B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A43D6FE2A37ABCD0048C4B4 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A43D6FF2A37ABCD0048C4B4 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
 		5A43D7032A37B1CE0048C4B4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
-		5A43D7082A37BB860048C4B4 /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A43D7042A37B4210048C4B4 /* shader.metal */; };
 		5A61A28C2A3B8E0D00D9DA5B /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */; };
 		5A61A28D2A3B8E0D00D9DA5B /* Transforms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FF2A3B85D400D9DA5B /* Transforms.mm */; };
 		5A61A28E2A3B8E0D00D9DA5B /* Scene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2002A3B85D400D9DA5B /* Scene.mm */; };
@@ -35,6 +31,16 @@
 		5AF235192A3F6C0900CD623D /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235182A3F6C0900CD623D /* teapot.obj */; };
 		5AF2351B2A3F763500CD623D /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351A2A3F763500CD623D /* cylinder.obj */; };
 		5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351C2A3F7ADB00CD623D /* bunny.obj */; };
+		5AF235242A40BF9E00CD623D /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351F2A40BF9E00CD623D /* plate4.obj */; };
+		5AF235252A40BF9E00CD623D /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235202A40BF9E00CD623D /* plate1.obj */; };
+		5AF235262A40BF9E00CD623D /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235212A40BF9E00CD623D /* plate2.obj */; };
+		5AF235272A40BF9E00CD623D /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235222A40BF9E00CD623D /* plate3.obj */; };
+		5AF235282A40BF9E00CD623D /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235232A40BF9E00CD623D /* floor.obj */; };
+		5AF2352E2A40C59100CD623D /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235292A40C59100CD623D /* plate2.mtl */; };
+		5AF2352F2A40C59100CD623D /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352A2A40C59100CD623D /* floor.mtl */; };
+		5AF235302A40C59100CD623D /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352B2A40C59100CD623D /* plate1.mtl */; };
+		5AF235312A40C59100CD623D /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352C2A40C59100CD623D /* plate3.mtl */; };
+		5AF235322A40C59100CD623D /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352D2A40C59100CD623D /* plate4.mtl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,18 +66,11 @@
 
 /* Begin PBXFileReference section */
 		5A087F482A3508C100BDCA99 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
-		5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = helloMetal.cpp; sourceTree = "<group>"; };
 		5A087F5B2A350CA000BDCA99 /* helloMetal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloMetal; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A1543382A38F26200A1D990 /* scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
-		5A1543392A38F26200A1D990 /* scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = scene.hpp; sourceTree = "<group>"; };
 		5A426A1F2A2E84EF00EE9F46 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		5A426A292A2E856200EE9F46 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5A426A2B2A2E857500EE9F46 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5A43D6F62A37AB5A0048C4B4 /* helloRayTracing */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloRayTracing; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A43D6F82A37AB5B0048C4B4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		5A43D7002A37AE140048C4B4 /* renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = renderer.cpp; sourceTree = "<group>"; };
-		5A43D7012A37AE140048C4B4 /* renderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = renderer.hpp; sourceTree = "<group>"; };
-		5A43D7042A37B4210048C4B4 /* shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shader.metal; sourceTree = "<group>"; };
 		5A61A1FC2A3B85D400D9DA5B /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		5A61A1FE2A3B85D400D9DA5B /* ShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
@@ -100,6 +99,16 @@
 		5AF235182A3F6C0900CD623D /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 		5AF2351A2A3F763500CD623D /* cylinder.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.obj; sourceTree = "<group>"; };
 		5AF2351C2A3F7ADB00CD623D /* bunny.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bunny.obj; sourceTree = "<group>"; };
+		5AF2351F2A40BF9E00CD623D /* plate4.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate4.obj; sourceTree = "<group>"; };
+		5AF235202A40BF9E00CD623D /* plate1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate1.obj; sourceTree = "<group>"; };
+		5AF235212A40BF9E00CD623D /* plate2.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate2.obj; sourceTree = "<group>"; };
+		5AF235222A40BF9E00CD623D /* plate3.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate3.obj; sourceTree = "<group>"; };
+		5AF235232A40BF9E00CD623D /* floor.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
+		5AF235292A40C59100CD623D /* plate2.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate2.mtl; sourceTree = "<group>"; };
+		5AF2352A2A40C59100CD623D /* floor.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.mtl; sourceTree = "<group>"; };
+		5AF2352B2A40C59100CD623D /* plate1.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate1.mtl; sourceTree = "<group>"; };
+		5AF2352C2A40C59100CD623D /* plate3.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate3.mtl; sourceTree = "<group>"; };
+		5AF2352D2A40C59100CD623D /* plate4.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate4.mtl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,23 +145,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5A087F4A2A350A6E00BDCA99 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				5A43D6F72A37AB5B0048C4B4 /* helloRayTracing */,
-				5A087F5C2A350CA000BDCA99 /* helloMetal */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		5A087F5C2A350CA000BDCA99 /* helloMetal */ = {
-			isa = PBXGroup;
-			children = (
-				5A087F4B2A350A9600BDCA99 /* helloMetal.cpp */,
-			);
-			path = helloMetal;
-			sourceTree = "<group>";
-		};
 		5A426A0B2A2E845900EE9F46 = {
 			isa = PBXGroup;
 			children = (
@@ -160,7 +152,6 @@
 				5A84AFFA2A3DFD6E00100842 /* README.md */,
 				5A61A1FB2A3B85D400D9DA5B /* Renderer */,
 				5A426A162A2E845900EE9F46 /* Mimosa */,
-				5A087F4A2A350A6E00BDCA99 /* Tests */,
 				5A426A152A2E845900EE9F46 /* Products */,
 				5A426A1E2A2E84EF00EE9F46 /* Frameworks */,
 			);
@@ -203,19 +194,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		5A43D6F72A37AB5B0048C4B4 /* helloRayTracing */ = {
-			isa = PBXGroup;
-			children = (
-				5A43D6F82A37AB5B0048C4B4 /* main.cpp */,
-				5A43D7002A37AE140048C4B4 /* renderer.cpp */,
-				5A43D7012A37AE140048C4B4 /* renderer.hpp */,
-				5A43D7042A37B4210048C4B4 /* shader.metal */,
-				5A1543382A38F26200A1D990 /* scene.cpp */,
-				5A1543392A38F26200A1D990 /* scene.hpp */,
-			);
-			path = helloRayTracing;
-			sourceTree = "<group>";
-		};
 		5A61A1FB2A3B85D400D9DA5B /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
@@ -253,6 +231,7 @@
 		5AF2350E2A3E415F00CD623D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5AF2351E2A40BF9E00CD623D /* veach */,
 				5AF2351C2A3F7ADB00CD623D /* bunny.obj */,
 				5AF2351A2A3F763500CD623D /* cylinder.obj */,
 				5AF235182A3F6C0900CD623D /* teapot.obj */,
@@ -261,6 +240,23 @@
 				5AF2350F2A3E415F00CD623D /* bunny-fine.obj */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		5AF2351E2A40BF9E00CD623D /* veach */ = {
+			isa = PBXGroup;
+			children = (
+				5AF2352A2A40C59100CD623D /* floor.mtl */,
+				5AF2352B2A40C59100CD623D /* plate1.mtl */,
+				5AF235292A40C59100CD623D /* plate2.mtl */,
+				5AF2352C2A40C59100CD623D /* plate3.mtl */,
+				5AF2352D2A40C59100CD623D /* plate4.mtl */,
+				5AF2351F2A40BF9E00CD623D /* plate4.obj */,
+				5AF235202A40BF9E00CD623D /* plate1.obj */,
+				5AF235212A40BF9E00CD623D /* plate2.obj */,
+				5AF235222A40BF9E00CD623D /* plate3.obj */,
+				5AF235232A40BF9E00CD623D /* floor.obj */,
+			);
+			path = veach;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -363,14 +359,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AF235272A40BF9E00CD623D /* plate3.obj in Resources */,
+				5AF2352E2A40C59100CD623D /* plate2.mtl in Resources */,
 				5AF2351B2A3F763500CD623D /* cylinder.obj in Resources */,
+				5AF2352F2A40C59100CD623D /* floor.mtl in Resources */,
 				5AF235132A3F586B00CD623D /* bunny-fine.obj in Resources */,
+				5AF235312A40C59100CD623D /* plate3.mtl in Resources */,
 				5AF235172A3F5EE900CD623D /* cube.obj in Resources */,
 				5AF235192A3F6C0900CD623D /* teapot.obj in Resources */,
 				5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */,
 				5AF235152A3F5C7C00CD623D /* cone.obj in Resources */,
+				5AF235252A40BF9E00CD623D /* plate1.obj in Resources */,
+				5AF235322A40C59100CD623D /* plate4.mtl in Resources */,
+				5AF235262A40BF9E00CD623D /* plate2.obj in Resources */,
+				5AF235282A40BF9E00CD623D /* floor.obj in Resources */,
+				5AF235302A40C59100CD623D /* plate1.mtl in Resources */,
 				5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */,
 				5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */,
+				5AF235242A40BF9E00CD623D /* plate4.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +387,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A087F622A350CB300BDCA99 /* helloMetal.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,9 +394,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A15433B2A38F33D00A1D990 /* scene.cpp in Sources */,
-				5A43D7082A37BB860048C4B4 /* shader.metal in Sources */,
-				5A43D6F92A37AB5B0048C4B4 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

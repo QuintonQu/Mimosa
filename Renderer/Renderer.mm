@@ -36,6 +36,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
     id <MTLBuffer> _resourceBuffer;
     id <MTLBuffer> _instanceBuffer;
+    id <MTLBuffer> _lightBuffer;
 
     id <MTLIntersectionFunctionTable> _intersectionFunctionTable;
 
@@ -183,7 +184,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         intersectionFunctions[geometry.intersectionFunctionName] = intersectionFunction;
     }
 
-    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernel"];
+    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelNEE"];
 
     // Create the compute pipeline state, which does all the ray tracing.
     _raytracingPipeline = [self newComputePipelineStateWithFunction:raytracingFunction
@@ -202,10 +203,10 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         // can use it with only that pipeline.
         _intersectionFunctionTable = [_raytracingPipeline newIntersectionFunctionTableWithDescriptor:intersectionFunctionTableDescriptor];
 
-        if (!_usePerPrimitiveData) {
-            // Bind the buffer used to pass resources to the intersection functions.
-            [_intersectionFunctionTable setBuffer:_resourceBuffer offset:0 atIndex:0];
-        }
+//        if (!_usePerPrimitiveData) {
+//            // Bind the buffer used to pass resources to the intersection functions.
+//            [_intersectionFunctionTable setBuffer:_resourceBuffer offset:0 atIndex:0];
+//        }
 
         // Map each piece of scene geometry to its intersection function.
         for (NSUInteger geometryIndex = 0; geometryIndex < _scene.geometries.count; geometryIndex++) {
@@ -338,7 +339,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 //        }
 //#endif
     }
-
+    
 #if !TARGET_OS_IPHONE
     [_resourceBuffer didModifyRange:NSMakeRange(0, _resourceBuffer.length)];
 #endif
@@ -498,7 +499,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
             for (int row = 0; row < 3; row++)
                 instanceDescriptors[instanceIndex].transformationMatrix.columns[column][row] = instance.transform.columns[column][row];
     }
-
+    
 #if !TARGET_OS_IPHONE
     [_instanceBuffer didModifyRange:NSMakeRange(0, _instanceBuffer.length)];
 #endif
@@ -573,6 +574,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     vector_float3 position = _scene.cameraPosition;
     vector_float3 target = _scene.cameraTarget;
     vector_float3 up = _scene.cameraUp;
+    float fov = _scene.cameraFov;
 
     vector_float3 forward = vector_normalize(target - position);
     vector_float3 right = vector_normalize(vector_cross(forward, up));
@@ -582,8 +584,9 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     uniforms->camera.forward = forward;
     uniforms->camera.right = right;
     uniforms->camera.up = up;
+    uniforms->camera.fov = fov;
 
-    float fieldOfView = 45.0f * (M_PI / 180.0f);
+    float fieldOfView = fov * (M_PI / 180.0f);
     float aspectRatio = (float)_size.width / (float)_size.height;
     float imagePlaneHeight = tanf(fieldOfView / 2.0f);
     float imagePlaneWidth = aspectRatio * imagePlaneHeight;
@@ -597,6 +600,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     uniforms->frameIndex = _frameIndex++;
 
     uniforms->lightCount = (unsigned int)_scene.lightCount;
+    uniforms->instanceCount = (unsigned int)_scene.instanceCount;
 
 #if !TARGET_OS_IPHONE
     [_uniformBuffer didModifyRange:NSMakeRange(_uniformBufferOffset, alignedUniformsSize)];
@@ -647,11 +651,14 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
     // Bind buffers.
     [computeEncoder setBuffer:_uniformBuffer            offset:_uniformBufferOffset atIndex:0];
-    if (!_usePerPrimitiveData) {
-        [computeEncoder setBuffer:_resourceBuffer           offset:0                    atIndex:1];
-    }
+//    if (!_usePerPrimitiveData) {
+//        [computeEncoder setBuffer:_resourceBuffer           offset:0                    atIndex:1];
+//    }
+    [computeEncoder setBuffer:_resourceBuffer           offset:0                    atIndex:1];
     [computeEncoder setBuffer:_instanceBuffer           offset:0                    atIndex:2];
     [computeEncoder setBuffer:_scene.lightBuffer        offset:0                    atIndex:3];
+    [computeEncoder setBuffer:_scene.lightIndexBuffer   offset:0                    atIndex:6];
+    [computeEncoder setBuffer:_scene.lightCountBuffer   offset:0                    atIndex:7];
 
     // Bind acceleration structure and intersection function table. These bind to normal buffer
     // binding slots.

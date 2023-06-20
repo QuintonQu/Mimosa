@@ -12,8 +12,12 @@ The header that contains the types and enumeration constants that the Metal shad
 
 #define GEOMETRY_MASK_TRIANGLE 1
 #define GEOMETRY_MASK_SPHERE   2
-#define GEOMETRY_MASK_LIGHT    4
+#define GEOMETRY_MASK_TRIANGLE_LIGHT    4
+#define GEOMETRY_MASK_SPHERE_LIGHT    8
 
+//#define GEOMETRY_MASK_LIGHT 8
+
+#define GEOMETRY_MASK_LIGHT (GEOMETRY_MASK_TRIANGLE_LIGHT | GEOMETRY_MASK_SPHERE_LIGHT)
 #define GEOMETRY_MASK_GEOMETRY (GEOMETRY_MASK_TRIANGLE | GEOMETRY_MASK_SPHERE)
 
 #define RAY_MASK_PRIMARY   (GEOMETRY_MASK_GEOMETRY | GEOMETRY_MASK_LIGHT)
@@ -37,6 +41,7 @@ struct Camera {
     vector_float3 right;
     vector_float3 up;
     vector_float3 forward;
+    float fov = 45.0f;
 };
 
 struct AreaLight {
@@ -52,6 +57,7 @@ struct Uniforms {
     unsigned int height;
     unsigned int frameIndex;
     unsigned int lightCount;
+    unsigned int instanceCount;
     Camera camera;
 };
 
@@ -60,7 +66,8 @@ struct Material {
     bool is_metal = false;
     bool is_glass = false;
 //    float metallic;
-//    float roughness;
+    bool is_phong = false;
+    float exponent;
 };
 
 struct Sphere {
