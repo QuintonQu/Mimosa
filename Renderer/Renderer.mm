@@ -184,7 +184,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         intersectionFunctions[geometry.intersectionFunctionName] = intersectionFunction;
     }
 
-    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelNEE"];
+    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
 
     // Create the compute pipeline state, which does all the ray tracing.
     _raytracingPipeline = [self newComputePipelineStateWithFunction:raytracingFunction

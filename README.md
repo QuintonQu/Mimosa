@@ -32,8 +32,8 @@ This is an exercise project for writing ray tracing in Metal shader. The project
 - [ ] Displacement mapping
 
 ### Path Tracer
-- [ ] Multiple importance sampling
 - [ ] Volumetric rendering
+- [x] Multiple importance sampling
 - [x] Naive Path tracer
 - [x] Next event estimation
 

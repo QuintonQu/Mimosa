@@ -1190,7 +1190,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     diffuse_light_3->color = vector3(11.111f, 11.111f, 11.111f);
     
     Material* diffuse_light_4 = new Material;
-    diffuse_light_4->color = vector3(3.111f, 3.111f, 3.111f);
+    diffuse_light_4->color = vector3(4.23457f, 4.23457f, 4.23457f);
     
     Material* plate_1 = new Material;
     plate_1->color = vector3(0.35f, 0.35f, 0.35f);
