@@ -166,6 +166,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Number of light instances.
 @property (nonatomic, readonly) NSUInteger lightCount;
 
+// Number of lights.
+@property (nonatomic, readonly) NSUInteger totalLightCount;
+
 // Number of instances in the light buffer.
 @property (nonatomic, readonly) NSUInteger instanceCount;
 

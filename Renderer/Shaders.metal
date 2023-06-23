@@ -16,7 +16,8 @@ using namespace raytracing;
 constant unsigned int resourcesStride   [[function_constant(0)]];
 constant bool useIntersectionFunctions  [[function_constant(1)]];
 constant bool usePerPrimitiveData       [[function_constant(2)]];
-//constant bool useResourcesBuffer = !usePerPrimitiveData;
+//constant bool useResourcesBuffer = !usePerPrimitiveData
+constant int max_bounce = 4;
 
 constant unsigned int primes[] = {
     2,   3,  5,  7,
@@ -244,6 +245,48 @@ inline float spherePdf(Sphere sphere, float3 hit_point, float4x4 transform){
     return abs(1.f / area);
 }
 
+// Sample a triangle light
+inline EmitterRecord sampleTriangleLight(Triangle triangle, float3 hit_point, float2 random_variable, float4x4 transform){
+    EmitterRecord emitter_record;
+    float alpha = random_variable.x;
+    float beta = random_variable.y;
+    if (alpha + beta > 1){
+        alpha = 1 - alpha;
+        beta = 1 - beta;
+    }
+    float2 barycentric_coords = float2(alpha, beta);
+    float3 objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
+    float3 origin = interpolateVertexAttribute(triangle.positions, barycentric_coords);
+    origin = transformPoint(origin, transform);
+    float3 in_direction = hit_point - origin;
+    
+    emitter_record.out_direction = normalize(-in_direction);
+    float3 worldSpaceSurfaceNormal = transformDirection(objectSpaceSurfaceNormal, transform);
+    
+    emitter_record.emit = triangle.material.color;
+    
+    float3 a = transformPoint(triangle.positions[0], transform) - transformPoint(triangle.positions[2], transform);
+    float3 b = transformPoint(triangle.positions[1], transform) - transformPoint(triangle.positions[2], transform);
+    float area = length(cross(a, b)) / 2.f;
+    float cosine = abs(dot(emitter_record.out_direction, worldSpaceSurfaceNormal));
+    emitter_record.distance = length(in_direction);
+    emitter_record.pdf = length_squared(in_direction) / (cosine * area);
+    return emitter_record;
+}
+
+inline float trianglePdf(Triangle triangle, float3 hit_point, float4x4 transform, float2 barycentric_coords){
+    float3 objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
+    float3 worldSpaceSurfaceNormal = transformDirection(objectSpaceSurfaceNormal, transform);
+    float3 origin = interpolateVertexAttribute(triangle.positions, barycentric_coords);
+    origin = transformPoint(origin, transform);
+    float3 in_direction = hit_point - origin;
+    float3 a = transformPoint(triangle.positions[0], transform) - transformPoint(triangle.positions[2], transform);
+    float3 b = transformPoint(triangle.positions[1], transform) - transformPoint(triangle.positions[2], transform);
+    float area = length(cross(a, b)) / 2.f;
+    float cosine = abs(dot(in_direction, worldSpaceSurfaceNormal));
+    return length_squared(in_direction) / (cosine * area);
+}
+
 # pragma mark - Materials' Scatter Methods
 
 // Return the type for Scatter Record for different material.
@@ -348,9 +391,11 @@ inline float phongPdf(float3 normal, float3 in_direction, float3 out_direction, 
 
 // Resources for a piece of triangle geometry.
 struct TriangleResources {
-    device uint16_t *indices;
-    device float3 *vertexNormals;
-    device float3 *vertexColors;
+//    device uint16_t *indices;
+//    device float3 *vertexNormals;
+//    device float3 *vertexColors;
+//    device float3 *vertexPositions;
+    device Triangle* triangles;
 };
 
 // Resources for a piece of sphere geometry.
@@ -538,7 +583,7 @@ kernel void raytracingKernelMats(
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
-    for (int bounce = 0; bounce < 2; bounce++) {
+    for (int bounce = 0; bounce < max_bounce + 1; bounce++) {
         // Get the closest intersection, not the first intersection. This is the default, but
         // the sample adjusts this property below when it casts shadow rays.
         i.accept_any_intersection(false);
@@ -664,71 +709,9 @@ kernel void raytracingKernelMats(
             material = sphere.material;
         }
 
-        // Choose a random light source to sample.
-//        float lightSample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 0);
-//        unsigned int lightIndex = min((unsigned int)(lightSample * uniforms.lightCount), uniforms.lightCount - 1);
-
         // Choose a random point to sample on the light source.
         float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),
                           halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 2));
-
-//        float3 worldSpaceLightDirection;
-//        float3 lightColor;
-//        float lightDistance;
-//
-//        // Sample the lighting between the intersection point and the point on the area light.
-//        sampleAreaLight(areaLights[lightIndex], r, worldSpaceIntersectionPoint, worldSpaceLightDirection,
-//                        lightColor, lightDistance);
-//
-//        // Scale the light color by the cosine of the angle between the light direction and
-//        // surface normal.
-//        lightColor *= saturate(dot(worldSpaceSurfaceNormal, worldSpaceLightDirection));
-//
-//        // Scale the light color by the number of lights to compensate for the fact that
-//        // the sample samples only one light source at random.
-//        lightColor *= uniforms.lightCount;
-//
-        // Scale the ray color by the color of the surface to simulate the surface absorbing light.
-//        color *= surfaceColor;
-//
-//        // Compute the shadow ray. The shadow ray checks whether the sample position on the
-//        // light source is visible from the current intersection point.
-//        // If it is, the kernel adds lighting to the output image.
-//        struct ray shadowRay;
-//
-//        // Add a small offset to the intersection point to avoid intersecting the same
-//        // triangle again.
-//        shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;
-//
-//        // Travel toward the light source.
-//        shadowRay.direction = worldSpaceLightDirection;
-//
-//        // Don't overshoot the light source.
-//        shadowRay.max_distance = lightDistance - 1e-3f;
-//
-//        // Shadow rays check only whether there is an object between the intersection point
-//        // and the light source. Tell Metal to return after finding any intersection.
-//        i.accept_any_intersection(true);
-//
-//        if (useIntersectionFunctions)
-//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
-//        else
-//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW);
-
-//        // If there was no intersection, then the light source is visible from the original
-//        // intersection  point. Add the light's contribution to the image.
-//        if (intersection.type == intersection_type::none)
-//            accumulatedColor += lightColor * color;
-
-        // Choose a random direction to continue the path of the ray. This causes light to
-        // bounce between surfaces. An app might evaluate a more complicated equation to
-        // calculate the amount of light that reflects between intersection points.  However,
-        // all the math in this kernel cancels out because this app assumes a simple diffuse
-        // BRDF and samples the rays with a cosine distribution over the hemisphere (importance
-        // sampling). This requires that the kernel only multiply the colors together. This
-        // sampling strategy also reduces the amount of noise in the output image.
-        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
-                   halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
         
         ray.origin = worldSpaceIntersectionPoint;
         
@@ -760,7 +743,7 @@ kernel void raytracingKernelMats(
             color *= scatter_record.attenuation;
         } else{
             if(dot(worldSpaceSurfaceNormal, ray.direction) > 0){
-                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
+//                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
             }
             float3 worldSpaceSampleDirection = sampleCosineWeightedHemisphere(r);
             worldSpaceSampleDirection = alignHemisphereWithNormal(worldSpaceSampleDirection, worldSpaceSurfaceNormal);
@@ -827,21 +810,24 @@ kernel void raytracingKernelNEE(
     typename intersector<triangle_data, instancing>::result_type intersection;
     
     ScatterRecord scatter_record;
+    
+    // Check if last is specular material
+    bool last_is_specular = false;
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
-    for (int bounce = 0; bounce < 4; bounce++) {
+    for (int bounce = 0; bounce < max_bounce; bounce++) {
         // Get the closest intersection, not the first intersection. This is the default, but
         // the sample adjusts this property below when it casts shadow rays.
         i.accept_any_intersection(false);
 
         // Check for intersection between the ray and the acceleration structure. If the sample
         // isn't using intersection functions, it doesn't need to include one.
-        intersection = i.intersect(ray, accelerationStructure, bounce == 0 ? RAY_MASK_PRIMARY : RAY_MASK_SECONDARY, intersectionFunctionTable);
+        intersection = i.intersect(ray, accelerationStructure, bounce == 0 || last_is_specular ? RAY_MASK_PRIMARY : RAY_MASK_SECONDARY, intersectionFunctionTable);
 
         // Stop if the ray didn't hit anything and has bounced out of the scene.
         if (intersection.type == intersection_type::none) {
-            accumulatedColor = background_color * color;
+            accumulatedColor += background_color * color;
             break;
         }
             
@@ -856,14 +842,14 @@ kernel void raytracingKernelNEE(
                 Sphere area_light;
                 area_light = *(const device Sphere*)intersection.primitive_data;
                 float3 light_color = area_light.material.color;
-                accumulatedColor = light_color;
+                accumulatedColor += light_color;
                 break;
             }
             if(mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
                 Triangle area_light;
                 area_light = *(const device Triangle*)intersection.primitive_data;
                 float3 light_color = area_light.material.color;
-                accumulatedColor = light_color;
+                accumulatedColor += light_color;
                 break;
             }
         }
@@ -944,6 +930,11 @@ kernel void raytracingKernelNEE(
             Sphere sphere = sphereResources.spheres[light_geometry_index];
             emitter_record = sampleSphereLight(sphere, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
         }
+        if(light_mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
+            device TriangleResources & triangleResources = *(device TriangleResources *)((device char *)resources + resourcesStride * geometries_index);
+            Triangle triangle = triangleResources.triangles[light_geometry_index];
+            emitter_record = sampleTriangleLight(triangle, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
+        }
         
 
         // Choose a random direction to continue the path of the ray. This causes light to
@@ -986,19 +977,24 @@ kernel void raytracingKernelNEE(
             }
         } else{
             if(dot(worldSpaceSurfaceNormal, ray.direction) > 0){
-                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
+//                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
+                break;
             }
             float3 worldSpaceSampleDirection = sampleCosineWeightedHemisphere(r);
             worldSpaceSampleDirection = alignHemisphereWithNormal(worldSpaceSampleDirection, worldSpaceSurfaceNormal);
             ray.direction = worldSpaceSampleDirection;
         }
         
+        // Scale the ray color by the color of the surface to simulate the surface absorbing light.
+        color *= surfaceColor;
+        
         // Deal with light sampling
         if(material.is_metal){
-
+            last_is_specular = true;
         }else if(material.is_glass){
-
+            last_is_specular = true;
         }else{
+            last_is_specular = false;
             // Sample light for diffuse material
             struct ray shadowRay;
             shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
@@ -1006,20 +1002,16 @@ kernel void raytracingKernelNEE(
             shadowRay.max_distance = emitter_record.distance - 1e-3f;
             i.accept_any_intersection(true);
             intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
-            if (intersection.type != intersection_type::none){
-                break;
+            if (intersection.type == intersection_type::none){
+                float material_pdf;
+                if(material.is_phong){
+                    material_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
+                }else{
+                    material_pdf = saturate(dot(worldSpaceSurfaceNormal, shadowRay.direction)) / M_PI_F;
+                }
+                accumulatedColor += emitter_record.emit * color * material_pdf / emitter_record.pdf * uniforms.totalLightCount;
             }
-            float material_pdf;
-            if(material.is_phong){
-                material_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
-            }else{
-                material_pdf = saturate(dot(worldSpaceSurfaceNormal, shadowRay.direction)) / M_PI_F;
-            }
-            accumulatedColor += emitter_record.emit * color * material_pdf / emitter_record.pdf;
         }
-        
-        // Scale the ray color by the color of the surface to simulate the surface absorbing light.
-        color *= surfaceColor;
         
         ray.direction = normalize(ray.direction);
     }
@@ -1077,7 +1069,10 @@ kernel void raytracingKernelMIS(
     float Le_weight = 1.f;
     float nee_pdf = 1.f;
     float brdf_pdf = 1.f;
-    float mis_power = 3.f;
+    float mis_power = 4.f;
+    
+    // Check if last is specular material
+    bool last_is_specular = false;
 
     // Create an intersector to test for intersection between the ray and the geometry in the scene.
     intersector<triangle_data, instancing> i;
@@ -1088,13 +1083,13 @@ kernel void raytracingKernelMIS(
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
-    for (int bounce = 0; bounce < 2; bounce++) {
+    for (int bounce = 0; bounce < max_bounce; bounce++) {
         i.accept_any_intersection(false);
         intersection = i.intersect(ray, accelerationStructure, RAY_MASK_PRIMARY, intersectionFunctionTable);
 
         // Stop if the ray didn't hit anything and has bounced out of the scene.
         if (intersection.type == intersection_type::none) {
-            accumulatedColor = background_color * color;
+            accumulatedColor += background_color * color;
             break;
         }
             
@@ -1119,26 +1114,33 @@ kernel void raytracingKernelMIS(
                 Sphere area_light;
                 area_light = *(const device Sphere*)intersection.primitive_data;
                 float3 light_color = area_light.material.color;
-                if(bounce > 0){
+                if(bounce > 0 && !last_is_specular){
                     nee_pdf = spherePdf(area_light, ray.origin, objectToWorldSpaceTransform);
+//                    Le_weight = pow(brdf_pdf, mis_power) / (pow(nee_pdf, mis_power) + pow(brdf_pdf, mis_power));
+                    Le_weight = 1.f + pow(nee_pdf, mis_power) / pow(brdf_pdf, mis_power);
+                    Le_weight = 1.f / Le_weight;
+                }else{
+                    Le_weight = 1.f;
                 }
-                Le_weight = pow(brdf_pdf, mis_power) / (pow(nee_pdf, mis_power) + pow(brdf_pdf, mis_power));
                 accumulatedColor += light_color * Le_weight * color;
             }
             if(mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
                 Triangle area_light;
+                float2 barycentric_coords = intersection.triangle_barycentric_coord;
                 area_light = *(const device Triangle*)intersection.primitive_data;
                 float3 light_color = area_light.material.color;
-                if(bounce > 0){
-//                    nee_pdf = spherePdf(area_light, ray.origin, objectToWorldSpaceTransform);
+                if(bounce > 0 && !last_is_specular){
+                    nee_pdf = trianglePdf(area_light, ray.origin, objectToWorldSpaceTransform, barycentric_coords);
+//                    Le_weight = pow(brdf_pdf, mis_power) / (pow(nee_pdf, mis_power) + pow(brdf_pdf, mis_power));
+                    Le_weight = 1.f + pow(nee_pdf, mis_power) / pow(brdf_pdf, mis_power);
+                    Le_weight = 1.f / Le_weight;
+                }else{
+                    Le_weight = 1.f;
                 }
-                Le_weight = pow(brdf_pdf, mis_power) / (pow(nee_pdf, mis_power) + pow(brdf_pdf, mis_power));
                 accumulatedColor += light_color * Le_weight * color;
             }
             break;
         }
-        color *= Le_weight;
-
 
         float3 worldSpaceSurfaceNormal = 0.0f;
         float3 surfaceColor = 0.0f;
@@ -1149,9 +1151,8 @@ kernel void raytracingKernelMIS(
             
             float3 objectSpaceSurfaceNormal;
             
-            float2 barycentric_coords = intersection.triangle_barycentric_coord;
-            
             triangle = *(const device Triangle*)intersection.primitive_data;
+            float2 barycentric_coords = intersection.triangle_barycentric_coord;
 
             // Interpolate the vertex normal at the intersection point.
             objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
@@ -1174,7 +1175,6 @@ kernel void raytracingKernelMIS(
             worldSpaceSurfaceNormal = normalize(worldSpaceIntersectionPoint - worldSpaceOrigin);
 
             // The sphere is a uniform color, so you don't need to interpolate the color across the surface.
-            surfaceColor = sphere.color;
             surfaceColor = sphere.material.color;
             material = sphere.material;
         }
@@ -1207,6 +1207,12 @@ kernel void raytracingKernelMIS(
             Sphere sphere = sphereResources.spheres[light_geometry_index];
             emitter_record = sampleSphereLight(sphere, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
         }
+        if(light_mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
+            device TriangleResources & triangleResources = *(device TriangleResources *)((device char *)resources + resourcesStride * geometries_index);
+            Triangle triangle = triangleResources.triangles[light_geometry_index];
+            emitter_record = sampleTriangleLight(triangle, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
+        }
+        
 
         // Choose a random direction to continue the path of the ray. This causes light to
         // bounce between surfaces. An app might evaluate a more complicated equation to
@@ -1255,14 +1261,17 @@ kernel void raytracingKernelMIS(
             ray.direction = worldSpaceSampleDirection;
         }
         
+        // Scale the ray color by the color of the surface to simulate the surface absorbing light.
+        color *= surfaceColor;
         ray.direction = normalize(ray.direction);
         
         // Deal with light sampling
         if(material.is_metal){
-
+            last_is_specular = true;
         }else if(material.is_glass){
-
+            last_is_specular = true;
         }else{
+            last_is_specular = false;
             // Sample light for diffuse material
             struct ray shadowRay;
             shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
@@ -1270,23 +1279,20 @@ kernel void raytracingKernelMIS(
             shadowRay.max_distance = emitter_record.distance - 1e-3f;
             i.accept_any_intersection(true);
             intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
-            if (intersection.type != intersection_type::none){
-                break;
+            if (intersection.type == intersection_type::none){
+                if(material.is_phong){
+                    brdf_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
+                }else{
+                    brdf_pdf = saturate(dot(worldSpaceSurfaceNormal, shadowRay.direction)) / M_PI_F;
+                }
+                nee_pdf = emitter_record.pdf;
+//                Le_weight = pow(nee_pdf, mis_power) / (pow(nee_pdf, mis_power) + pow(brdf_pdf, mis_power));
+                Le_weight = 1.f + pow(brdf_pdf, mis_power) / pow(nee_pdf, mis_power);
+                Le_weight = 1.f / Le_weight;
+                accumulatedColor += Le_weight * emitter_record.emit * color * brdf_pdf / nee_pdf * uniforms.totalLightCount;
             }
-            if(material.is_phong){
-                brdf_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
-            }else{
-                brdf_pdf = saturate(dot(shadowRay.direction, worldSpaceSurfaceNormal)) / M_PI_F;
-            }
-            nee_pdf = emitter_record.pdf;
-            Le_weight = pow(nee_pdf, mis_power) / (pow(nee_pdf, mis_power) + pow(brdf_pdf, mis_power));
-//            Le_weight = nee_pdf / (nee_pdf + brdf_pdf);
-            accumulatedColor += Le_weight * emitter_record.emit * color * brdf_pdf / nee_pdf;
         }
-        
-        // Scale the ray color by the color of the surface to simulate the surface absorbing light.
-        color *= surfaceColor;
-        
+                
         // Calculate BRDF_PDF for next trace.
         if(material.is_metal){
 

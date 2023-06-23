@@ -24,6 +24,34 @@
 		5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */; };
 		5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A2102A3B85FD00D9DA5B /* Main.storyboard */; };
 		5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
+		5AE195432A44A47100DD9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195412A44A47100DD9520 /* Main.storyboard */; };
+		5AE195452A44A47300DD9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195442A44A47300DD9520 /* Assets.xcassets */; };
+		5AE195482A44A47300DD9520 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195462A44A47300DD9520 /* LaunchScreen.storyboard */; };
+		5AE195502A44A7AD00DD9520 /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE1954F2A44A7AD00DD9520 /* ModelIO.framework */; };
+		5AE195522A44A7C200DD9520 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE195512A44A7C200DD9520 /* MetalKit.framework */; };
+		5AE195532A44A7D800DD9520 /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352A2A40C59100CD623D /* floor.mtl */; };
+		5AE195542A44A7D800DD9520 /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352B2A40C59100CD623D /* plate1.mtl */; };
+		5AE195552A44A7D800DD9520 /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235292A40C59100CD623D /* plate2.mtl */; };
+		5AE195562A44A7D800DD9520 /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352C2A40C59100CD623D /* plate3.mtl */; };
+		5AE195572A44A7D800DD9520 /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352D2A40C59100CD623D /* plate4.mtl */; };
+		5AE195582A44A7D800DD9520 /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351F2A40BF9E00CD623D /* plate4.obj */; };
+		5AE195592A44A7D800DD9520 /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235202A40BF9E00CD623D /* plate1.obj */; };
+		5AE1955A2A44A7D800DD9520 /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235212A40BF9E00CD623D /* plate2.obj */; };
+		5AE1955B2A44A7D800DD9520 /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235222A40BF9E00CD623D /* plate3.obj */; };
+		5AE1955C2A44A7D800DD9520 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235232A40BF9E00CD623D /* floor.obj */; };
+		5AE1955D2A44A7D800DD9520 /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351C2A3F7ADB00CD623D /* bunny.obj */; };
+		5AE1955E2A44A7D800DD9520 /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351A2A3F763500CD623D /* cylinder.obj */; };
+		5AE1955F2A44A7D800DD9520 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235182A3F6C0900CD623D /* teapot.obj */; };
+		5AE195602A44A7D800DD9520 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235162A3F5EE900CD623D /* cube.obj */; };
+		5AE195612A44A7D800DD9520 /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235142A3F5C7C00CD623D /* cone.obj */; };
+		5AE195622A44A7D800DD9520 /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2350F2A3E415F00CD623D /* bunny-fine.obj */; };
+		5AE195642A44A7F600DD9520 /* Transforms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FF2A3B85D400D9DA5B /* Transforms.mm */; };
+		5AE195652A44A7F600DD9520 /* Scene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2002A3B85D400D9DA5B /* Scene.mm */; };
+		5AE195662A44A7F600DD9520 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2022A3B85D400D9DA5B /* Renderer.mm */; };
+		5AE195672A44A87300DD9520 /* mimosa.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2162A3B8A7E00D9DA5B /* mimosa.m */; };
+		5AE195692A44A8F200DD9520 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
+		5AE1956A2A44AF2800DD9520 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */; };
+		5AE1956B2A44AF5900DD9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */; };
 		5AF235122A3E4E5F00CD623D /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AF235102A3E4C2700CD623D /* ModelIO.framework */; };
 		5AF235132A3F586B00CD623D /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2350F2A3E415F00CD623D /* bunny-fine.obj */; };
 		5AF235152A3F5C7C00CD623D /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235142A3F5C7C00CD623D /* cone.obj */; };
@@ -92,6 +120,15 @@
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A84AFFA2A3DFD6E00100842 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5AE195362A44A47100DD9520 /* Mimosa-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mimosa-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AE195422A44A47100DD9520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5AE195442A44A47300DD9520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5AE195472A44A47300DD9520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5AE195492A44A47300DD9520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5AE1954F2A44A7AD00DD9520 /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.0.sdk/System/Library/Frameworks/ModelIO.framework; sourceTree = DEVELOPER_DIR; };
+		5AE195512A44A7C200DD9520 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.0.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = DEVELOPER_DIR; };
+		5AE1956C2A44B48800DD9520 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		5AE1956D2A44B4BB00DD9520 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		5AF2350F2A3E415F00CD623D /* bunny-fine.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = "bunny-fine.obj"; sourceTree = "<group>"; };
 		5AF235102A3E4C2700CD623D /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = System/Library/Frameworks/ModelIO.framework; sourceTree = SDKROOT; };
 		5AF235142A3F5C7C00CD623D /* cone.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cone.obj; sourceTree = "<group>"; };
@@ -142,6 +179,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5AE195332A44A47100DD9520 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AE195522A44A7C200DD9520 /* MetalKit.framework in Frameworks */,
+				5AE195502A44A7AD00DD9520 /* ModelIO.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -152,6 +198,7 @@
 				5A84AFFA2A3DFD6E00100842 /* README.md */,
 				5A61A1FB2A3B85D400D9DA5B /* Renderer */,
 				5A426A162A2E845900EE9F46 /* Mimosa */,
+				5AE195372A44A47100DD9520 /* Mimosa-IOS */,
 				5A426A152A2E845900EE9F46 /* Products */,
 				5A426A1E2A2E84EF00EE9F46 /* Frameworks */,
 			);
@@ -163,6 +210,7 @@
 				5A087F5B2A350CA000BDCA99 /* helloMetal */,
 				5A43D6F62A37AB5A0048C4B4 /* helloRayTracing */,
 				5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */,
+				5AE195362A44A47100DD9520 /* Mimosa-IOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -170,6 +218,8 @@
 		5A426A162A2E845900EE9F46 /* Mimosa */ = {
 			isa = PBXGroup;
 			children = (
+				5AE1956D2A44B4BB00DD9520 /* SceneDelegate.m */,
+				5AE1956C2A44B48800DD9520 /* SceneDelegate.h */,
 				5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */,
 				5A61A2152A3B8A7E00D9DA5B /* AppDelegate.h */,
 				5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */,
@@ -185,7 +235,9 @@
 		5A426A1E2A2E84EF00EE9F46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5AE195512A44A7C200DD9520 /* MetalKit.framework */,
 				5AF235102A3E4C2700CD623D /* ModelIO.framework */,
+				5AE1954F2A44A7AD00DD9520 /* ModelIO.framework */,
 				5A087F482A3508C100BDCA99 /* MetalKit.framework */,
 				5A426A2B2A2E857500EE9F46 /* Foundation.framework */,
 				5A426A292A2E856200EE9F46 /* QuartzCore.framework */,
@@ -226,6 +278,17 @@
 				5A61A2122A3B85FD00D9DA5B /* Info.plist */,
 			);
 			path = macOS;
+			sourceTree = "<group>";
+		};
+		5AE195372A44A47100DD9520 /* Mimosa-IOS */ = {
+			isa = PBXGroup;
+			children = (
+				5AE195412A44A47100DD9520 /* Main.storyboard */,
+				5AE195442A44A47300DD9520 /* Assets.xcassets */,
+				5AE195462A44A47300DD9520 /* LaunchScreen.storyboard */,
+				5AE195492A44A47300DD9520 /* Info.plist */,
+			);
+			path = "Mimosa-IOS";
 			sourceTree = "<group>";
 		};
 		5AF2350E2A3E415F00CD623D /* Model */ = {
@@ -313,6 +376,23 @@
 			productReference = 5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */;
 			productType = "com.apple.product-type.application";
 		};
+		5AE195352A44A47100DD9520 /* Mimosa-IOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5AE1954E2A44A47300DD9520 /* Build configuration list for PBXNativeTarget "Mimosa-IOS" */;
+			buildPhases = (
+				5AE195322A44A47100DD9520 /* Sources */,
+				5AE195332A44A47100DD9520 /* Frameworks */,
+				5AE195342A44A47100DD9520 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mimosa-IOS";
+			productName = "Mimosa-IOS";
+			productReference = 5AE195362A44A47100DD9520 /* Mimosa-IOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -321,7 +401,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					5A087F5A2A350CA000BDCA99 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -331,6 +411,9 @@
 					};
 					5A61A2782A3B8DBC00D9DA5B = {
 						CreatedOnToolsVersion = 14.3.1;
+					};
+					5AE195352A44A47100DD9520 = {
+						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
@@ -348,6 +431,7 @@
 			projectRoot = "";
 			targets = (
 				5A61A2782A3B8DBC00D9DA5B /* Mimosa */,
+				5AE195352A44A47100DD9520 /* Mimosa-IOS */,
 				5A087F5A2A350CA000BDCA99 /* helloMetal */,
 				5A43D6F52A37AB5A0048C4B4 /* helloRayTracing */,
 			);
@@ -377,6 +461,32 @@
 				5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */,
 				5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */,
 				5AF235242A40BF9E00CD623D /* plate4.obj in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5AE195342A44A47100DD9520 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AE195532A44A7D800DD9520 /* floor.mtl in Resources */,
+				5AE195542A44A7D800DD9520 /* plate1.mtl in Resources */,
+				5AE195552A44A7D800DD9520 /* plate2.mtl in Resources */,
+				5AE195562A44A7D800DD9520 /* plate3.mtl in Resources */,
+				5AE195572A44A7D800DD9520 /* plate4.mtl in Resources */,
+				5AE195582A44A7D800DD9520 /* plate4.obj in Resources */,
+				5AE195592A44A7D800DD9520 /* plate1.obj in Resources */,
+				5AE1955A2A44A7D800DD9520 /* plate2.obj in Resources */,
+				5AE1955B2A44A7D800DD9520 /* plate3.obj in Resources */,
+				5AE1955C2A44A7D800DD9520 /* floor.obj in Resources */,
+				5AE1955D2A44A7D800DD9520 /* bunny.obj in Resources */,
+				5AE1955E2A44A7D800DD9520 /* cylinder.obj in Resources */,
+				5AE1955F2A44A7D800DD9520 /* teapot.obj in Resources */,
+				5AE195602A44A7D800DD9520 /* cube.obj in Resources */,
+				5AE195612A44A7D800DD9520 /* cone.obj in Resources */,
+				5AE195622A44A7D800DD9520 /* bunny-fine.obj in Resources */,
+				5AE195482A44A47300DD9520 /* LaunchScreen.storyboard in Resources */,
+				5AE195452A44A47300DD9520 /* Assets.xcassets in Resources */,
+				5AE195432A44A47100DD9520 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +521,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5AE195322A44A47100DD9520 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AE1956B2A44AF5900DD9520 /* AppDelegate.m in Sources */,
+				5AE1956A2A44AF2800DD9520 /* Shaders.metal in Sources */,
+				5AE195692A44A8F200DD9520 /* ViewController.mm in Sources */,
+				5AE195672A44A87300DD9520 /* mimosa.m in Sources */,
+				5AE195642A44A7F600DD9520 /* Transforms.mm in Sources */,
+				5AE195652A44A7F600DD9520 /* Scene.mm in Sources */,
+				5AE195662A44A7F600DD9520 /* Renderer.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -438,6 +562,22 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
+		5AE195412A44A47100DD9520 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5AE195422A44A47100DD9520 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5AE195462A44A47300DD9520 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5AE195472A44A47300DD9520 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -445,6 +585,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/metal-cpp";
@@ -456,6 +597,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = "/Users/quinton/Documents/Mimosa/metal-cpp";
@@ -496,6 +638,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -555,6 +698,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -578,6 +722,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = (
@@ -592,6 +737,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				HEADER_SEARCH_PATHS = (
@@ -612,6 +758,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -647,6 +794,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
@@ -665,6 +813,81 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Q.Mimosa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		5AE1954C2A44A47300DD9520 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"SUPPORTS_METAL_3=1",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mimosa-IOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Mimosa;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-IOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5AE1954D2A44A47300DD9520 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Mimosa-IOS/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Mimosa;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-IOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -703,6 +926,15 @@
 			buildConfigurations = (
 				5A61A28A2A3B8DBE00D9DA5B /* Debug */,
 				5A61A28B2A3B8DBE00D9DA5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5AE1954E2A44A47300DD9520 /* Build configuration list for PBXNativeTarget "Mimosa-IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5AE1954C2A44A47300DD9520 /* Debug */,
+				5AE1954D2A44A47300DD9520 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -56,7 +56,8 @@ struct Uniforms {
     unsigned int width;
     unsigned int height;
     unsigned int frameIndex;
-    unsigned int lightCount;
+    unsigned int lightCount; // This is light instance count, there might be more than one light.
+    unsigned int totalLightCount;
     unsigned int instanceCount;
     Camera camera;
 };
@@ -81,6 +82,7 @@ struct Sphere {
 struct Triangle {
     vector_float3 normals[3];
     vector_float3 colors[3];
+    vector_float3 positions[3];
     Material material;
 };
 

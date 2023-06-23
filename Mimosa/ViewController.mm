@@ -38,6 +38,9 @@ The implementation of the cross-platform view controller.
         }
     }
     _view.device = selectedDevice;
+    
+    CAMetalLayer *metalLayer = (CAMetalLayer *)_view.layer;
+    metalLayer.displaySyncEnabled = YES;
 
     NSLog(@"Selected Device: %@", _view.device.name);
 #endif
@@ -54,7 +57,7 @@ The implementation of the cross-platform view controller.
 //    Scene *scene = [Scene newInstancedCornellBoxSceneWithDevice:_view.device
 //                                       useIntersectionFunctions:YES];
     
-    Scene *scene = [Scene newTestSceneMIS:_view.device];
+    Scene *scene = [Scene newTestScene:_view.device];
 
     _renderer = [[Renderer alloc] initWithDevice:_view.device
                                            scene:scene];
@@ -62,6 +65,14 @@ The implementation of the cross-platform view controller.
     [_renderer mtkView:_view drawableSizeWillChange:_view.bounds.size];
 
     _view.delegate = _renderer;
+}
+
+- (IBAction)onRenderModeSegmentedControlAction:(id)sender
+{
+    if ( sender == _renderModeControl )
+    {
+        _renderer.renderMode = (RenderMode)_renderModeControl.indexOfSelectedItem;
+    }
 }
 
 @end

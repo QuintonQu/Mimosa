@@ -52,6 +52,9 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     NSUInteger _resourcesStride;
     bool _useIntersectionFunctions;
     bool _usePerPrimitiveData;
+    
+    // For interaction
+    RenderMode _renderMode;
 }
 
 - (nonnull instancetype)initWithDevice:(nonnull id<MTLDevice>)device
@@ -251,7 +254,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         MTLArgumentDescriptor *argumentDescriptor = [MTLArgumentDescriptor argumentDescriptor];
 
         argumentDescriptor.index = arguments.count;
-        argumentDescriptor.access = MTLArgumentAccessReadOnly;
+        argumentDescriptor.access = MTLBindingAccessReadOnly;
 
         if ([resource conformsToProtocol:@protocol(MTLBuffer)])
             argumentDescriptor.dataType = MTLDataTypePointer;
@@ -600,6 +603,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     uniforms->frameIndex = _frameIndex++;
 
     uniforms->lightCount = (unsigned int)_scene.lightCount;
+    uniforms->totalLightCount = (unsigned int)_scene.totalLightCount;
     uniforms->instanceCount = (unsigned int)_scene.instanceCount;
 
 #if !TARGET_OS_IPHONE
@@ -727,6 +731,12 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
     // Finally, commit the command buffer so that the GPU can start executing.
     [commandBuffer commit];
+}
+
+#pragma mark - Event Handling
+- (void)setRenderMode:(RenderMode)renderMode
+{
+    _renderMode = renderMode;
 }
 
 @end

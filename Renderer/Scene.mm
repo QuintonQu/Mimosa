@@ -170,6 +170,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
             const uint32_t index = _indices[firstIndex + triangleIndex * 3 + i];
             triangle.normals[i] = _normals[index];
             triangle.colors[i] = _colors[index];
+            triangle.positions[i] = _vertices[index];
         }
         triangle.material = material;
         _triangles.push_back(triangle);
@@ -225,6 +226,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
             const uint32_t index = _indices[firstIndex + triangleIndex * 3 + i];
             triangle.normals[i] = _normals[index];
             triangle.colors[i] = _colors[index];
+            triangle.positions[i] = _vertices[index];
         }
         triangle.material = material;
         _triangles.push_back(triangle);
@@ -338,6 +340,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
                 triangle.normals[i] = _normals[_indices[firstIndex + triangle_index * 3 + i]];
                 triangle.colors[i] = _colors[_indices[firstIndex + triangle_index * 3 + i]];
+                triangle.positions[i] = _vertices[_indices[firstIndex + triangle_index * 3 + i]];
             }
             triangle.material = material;
             _triangles.push_back(triangle);
@@ -373,7 +376,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
 - (NSArray <id <MTLResource>> *)resources {
     // The colors and normals for the vertices.
-    return @[ _indexBuffer, _vertexNormalBuffer, _vertexColorBuffer ];
+//    return @[ _indexBuffer, _vertexNormalBuffer, _vertexColorBuffer, _vertexPositionBuffer ];
+    return @[ _perPrimitiveDataBuffer ];
 }
 
 @end
@@ -508,6 +512,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     std::vector<AreaLight> _lights;
     std::vector<unsigned int> _light_indexs;
     std::vector<unsigned int> _light_counts; //_light_indexs.size() = _light_counts.size()
+    
+    int _totalLightCount;
 }
 
 - (NSArray <Geometry *> *)geometries {
@@ -516,6 +522,12 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
 - (NSUInteger)lightCount {
     return (NSUInteger)_light_indexs.size();
+
+}
+
+- (NSUInteger)totalLightCount {
+//    std::cout <<_totalLightCount << std::endl;
+    return (NSUInteger)_totalLightCount;
 
 }
 
@@ -535,6 +547,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
         _cameraPosition = vector3(0.0f, 0.0f, -1.0f);
         _cameraTarget = vector3(0.0f, 0.0f, 0.0f);
         _cameraUp = vector3(0.0f, 1.0f, 0.0f);
+        
+        _totalLightCount = 0;
     }
 
     return self;
@@ -559,7 +573,9 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
         _light_indexs.push_back((unsigned int)(_instances.count-1));
         Geometry* geometry = instance.geometry;
         _light_counts.push_back((unsigned int)geometry.geometryCount);
+        _totalLightCount += (unsigned int)geometry.geometryCount;
     }
+//    std::cout << _light_indexs[0] << ", " << _light_counts[0] << std::endl;
 }
 
 - (void)addLight:(AreaLight)light {
@@ -901,6 +917,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     scene.cameraPosition = vector3(0.0f, 1.75f, 6.0f);
     scene.cameraTarget = vector3(0.0f, 1.0f, 0.0f);
     scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraFov = 45.0f;
     
     // Add a default material
     Material* default_material = new Material();
@@ -975,7 +992,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     // Create an instance of the light.
     GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
                                                                            transform:transform
-                                                                                mask:GEOMETRY_MASK_LIGHT];
+                                                                                mask:GEOMETRY_MASK_TRIANGLE_LIGHT];
 
     [scene addInstance:lightMeshInstance];
 
@@ -1131,7 +1148,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     // Create an instance of the light.
     GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
                                                                            transform:transform
-                                                                                mask:GEOMETRY_MASK_LIGHT];
+                                                                                mask:GEOMETRY_MASK_TRIANGLE_LIGHT];
 
     [scene addInstance:lightMeshInstance];
 
