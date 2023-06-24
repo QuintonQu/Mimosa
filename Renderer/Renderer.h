@@ -22,6 +22,7 @@ typedef NS_ENUM( uint8_t, RenderMode )
 
 - (instancetype)initWithDevice:(id<MTLDevice>)device
                          scene:(Scene *)scene;
+
 - (void)setRenderMode:(RenderMode)renderMode;
 
 @end

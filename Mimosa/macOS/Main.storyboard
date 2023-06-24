@@ -695,7 +695,7 @@
                         </connections>
                     </window>
                     <connections>
-                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
+                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="PRM-Aa-0Rk"/>
                     </connections>
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -711,29 +711,44 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qql-yn-rR1">
-                                <rect key="frame" x="20" y="484" width="163" height="96"/>
+                                <rect key="frame" x="20" y="541" width="163" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DU7-nH-moS">
-                                        <rect key="frame" x="13" y="37" width="136" height="23"/>
+                                        <rect key="frame" x="13" y="7" width="136" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <segmentedCell key="cell" borderStyle="border" alignment="left" segmentDistribution="fillEqually" style="capsule" trackingMode="selectOne" id="PET-O1-DjV">
                                             <font key="font" metaFont="system"/>
                                             <segments>
                                                 <segment label="BRDF" width="40"/>
-                                                <segment label="NEE" width="40" selected="YES" tag="1"/>
-                                                <segment label="MIS" width="40"/>
+                                                <segment label="NEE" width="40" tag="1"/>
+                                                <segment label="MIS" width="40" selected="YES"/>
                                             </segments>
                                         </segmentedCell>
+                                        <connections>
+                                            <action selector="renderModeControl:" target="XfG-lQ-9wD" id="B7W-2l-bbY"/>
+                                        </connections>
                                     </segmentedControl>
                                 </subviews>
+                                <backgroundFilters>
+                                    <ciFilter name="CIGaussianBlur">
+                                        <configuration>
+                                            <null key="inputImage"/>
+                                            <real key="inputRadius" value="5"/>
+                                        </configuration>
+                                    </ciFilter>
+                                </backgroundFilters>
                             </customView>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="configBackdrop" destination="Qql-yn-rR1" id="nFS-pB-2m9"/>
+                        <outlet property="renderModeControl" destination="DU7-nH-moS" id="jsO-PL-Sre"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="817"/>
+            <point key="canvasLocation" x="75" y="975"/>
         </scene>
     </scenes>
 </document>

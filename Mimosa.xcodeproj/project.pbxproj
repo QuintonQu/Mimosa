@@ -22,8 +22,8 @@
 		5A61A2912A3B8E2C00D9DA5B /* mimosa.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2162A3B8A7E00D9DA5B /* mimosa.m */; };
 		5A61A2922A3B8E2C00D9DA5B /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
 		5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */; };
-		5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A2102A3B85FD00D9DA5B /* Main.storyboard */; };
 		5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
+		5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AD974A82A475E8E00168B28 /* Main.storyboard */; };
 		5AE195432A44A47100DD9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195412A44A47100DD9520 /* Main.storyboard */; };
 		5AE195452A44A47300DD9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195442A44A47300DD9520 /* Assets.xcassets */; };
 		5AE195482A44A47300DD9520 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195462A44A47300DD9520 /* LaunchScreen.storyboard */; };
@@ -110,7 +110,6 @@
 		5A61A20B2A3B85FD00D9DA5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5A61A20D2A3B85FD00D9DA5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5A61A20E2A3B85FD00D9DA5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5A61A2112A3B85FD00D9DA5B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5A61A2122A3B85FD00D9DA5B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A61A2152A3B8A7E00D9DA5B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5A61A2162A3B8A7E00D9DA5B /* mimosa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mimosa.m; sourceTree = "<group>"; };
@@ -120,6 +119,7 @@
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A84AFFA2A3DFD6E00100842 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5AD974A82A475E8E00168B28 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5AE195362A44A47100DD9520 /* Mimosa-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mimosa-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AE195422A44A47100DD9520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5AE195442A44A47300DD9520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -274,7 +274,7 @@
 		5A61A20F2A3B85FD00D9DA5B /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				5A61A2102A3B85FD00D9DA5B /* Main.storyboard */,
+				5AD974A82A475E8E00168B28 /* Main.storyboard */,
 				5A61A2122A3B85FD00D9DA5B /* Info.plist */,
 			);
 			path = macOS;
@@ -459,7 +459,7 @@
 				5AF235282A40BF9E00CD623D /* floor.obj in Resources */,
 				5AF235302A40C59100CD623D /* plate1.mtl in Resources */,
 				5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */,
-				5A61A2942A3B8E3B00D9DA5B /* Main.storyboard in Resources */,
+				5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */,
 				5AF235242A40BF9E00CD623D /* plate4.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -550,14 +550,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				5A61A20D2A3B85FD00D9DA5B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		5A61A2102A3B85FD00D9DA5B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5A61A2112A3B85FD00D9DA5B /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

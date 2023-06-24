@@ -11,6 +11,7 @@ The implementation of the renderer class that performs Metal setup and per-frame
 #import "Transforms.h"
 #import "ShaderTypes.h"
 #import "Scene.h"
+#import <iostream>
 
 using namespace simd;
 
@@ -69,6 +70,8 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         _sem = dispatch_semaphore_create(maxFramesInFlight);
 
         _scene = scene;
+        
+        _renderMode = (RenderMode)2;
 
         [self loadMetal];
         [self createBuffers];
@@ -186,9 +189,16 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         // Add the function to the dictionary.
         intersectionFunctions[geometry.intersectionFunctionName] = intersectionFunction;
     }
-
+    
     id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
-
+    
+    if (_renderMode == Mats)
+        raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMats"];
+    if (_renderMode == NEE)
+        raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelNEE"];
+    if (_renderMode == MIS)
+        raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
+    
     // Create the compute pipeline state, which does all the ray tracing.
     _raytracingPipeline = [self newComputePipelineStateWithFunction:raytracingFunction
                                                     linkedFunctions:[intersectionFunctions allValues]];
@@ -737,6 +747,8 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 - (void)setRenderMode:(RenderMode)renderMode
 {
     _renderMode = renderMode;
+    _frameIndex = 0;
+    [self createPipelines];
 }
 
 @end

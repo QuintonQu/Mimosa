@@ -17,9 +17,10 @@ The header for the cross-platform view controller.
 #if !TARGET_OS_IPHONE
 @interface ViewController : NSViewController
 
-@property (nonatomic, weak) IBOutlet NSSegmentedControl* renderModeControl;
+- (IBAction)renderModeControl:(id)sender;
 
-- (IBAction)onRenderModeSegmentedControlAction:(id)sender;
+@property (nonatomic, weak) IBOutlet NSSegmentedControl* renderModeControl;
+@property (nonatomic, weak) IBOutlet NSView* configBackdrop;
 
 #else
 @interface ViewController : UIViewController

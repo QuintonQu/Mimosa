@@ -6,6 +6,7 @@ The implementation of the cross-platform view controller.
 */
 #import "ViewController.h"
 #import "Renderer.h"
+#import <iostream>
 
 @implementation ViewController
 {
@@ -17,6 +18,8 @@ The implementation of the cross-platform view controller.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self _configureBackdrop:_configBackdrop];
 
     _view = (MTKView *)self.view;
 
@@ -57,7 +60,7 @@ The implementation of the cross-platform view controller.
 //    Scene *scene = [Scene newInstancedCornellBoxSceneWithDevice:_view.device
 //                                       useIntersectionFunctions:YES];
     
-    Scene *scene = [Scene newTestScene:_view.device];
+    Scene *scene = [Scene newTestSceneMIS:_view.device];
 
     _renderer = [[Renderer alloc] initWithDevice:_view.device
                                            scene:scene];
@@ -67,11 +70,23 @@ The implementation of the cross-platform view controller.
     _view.delegate = _renderer;
 }
 
-- (IBAction)onRenderModeSegmentedControlAction:(id)sender
+- (void)_configureBackdrop:(NSView *)view
 {
+    view.wantsLayer = YES;
+    view.layer.borderWidth = 1.0f;
+    view.layer.cornerRadius = 8.0f;
+    
+    CGFloat components[] = {1.0, 1.0, 1.0, 0.8}; // RGBA values for white color
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorRef whiteColor = CGColorCreate(colorSpace, components);
+    view.layer.backgroundColor = whiteColor;
+}
+
+- (IBAction)renderModeControl:(id)sender {
     if ( sender == _renderModeControl )
     {
         _renderer.renderMode = (RenderMode)_renderModeControl.indexOfSelectedItem;
+//        std::cout << _renderModeControl.indexOfSelectedItem << std::endl;
     }
 }
 
