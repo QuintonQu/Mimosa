@@ -10,7 +10,7 @@ The implementation of the renderer class that performs Metal setup and per-frame
 #import "Renderer.h"
 #import "Transforms.h"
 #import "ShaderTypes.h"
-#import "Scene.h"
+#import "RenderScene.h"
 #import <iostream>
 
 using namespace simd;
@@ -48,7 +48,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
     unsigned int _frameIndex;
 
-    Scene *_scene;
+    RenderScene *_scene;
 
     NSUInteger _resourcesStride;
     bool _useIntersectionFunctions;
@@ -59,7 +59,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 }
 
 - (nonnull instancetype)initWithDevice:(nonnull id<MTLDevice>)device
-                                 scene:(Scene *)scene
+                                 scene:(RenderScene *)scene
 {
     self = [super init];
 

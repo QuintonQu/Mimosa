@@ -5,7 +5,7 @@ Abstract:
 The implementation of the class that describes objects in a scene.
 */
 
-#import "Scene.h"
+#import "RenderScene.h"
 
 #import <vector>
 #import <set>
@@ -505,7 +505,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 @end
 
 #pragma mark - Scene
-@implementation Scene {
+@implementation RenderScene {
     NSMutableArray <Geometry *> *_geometries;
     NSMutableArray <GeometryInstance *> *_instances;
 
@@ -606,10 +606,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 }
 
 #pragma mark - Create Scene
-+ (Scene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
++ (RenderScene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions
 {
-    Scene *scene = [[Scene alloc] initWithDevice:device];
+    RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
 
     // Set up the camera.
     scene.cameraPosition = vector3(0.0f, 1.0f, 10.0f);
@@ -749,10 +749,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
-+ (Scene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
++ (RenderScene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions
 {
-    Scene *scene = [[Scene alloc] initWithDevice:device];
+    RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
 
     // Set up the camera.
     scene.cameraPosition = vector3(0.0f, 1.0f, 3.5f);
@@ -909,9 +909,9 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
-+ (Scene *)newTestScene:(id<MTLDevice>)device
++ (RenderScene *)newTestScene:(id<MTLDevice>)device
 {
-    Scene *scene = [[Scene alloc] initWithDevice:device];
+    RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
 
     // Set up the camera.
     scene.cameraPosition = vector3(0.0f, 1.75f, 6.0f);
@@ -1031,9 +1031,9 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
-+ (Scene *)newTestSceneObj:(id <MTLDevice>)device
++ (RenderScene *)newTestSceneObj:(id <MTLDevice>)device
 {
-    Scene *scene = [[Scene alloc] initWithDevice:device];
+    RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
 
     // Set up the camera.
     scene.cameraPosition = vector3(0.0f, 1.0f, 3.5f);
@@ -1186,9 +1186,9 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
-+ (Scene *)newTestSceneMIS:(id<MTLDevice>)device
++ (RenderScene *)newTestSceneMIS:(id<MTLDevice>)device
 {
-    Scene *scene = [[Scene alloc] initWithDevice:device];
+    RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
     
     // Set up the camera
     scene.cameraPosition = vector3(0.f, 6.f, 27.5f);

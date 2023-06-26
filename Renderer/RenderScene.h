@@ -140,7 +140,7 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 // Represents an entire scene, including different types of geometry,
 // instances of that geometry, lights, and a camera.
-@interface Scene : NSObject
+@interface RenderScene : NSObject
 
 // The device used to create the scene.
 @property (nonatomic, readonly) id <MTLDevice> device;
@@ -191,21 +191,21 @@ MTLResourceOptions getManagedBufferStorageMode();
 #pragma region CreateScene {
 // Create scene with instances of a Cornell box. Each box can optionally
 // contain a sphere primitive that uses an intersection function.
-+ (Scene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
++ (RenderScene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
                                 useIntersectionFunctions:(BOOL)useIntersectionFunctions;
 
 // Create one Cornell box for test.
-+ (Scene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
++ (RenderScene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions;
 
 // Create test scene from darts.
-+ (Scene *)newTestScene:(id <MTLDevice>)device;
++ (RenderScene *)newTestScene:(id <MTLDevice>)device;
 
 // Create test scene from Obj.
-+ (Scene *)newTestSceneObj:(id <MTLDevice>)device;
++ (RenderScene *)newTestSceneObj:(id <MTLDevice>)device;
 
 // Create test scene for MIS Implementation
-+ (Scene *)newTestSceneMIS:(id <MTLDevice>)device;
++ (RenderScene *)newTestSceneMIS:(id <MTLDevice>)device;
 
 #pragma endregion CreateScene }
 

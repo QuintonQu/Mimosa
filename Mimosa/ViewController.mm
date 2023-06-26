@@ -13,13 +13,13 @@ The implementation of the cross-platform view controller.
     MTKView *_view;
 
     Renderer *_renderer;
+    
+    NSString *_sceneName;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self _configureBackdrop:_configBackdrop];
 
     _view = (MTKView *)self.view;
 
@@ -60,7 +60,14 @@ The implementation of the cross-platform view controller.
 //    Scene *scene = [Scene newInstancedCornellBoxSceneWithDevice:_view.device
 //                                       useIntersectionFunctions:YES];
     
-    Scene *scene = [Scene newTestSceneMIS:_view.device];
+//    RenderScene *scene = [RenderScene newTestScene:_view.device];
+    RenderScene *scene;
+    if([_sceneName  isEqual: @"Scene 1"])
+        scene = [RenderScene newTestScene:_view.device];
+    if([_sceneName  isEqual: @"Scene 2"])
+        scene = [RenderScene newTestSceneObj:_view.device];
+    if([_sceneName  isEqual: @"Scene 3"])
+        scene = [RenderScene newTestSceneMIS:_view.device];
 
     _renderer = [[Renderer alloc] initWithDevice:_view.device
                                            scene:scene];
@@ -68,26 +75,18 @@ The implementation of the cross-platform view controller.
     [_renderer mtkView:_view drawableSizeWillChange:_view.bounds.size];
 
     _view.delegate = _renderer;
-}
-
-- (void)_configureBackdrop:(NSView *)view
-{
-    view.wantsLayer = YES;
-    view.layer.borderWidth = 1.0f;
-    view.layer.cornerRadius = 8.0f;
     
-    CGFloat components[] = {1.0, 1.0, 1.0, 0.8}; // RGBA values for white color
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGColorRef whiteColor = CGColorCreate(colorSpace, components);
-    view.layer.backgroundColor = whiteColor;
+    std::cout << "I initialize" << std::endl;
 }
 
-- (IBAction)renderModeControl:(id)sender {
-    if ( sender == _renderModeControl )
-    {
-        _renderer.renderMode = (RenderMode)_renderModeControl.indexOfSelectedItem;
-//        std::cout << _renderModeControl.indexOfSelectedItem << std::endl;
-    }
+- (void)setRenderMode:(int)renderModeIndex {
+    _renderer.renderMode = (RenderMode)renderModeIndex;
+    std::cout << "set render mode to " << renderModeIndex << std::endl;
+}
+
+- (void)setSceneName:(NSString *)sceneName {
+    _sceneName = sceneName;
+    std::cout << "load scene: " << [sceneName UTF8String] << std::endl;
 }
 
 @end

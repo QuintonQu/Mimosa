@@ -8,7 +8,7 @@ The header for the renderer class that performs Metal setup and per-frame render
 #import <Metal/Metal.h>
 #import <MetalKit/MetalKit.h>
 
-#import "Scene.h"
+#import "RenderScene.h"
 
 typedef NS_ENUM( uint8_t, RenderMode )
 {
@@ -21,7 +21,7 @@ typedef NS_ENUM( uint8_t, RenderMode )
 @interface Renderer : NSObject <MTKViewDelegate>
 
 - (instancetype)initWithDevice:(id<MTLDevice>)device
-                         scene:(Scene *)scene;
+                         scene:(RenderScene *)scene;
 
 - (void)setRenderMode:(RenderMode)renderMode;
 
