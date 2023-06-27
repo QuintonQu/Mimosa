@@ -15,8 +15,6 @@ The header that contains the types and enumeration constants that the Metal shad
 #define GEOMETRY_MASK_TRIANGLE_LIGHT    4
 #define GEOMETRY_MASK_SPHERE_LIGHT    8
 
-//#define GEOMETRY_MASK_LIGHT 8
-
 #define GEOMETRY_MASK_LIGHT (GEOMETRY_MASK_TRIANGLE_LIGHT | GEOMETRY_MASK_SPHERE_LIGHT)
 #define GEOMETRY_MASK_GEOMETRY (GEOMETRY_MASK_TRIANGLE | GEOMETRY_MASK_SPHERE)
 
@@ -85,6 +83,4 @@ struct Triangle {
     vector_float3 positions[3];
     Material material;
 };
-
-
 #endif

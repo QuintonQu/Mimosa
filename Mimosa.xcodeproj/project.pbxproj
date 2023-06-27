@@ -23,6 +23,40 @@
 		5A61A2922A3B8E2C00D9DA5B /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
 		5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */; };
 		5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
+		5A7E01822A4B8FEA0002592C /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E016F2A4B8FD20002592C /* cone.obj */; };
+		5A7E01832A4B8FEA0002592C /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01702A4B8FD20002592C /* bunny-fine.obj */; };
+		5A7E01842A4B8FEA0002592C /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01712A4B8FD20002592C /* bunny.obj */; };
+		5A7E01852A4B8FEA0002592C /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01722A4B8FD20002592C /* cube.obj */; };
+		5A7E01862A4B8FEA0002592C /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01732A4B8FD20002592C /* teapot.obj */; };
+		5A7E01872A4B8FEA0002592C /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01742A4B8FD20002592C /* cylinder.obj */; };
+		5A7E01882A4B8FEA0002592C /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01762A4B8FD20002592C /* floor.mtl */; };
+		5A7E01892A4B8FEA0002592C /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01772A4B8FD20002592C /* plate4.obj */; };
+		5A7E018A2A4B8FEA0002592C /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01782A4B8FD20002592C /* plate1.obj */; };
+		5A7E018B2A4B8FEA0002592C /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01792A4B8FD20002592C /* plate2.obj */; };
+		5A7E018C2A4B8FEA0002592C /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017A2A4B8FD20002592C /* plate3.obj */; };
+		5A7E018D2A4B8FEA0002592C /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017B2A4B8FD20002592C /* plate4.mtl */; };
+		5A7E018E2A4B8FEA0002592C /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017C2A4B8FD20002592C /* floor.obj */; };
+		5A7E018F2A4B8FEA0002592C /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017D2A4B8FD20002592C /* plate2.mtl */; };
+		5A7E01902A4B8FEA0002592C /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017E2A4B8FD20002592C /* plate3.mtl */; };
+		5A7E01912A4B8FEA0002592C /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017F2A4B8FD20002592C /* plate1.mtl */; };
+		5A7E01922A4B8FEA0002592C /* kloppenheim_06_4k.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01812A4B8FD20002592C /* kloppenheim_06_4k.hdr */; };
+		5A7E01932A4B8FFC0002592C /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E016F2A4B8FD20002592C /* cone.obj */; };
+		5A7E01942A4B8FFC0002592C /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01702A4B8FD20002592C /* bunny-fine.obj */; };
+		5A7E01952A4B8FFC0002592C /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01712A4B8FD20002592C /* bunny.obj */; };
+		5A7E01962A4B8FFC0002592C /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01722A4B8FD20002592C /* cube.obj */; };
+		5A7E01972A4B8FFC0002592C /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01732A4B8FD20002592C /* teapot.obj */; };
+		5A7E01982A4B8FFC0002592C /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01742A4B8FD20002592C /* cylinder.obj */; };
+		5A7E01992A4B8FFC0002592C /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01762A4B8FD20002592C /* floor.mtl */; };
+		5A7E019A2A4B8FFC0002592C /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01772A4B8FD20002592C /* plate4.obj */; };
+		5A7E019B2A4B8FFC0002592C /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01782A4B8FD20002592C /* plate1.obj */; };
+		5A7E019C2A4B8FFC0002592C /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01792A4B8FD20002592C /* plate2.obj */; };
+		5A7E019D2A4B8FFC0002592C /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017A2A4B8FD20002592C /* plate3.obj */; };
+		5A7E019E2A4B8FFC0002592C /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017B2A4B8FD20002592C /* plate4.mtl */; };
+		5A7E019F2A4B8FFC0002592C /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017C2A4B8FD20002592C /* floor.obj */; };
+		5A7E01A02A4B8FFC0002592C /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017D2A4B8FD20002592C /* plate2.mtl */; };
+		5A7E01A12A4B8FFC0002592C /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017E2A4B8FD20002592C /* plate3.mtl */; };
+		5A7E01A22A4B8FFC0002592C /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017F2A4B8FD20002592C /* plate1.mtl */; };
+		5A7E01A32A4B8FFC0002592C /* kloppenheim_06_4k.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01812A4B8FD20002592C /* kloppenheim_06_4k.hdr */; };
 		5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AD974A82A475E8E00168B28 /* Main.storyboard */; };
 		5AD975072A49D6D700168B28 /* Mimosa_SwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD975062A49D6D700168B28 /* Mimosa_SwiftApp.swift */; };
 		5AD975092A49D6D700168B28 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD975082A49D6D700168B28 /* ContentView.swift */; };
@@ -35,47 +69,30 @@
 		5AD975172A49D8C000168B28 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
 		5AD975182A49D8CD00168B28 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE195512A44A7C200DD9520 /* MetalKit.framework */; };
 		5AD975192A49D8D700168B28 /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE1954F2A44A7AD00DD9520 /* ModelIO.framework */; };
-		5AD9751A2A49D8E800168B28 /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352A2A40C59100CD623D /* floor.mtl */; };
-		5AD9751B2A49D8E800168B28 /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352B2A40C59100CD623D /* plate1.mtl */; };
-		5AD9751C2A49D8E800168B28 /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235292A40C59100CD623D /* plate2.mtl */; };
-		5AD9751D2A49D8E800168B28 /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352C2A40C59100CD623D /* plate3.mtl */; };
-		5AD9751E2A49D8E800168B28 /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352D2A40C59100CD623D /* plate4.mtl */; };
-		5AD9751F2A49D8E800168B28 /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351F2A40BF9E00CD623D /* plate4.obj */; };
-		5AD975202A49D8E800168B28 /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235202A40BF9E00CD623D /* plate1.obj */; };
-		5AD975212A49D8E800168B28 /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235212A40BF9E00CD623D /* plate2.obj */; };
-		5AD975222A49D8E800168B28 /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235222A40BF9E00CD623D /* plate3.obj */; };
-		5AD975232A49D8E800168B28 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235232A40BF9E00CD623D /* floor.obj */; };
-		5AD975242A49D8E900168B28 /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351C2A3F7ADB00CD623D /* bunny.obj */; };
-		5AD975252A49D8E900168B28 /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351A2A3F763500CD623D /* cylinder.obj */; };
-		5AD975262A49D8E900168B28 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235182A3F6C0900CD623D /* teapot.obj */; };
-		5AD975272A49D8E900168B28 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235162A3F5EE900CD623D /* cube.obj */; };
-		5AD975282A49D8E900168B28 /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235142A3F5C7C00CD623D /* cone.obj */; };
-		5AD975292A49D8E900168B28 /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2350F2A3E415F00CD623D /* bunny-fine.obj */; };
 		5AD9752D2A49E8A800168B28 /* RenderScene.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AD9752C2A49E8A800168B28 /* RenderScene.storyboard */; };
 		5AD975322A49FEB900168B28 /* 03.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD9752F2A49FEB900168B28 /* 03.png */; };
 		5AD975332A49FEB900168B28 /* 02.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD975302A49FEB900168B28 /* 02.png */; };
 		5AD975342A49FEBA00168B28 /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD975312A49FEB900168B28 /* 01.png */; };
+		5AD9754A2A4A30F400168B28 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */; };
+		5AD9754B2A4A30F400168B28 /* Transforms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FF2A3B85D400D9DA5B /* Transforms.mm */; };
+		5AD9754C2A4A30F400168B28 /* RenderScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2002A3B85D400D9DA5B /* RenderScene.mm */; };
+		5AD9754D2A4A30F400168B28 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2022A3B85D400D9DA5B /* Renderer.mm */; };
+		5AD9754E2A4A30F400168B28 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
+		5AD9754F2A4A30F400168B28 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD975082A49D6D700168B28 /* ContentView.swift */; };
+		5AD975502A4A30F400168B28 /* Mimosa_SwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD975062A49D6D700168B28 /* Mimosa_SwiftApp.swift */; };
+		5AD975522A4A30F400168B28 /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE1954F2A44A7AD00DD9520 /* ModelIO.framework */; };
+		5AD975532A4A30F400168B28 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE195512A44A7C200DD9520 /* MetalKit.framework */; };
+		5AD975552A4A30F400168B28 /* 03.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD9752F2A49FEB900168B28 /* 03.png */; };
+		5AD975612A4A30F400168B28 /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD975312A49FEB900168B28 /* 01.png */; };
+		5AD975652A4A30F400168B28 /* RenderScene.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AD9752C2A49E8A800168B28 /* RenderScene.storyboard */; };
+		5AD975672A4A30F400168B28 /* 02.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AD975302A49FEB900168B28 /* 02.png */; };
+		5AD975692A4A30F400168B28 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AD9750E2A49D6D900168B28 /* Preview Assets.xcassets */; };
+		5AD9756A2A4A30F400168B28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AD9750A2A49D6D900168B28 /* Assets.xcassets */; };
 		5AE195432A44A47100DD9520 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195412A44A47100DD9520 /* Main.storyboard */; };
 		5AE195452A44A47300DD9520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195442A44A47300DD9520 /* Assets.xcassets */; };
 		5AE195482A44A47300DD9520 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AE195462A44A47300DD9520 /* LaunchScreen.storyboard */; };
 		5AE195502A44A7AD00DD9520 /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE1954F2A44A7AD00DD9520 /* ModelIO.framework */; };
 		5AE195522A44A7C200DD9520 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AE195512A44A7C200DD9520 /* MetalKit.framework */; };
-		5AE195532A44A7D800DD9520 /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352A2A40C59100CD623D /* floor.mtl */; };
-		5AE195542A44A7D800DD9520 /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352B2A40C59100CD623D /* plate1.mtl */; };
-		5AE195552A44A7D800DD9520 /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235292A40C59100CD623D /* plate2.mtl */; };
-		5AE195562A44A7D800DD9520 /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352C2A40C59100CD623D /* plate3.mtl */; };
-		5AE195572A44A7D800DD9520 /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352D2A40C59100CD623D /* plate4.mtl */; };
-		5AE195582A44A7D800DD9520 /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351F2A40BF9E00CD623D /* plate4.obj */; };
-		5AE195592A44A7D800DD9520 /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235202A40BF9E00CD623D /* plate1.obj */; };
-		5AE1955A2A44A7D800DD9520 /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235212A40BF9E00CD623D /* plate2.obj */; };
-		5AE1955B2A44A7D800DD9520 /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235222A40BF9E00CD623D /* plate3.obj */; };
-		5AE1955C2A44A7D800DD9520 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235232A40BF9E00CD623D /* floor.obj */; };
-		5AE1955D2A44A7D800DD9520 /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351C2A3F7ADB00CD623D /* bunny.obj */; };
-		5AE1955E2A44A7D800DD9520 /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351A2A3F763500CD623D /* cylinder.obj */; };
-		5AE1955F2A44A7D800DD9520 /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235182A3F6C0900CD623D /* teapot.obj */; };
-		5AE195602A44A7D800DD9520 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235162A3F5EE900CD623D /* cube.obj */; };
-		5AE195612A44A7D800DD9520 /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235142A3F5C7C00CD623D /* cone.obj */; };
-		5AE195622A44A7D800DD9520 /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2350F2A3E415F00CD623D /* bunny-fine.obj */; };
 		5AE195642A44A7F600DD9520 /* Transforms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FF2A3B85D400D9DA5B /* Transforms.mm */; };
 		5AE195652A44A7F600DD9520 /* RenderScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2002A3B85D400D9DA5B /* RenderScene.mm */; };
 		5AE195662A44A7F600DD9520 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2022A3B85D400D9DA5B /* Renderer.mm */; };
@@ -84,22 +101,6 @@
 		5AE1956A2A44AF2800DD9520 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */; };
 		5AE1956B2A44AF5900DD9520 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */; };
 		5AF235122A3E4E5F00CD623D /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AF235102A3E4C2700CD623D /* ModelIO.framework */; };
-		5AF235132A3F586B00CD623D /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2350F2A3E415F00CD623D /* bunny-fine.obj */; };
-		5AF235152A3F5C7C00CD623D /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235142A3F5C7C00CD623D /* cone.obj */; };
-		5AF235172A3F5EE900CD623D /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235162A3F5EE900CD623D /* cube.obj */; };
-		5AF235192A3F6C0900CD623D /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235182A3F6C0900CD623D /* teapot.obj */; };
-		5AF2351B2A3F763500CD623D /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351A2A3F763500CD623D /* cylinder.obj */; };
-		5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351C2A3F7ADB00CD623D /* bunny.obj */; };
-		5AF235242A40BF9E00CD623D /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2351F2A40BF9E00CD623D /* plate4.obj */; };
-		5AF235252A40BF9E00CD623D /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235202A40BF9E00CD623D /* plate1.obj */; };
-		5AF235262A40BF9E00CD623D /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235212A40BF9E00CD623D /* plate2.obj */; };
-		5AF235272A40BF9E00CD623D /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235222A40BF9E00CD623D /* plate3.obj */; };
-		5AF235282A40BF9E00CD623D /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235232A40BF9E00CD623D /* floor.obj */; };
-		5AF2352E2A40C59100CD623D /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF235292A40C59100CD623D /* plate2.mtl */; };
-		5AF2352F2A40C59100CD623D /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352A2A40C59100CD623D /* floor.mtl */; };
-		5AF235302A40C59100CD623D /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352B2A40C59100CD623D /* plate1.mtl */; };
-		5AF235312A40C59100CD623D /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352C2A40C59100CD623D /* plate3.mtl */; };
-		5AF235322A40C59100CD623D /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5AF2352D2A40C59100CD623D /* plate4.mtl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -149,6 +150,24 @@
 		5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A7E016F2A4B8FD20002592C /* cone.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = cone.obj; sourceTree = "<group>"; };
+		5A7E01702A4B8FD20002592C /* bunny-fine.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = "bunny-fine.obj"; sourceTree = "<group>"; };
+		5A7E01712A4B8FD20002592C /* bunny.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = bunny.obj; sourceTree = "<group>"; };
+		5A7E01722A4B8FD20002592C /* cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
+		5A7E01732A4B8FD20002592C /* teapot.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
+		5A7E01742A4B8FD20002592C /* cylinder.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = cylinder.obj; sourceTree = "<group>"; };
+		5A7E01762A4B8FD20002592C /* floor.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = floor.mtl; sourceTree = "<group>"; };
+		5A7E01772A4B8FD20002592C /* plate4.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate4.obj; sourceTree = "<group>"; };
+		5A7E01782A4B8FD20002592C /* plate1.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate1.obj; sourceTree = "<group>"; };
+		5A7E01792A4B8FD20002592C /* plate2.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate2.obj; sourceTree = "<group>"; };
+		5A7E017A2A4B8FD20002592C /* plate3.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate3.obj; sourceTree = "<group>"; };
+		5A7E017B2A4B8FD20002592C /* plate4.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate4.mtl; sourceTree = "<group>"; };
+		5A7E017C2A4B8FD20002592C /* floor.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
+		5A7E017D2A4B8FD20002592C /* plate2.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate2.mtl; sourceTree = "<group>"; };
+		5A7E017E2A4B8FD20002592C /* plate3.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate3.mtl; sourceTree = "<group>"; };
+		5A7E017F2A4B8FD20002592C /* plate1.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = plate1.mtl; sourceTree = "<group>"; };
+		5A7E01812A4B8FD20002592C /* kloppenheim_06_4k.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = kloppenheim_06_4k.hdr; sourceTree = "<group>"; };
+		5A7E01A42A4B91390002592C /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		5A84AFFA2A3DFD6E00100842 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5AD974A82A475E8E00168B28 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5AD975042A49D6D700168B28 /* Mimosa-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mimosa-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,6 +181,7 @@
 		5AD9752F2A49FEB900168B28 /* 03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 03.png; sourceTree = "<group>"; };
 		5AD975302A49FEB900168B28 /* 02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 02.png; sourceTree = "<group>"; };
 		5AD975312A49FEB900168B28 /* 01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01.png; sourceTree = "<group>"; };
+		5AD9756E2A4A30F400168B28 /* Mimosa-Swift-Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mimosa-Swift-Mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AE195362A44A47100DD9520 /* Mimosa-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mimosa-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AE195422A44A47100DD9520 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5AE195442A44A47300DD9520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -171,23 +191,7 @@
 		5AE195512A44A7C200DD9520 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.0.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = DEVELOPER_DIR; };
 		5AE1956C2A44B48800DD9520 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		5AE1956D2A44B4BB00DD9520 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		5AF2350F2A3E415F00CD623D /* bunny-fine.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = "bunny-fine.obj"; sourceTree = "<group>"; };
 		5AF235102A3E4C2700CD623D /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = System/Library/Frameworks/ModelIO.framework; sourceTree = SDKROOT; };
-		5AF235142A3F5C7C00CD623D /* cone.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cone.obj; sourceTree = "<group>"; };
-		5AF235162A3F5EE900CD623D /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
-		5AF235182A3F6C0900CD623D /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
-		5AF2351A2A3F763500CD623D /* cylinder.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cylinder.obj; sourceTree = "<group>"; };
-		5AF2351C2A3F7ADB00CD623D /* bunny.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bunny.obj; sourceTree = "<group>"; };
-		5AF2351F2A40BF9E00CD623D /* plate4.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate4.obj; sourceTree = "<group>"; };
-		5AF235202A40BF9E00CD623D /* plate1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate1.obj; sourceTree = "<group>"; };
-		5AF235212A40BF9E00CD623D /* plate2.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate2.obj; sourceTree = "<group>"; };
-		5AF235222A40BF9E00CD623D /* plate3.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate3.obj; sourceTree = "<group>"; };
-		5AF235232A40BF9E00CD623D /* floor.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
-		5AF235292A40C59100CD623D /* plate2.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate2.mtl; sourceTree = "<group>"; };
-		5AF2352A2A40C59100CD623D /* floor.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = floor.mtl; sourceTree = "<group>"; };
-		5AF2352B2A40C59100CD623D /* plate1.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate1.mtl; sourceTree = "<group>"; };
-		5AF2352C2A40C59100CD623D /* plate3.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate3.mtl; sourceTree = "<group>"; };
-		5AF2352D2A40C59100CD623D /* plate4.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plate4.mtl; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +234,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5AD975512A4A30F400168B28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AD975522A4A30F400168B28 /* ModelIO.framework in Frameworks */,
+				5AD975532A4A30F400168B28 /* MetalKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5AE195332A44A47100DD9520 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,7 +258,7 @@
 		5A426A0B2A2E845900EE9F46 = {
 			isa = PBXGroup;
 			children = (
-				5AF2350E2A3E415F00CD623D /* Model */,
+				5A7E016D2A4B8FD20002592C /* Resources */,
 				5A84AFFA2A3DFD6E00100842 /* README.md */,
 				5A61A1FB2A3B85D400D9DA5B /* Renderer */,
 				5A426A162A2E845900EE9F46 /* Mimosa */,
@@ -264,6 +277,7 @@
 				5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */,
 				5AE195362A44A47100DD9520 /* Mimosa-IOS.app */,
 				5AD975042A49D6D700168B28 /* Mimosa-Swift.app */,
+				5AD9756E2A4A30F400168B28 /* Mimosa-Swift-Mac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -288,6 +302,7 @@
 		5A426A1E2A2E84EF00EE9F46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A7E01A42A4B91390002592C /* ImageIO.framework */,
 				5AE195512A44A7C200DD9520 /* MetalKit.framework */,
 				5AF235102A3E4C2700CD623D /* ModelIO.framework */,
 				5AE1954F2A44A7AD00DD9520 /* ModelIO.framework */,
@@ -333,6 +348,54 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
+		5A7E016D2A4B8FD20002592C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A7E016E2A4B8FD20002592C /* Model */,
+				5A7E01802A4B8FD20002592C /* Texture */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5A7E016E2A4B8FD20002592C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5A7E016F2A4B8FD20002592C /* cone.obj */,
+				5A7E01702A4B8FD20002592C /* bunny-fine.obj */,
+				5A7E01712A4B8FD20002592C /* bunny.obj */,
+				5A7E01722A4B8FD20002592C /* cube.obj */,
+				5A7E01732A4B8FD20002592C /* teapot.obj */,
+				5A7E01742A4B8FD20002592C /* cylinder.obj */,
+				5A7E01752A4B8FD20002592C /* veach */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5A7E01752A4B8FD20002592C /* veach */ = {
+			isa = PBXGroup;
+			children = (
+				5A7E01762A4B8FD20002592C /* floor.mtl */,
+				5A7E01772A4B8FD20002592C /* plate4.obj */,
+				5A7E01782A4B8FD20002592C /* plate1.obj */,
+				5A7E01792A4B8FD20002592C /* plate2.obj */,
+				5A7E017A2A4B8FD20002592C /* plate3.obj */,
+				5A7E017B2A4B8FD20002592C /* plate4.mtl */,
+				5A7E017C2A4B8FD20002592C /* floor.obj */,
+				5A7E017D2A4B8FD20002592C /* plate2.mtl */,
+				5A7E017E2A4B8FD20002592C /* plate3.mtl */,
+				5A7E017F2A4B8FD20002592C /* plate1.mtl */,
+			);
+			path = veach;
+			sourceTree = "<group>";
+		};
+		5A7E01802A4B8FD20002592C /* Texture */ = {
+			isa = PBXGroup;
+			children = (
+				5A7E01812A4B8FD20002592C /* kloppenheim_06_4k.hdr */,
+			);
+			path = Texture;
+			sourceTree = "<group>";
+		};
 		5AD975052A49D6D700168B28 /* Mimosa-Swift */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,37 +438,6 @@
 				5AE195492A44A47300DD9520 /* Info.plist */,
 			);
 			path = "Mimosa-IOS";
-			sourceTree = "<group>";
-		};
-		5AF2350E2A3E415F00CD623D /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				5AF2351E2A40BF9E00CD623D /* veach */,
-				5AF2351C2A3F7ADB00CD623D /* bunny.obj */,
-				5AF2351A2A3F763500CD623D /* cylinder.obj */,
-				5AF235182A3F6C0900CD623D /* teapot.obj */,
-				5AF235162A3F5EE900CD623D /* cube.obj */,
-				5AF235142A3F5C7C00CD623D /* cone.obj */,
-				5AF2350F2A3E415F00CD623D /* bunny-fine.obj */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		5AF2351E2A40BF9E00CD623D /* veach */ = {
-			isa = PBXGroup;
-			children = (
-				5AF2352A2A40C59100CD623D /* floor.mtl */,
-				5AF2352B2A40C59100CD623D /* plate1.mtl */,
-				5AF235292A40C59100CD623D /* plate2.mtl */,
-				5AF2352C2A40C59100CD623D /* plate3.mtl */,
-				5AF2352D2A40C59100CD623D /* plate4.mtl */,
-				5AF2351F2A40BF9E00CD623D /* plate4.obj */,
-				5AF235202A40BF9E00CD623D /* plate1.obj */,
-				5AF235212A40BF9E00CD623D /* plate2.obj */,
-				5AF235222A40BF9E00CD623D /* plate3.obj */,
-				5AF235232A40BF9E00CD623D /* floor.obj */,
-			);
-			path = veach;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -479,6 +511,23 @@
 			productReference = 5AD975042A49D6D700168B28 /* Mimosa-Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
+		5AD975482A4A30F400168B28 /* Mimosa-Swift-Mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5AD9756B2A4A30F400168B28 /* Build configuration list for PBXNativeTarget "Mimosa-Swift-Mac" */;
+			buildPhases = (
+				5AD975492A4A30F400168B28 /* Sources */,
+				5AD975512A4A30F400168B28 /* Frameworks */,
+				5AD975542A4A30F400168B28 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mimosa-Swift-Mac";
+			productName = "Mimosa-Swift";
+			productReference = 5AD9756E2A4A30F400168B28 /* Mimosa-Swift-Mac.app */;
+			productType = "com.apple.product-type.application";
+		};
 		5AE195352A44A47100DD9520 /* Mimosa-IOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5AE1954E2A44A47300DD9520 /* Build configuration list for PBXNativeTarget "Mimosa-IOS" */;
@@ -537,6 +586,7 @@
 			projectRoot = "";
 			targets = (
 				5A61A2782A3B8DBC00D9DA5B /* Mimosa */,
+				5AD975482A4A30F400168B28 /* Mimosa-Swift-Mac */,
 				5AE195352A44A47100DD9520 /* Mimosa-IOS */,
 				5A087F5A2A350CA000BDCA99 /* helloMetal */,
 				5A43D6F52A37AB5A0048C4B4 /* helloRayTracing */,
@@ -550,24 +600,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5AF235272A40BF9E00CD623D /* plate3.obj in Resources */,
-				5AF2352E2A40C59100CD623D /* plate2.mtl in Resources */,
-				5AF2351B2A3F763500CD623D /* cylinder.obj in Resources */,
-				5AF2352F2A40C59100CD623D /* floor.mtl in Resources */,
-				5AF235132A3F586B00CD623D /* bunny-fine.obj in Resources */,
-				5AF235312A40C59100CD623D /* plate3.mtl in Resources */,
-				5AF235172A3F5EE900CD623D /* cube.obj in Resources */,
-				5AF235192A3F6C0900CD623D /* teapot.obj in Resources */,
+				5A7E01822A4B8FEA0002592C /* cone.obj in Resources */,
+				5A7E01832A4B8FEA0002592C /* bunny-fine.obj in Resources */,
+				5A7E01842A4B8FEA0002592C /* bunny.obj in Resources */,
+				5A7E01852A4B8FEA0002592C /* cube.obj in Resources */,
+				5A7E01862A4B8FEA0002592C /* teapot.obj in Resources */,
+				5A7E01872A4B8FEA0002592C /* cylinder.obj in Resources */,
+				5A7E01882A4B8FEA0002592C /* floor.mtl in Resources */,
+				5A7E01892A4B8FEA0002592C /* plate4.obj in Resources */,
+				5A7E018A2A4B8FEA0002592C /* plate1.obj in Resources */,
+				5A7E018B2A4B8FEA0002592C /* plate2.obj in Resources */,
+				5A7E018C2A4B8FEA0002592C /* plate3.obj in Resources */,
+				5A7E018D2A4B8FEA0002592C /* plate4.mtl in Resources */,
+				5A7E018E2A4B8FEA0002592C /* floor.obj in Resources */,
+				5A7E018F2A4B8FEA0002592C /* plate2.mtl in Resources */,
+				5A7E01902A4B8FEA0002592C /* plate3.mtl in Resources */,
+				5A7E01912A4B8FEA0002592C /* plate1.mtl in Resources */,
+				5A7E01922A4B8FEA0002592C /* kloppenheim_06_4k.hdr in Resources */,
 				5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */,
-				5AF235152A3F5C7C00CD623D /* cone.obj in Resources */,
-				5AF235252A40BF9E00CD623D /* plate1.obj in Resources */,
-				5AF235322A40C59100CD623D /* plate4.mtl in Resources */,
-				5AF235262A40BF9E00CD623D /* plate2.obj in Resources */,
-				5AF235282A40BF9E00CD623D /* floor.obj in Resources */,
-				5AF235302A40C59100CD623D /* plate1.mtl in Resources */,
-				5AF2351D2A3F7ADB00CD623D /* bunny.obj in Resources */,
 				5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */,
-				5AF235242A40BF9E00CD623D /* plate4.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,28 +626,42 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A7E01932A4B8FFC0002592C /* cone.obj in Resources */,
+				5A7E01942A4B8FFC0002592C /* bunny-fine.obj in Resources */,
+				5A7E01952A4B8FFC0002592C /* bunny.obj in Resources */,
+				5A7E01962A4B8FFC0002592C /* cube.obj in Resources */,
+				5A7E01972A4B8FFC0002592C /* teapot.obj in Resources */,
+				5A7E01982A4B8FFC0002592C /* cylinder.obj in Resources */,
+				5A7E01992A4B8FFC0002592C /* floor.mtl in Resources */,
+				5A7E019A2A4B8FFC0002592C /* plate4.obj in Resources */,
+				5A7E019B2A4B8FFC0002592C /* plate1.obj in Resources */,
+				5A7E019C2A4B8FFC0002592C /* plate2.obj in Resources */,
+				5A7E019D2A4B8FFC0002592C /* plate3.obj in Resources */,
+				5A7E019E2A4B8FFC0002592C /* plate4.mtl in Resources */,
+				5A7E019F2A4B8FFC0002592C /* floor.obj in Resources */,
+				5A7E01A02A4B8FFC0002592C /* plate2.mtl in Resources */,
+				5A7E01A12A4B8FFC0002592C /* plate3.mtl in Resources */,
+				5A7E01A22A4B8FFC0002592C /* plate1.mtl in Resources */,
+				5A7E01A32A4B8FFC0002592C /* kloppenheim_06_4k.hdr in Resources */,
 				5AD975322A49FEB900168B28 /* 03.png in Resources */,
-				5AD9751A2A49D8E800168B28 /* floor.mtl in Resources */,
-				5AD9751B2A49D8E800168B28 /* plate1.mtl in Resources */,
-				5AD9751C2A49D8E800168B28 /* plate2.mtl in Resources */,
-				5AD9751D2A49D8E800168B28 /* plate3.mtl in Resources */,
-				5AD9751E2A49D8E800168B28 /* plate4.mtl in Resources */,
-				5AD9751F2A49D8E800168B28 /* plate4.obj in Resources */,
-				5AD975202A49D8E800168B28 /* plate1.obj in Resources */,
-				5AD975212A49D8E800168B28 /* plate2.obj in Resources */,
-				5AD975222A49D8E800168B28 /* plate3.obj in Resources */,
-				5AD975232A49D8E800168B28 /* floor.obj in Resources */,
-				5AD975242A49D8E900168B28 /* bunny.obj in Resources */,
 				5AD975342A49FEBA00168B28 /* 01.png in Resources */,
-				5AD975252A49D8E900168B28 /* cylinder.obj in Resources */,
-				5AD975262A49D8E900168B28 /* teapot.obj in Resources */,
-				5AD975272A49D8E900168B28 /* cube.obj in Resources */,
 				5AD9752D2A49E8A800168B28 /* RenderScene.storyboard in Resources */,
-				5AD975282A49D8E900168B28 /* cone.obj in Resources */,
 				5AD975332A49FEB900168B28 /* 02.png in Resources */,
-				5AD975292A49D8E900168B28 /* bunny-fine.obj in Resources */,
 				5AD9750F2A49D6D900168B28 /* Preview Assets.xcassets in Resources */,
 				5AD9750B2A49D6D900168B28 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5AD975542A4A30F400168B28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AD975552A4A30F400168B28 /* 03.png in Resources */,
+				5AD975612A4A30F400168B28 /* 01.png in Resources */,
+				5AD975652A4A30F400168B28 /* RenderScene.storyboard in Resources */,
+				5AD975672A4A30F400168B28 /* 02.png in Resources */,
+				5AD975692A4A30F400168B28 /* Preview Assets.xcassets in Resources */,
+				5AD9756A2A4A30F400168B28 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,22 +669,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5AE195532A44A7D800DD9520 /* floor.mtl in Resources */,
-				5AE195542A44A7D800DD9520 /* plate1.mtl in Resources */,
-				5AE195552A44A7D800DD9520 /* plate2.mtl in Resources */,
-				5AE195562A44A7D800DD9520 /* plate3.mtl in Resources */,
-				5AE195572A44A7D800DD9520 /* plate4.mtl in Resources */,
-				5AE195582A44A7D800DD9520 /* plate4.obj in Resources */,
-				5AE195592A44A7D800DD9520 /* plate1.obj in Resources */,
-				5AE1955A2A44A7D800DD9520 /* plate2.obj in Resources */,
-				5AE1955B2A44A7D800DD9520 /* plate3.obj in Resources */,
-				5AE1955C2A44A7D800DD9520 /* floor.obj in Resources */,
-				5AE1955D2A44A7D800DD9520 /* bunny.obj in Resources */,
-				5AE1955E2A44A7D800DD9520 /* cylinder.obj in Resources */,
-				5AE1955F2A44A7D800DD9520 /* teapot.obj in Resources */,
-				5AE195602A44A7D800DD9520 /* cube.obj in Resources */,
-				5AE195612A44A7D800DD9520 /* cone.obj in Resources */,
-				5AE195622A44A7D800DD9520 /* bunny-fine.obj in Resources */,
 				5AE195482A44A47300DD9520 /* LaunchScreen.storyboard in Resources */,
 				5AE195452A44A47300DD9520 /* Assets.xcassets in Resources */,
 				5AE195432A44A47100DD9520 /* Main.storyboard in Resources */,
@@ -668,6 +717,20 @@
 				5AD975172A49D8C000168B28 /* ViewController.mm in Sources */,
 				5AD975092A49D6D700168B28 /* ContentView.swift in Sources */,
 				5AD975072A49D6D700168B28 /* Mimosa_SwiftApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5AD975492A4A30F400168B28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AD9754A2A4A30F400168B28 /* Shaders.metal in Sources */,
+				5AD9754B2A4A30F400168B28 /* Transforms.mm in Sources */,
+				5AD9754C2A4A30F400168B28 /* RenderScene.mm in Sources */,
+				5AD9754D2A4A30F400168B28 /* Renderer.mm in Sources */,
+				5AD9754E2A4A30F400168B28 /* ViewController.mm in Sources */,
+				5AD9754F2A4A30F400168B28 /* ContentView.swift in Sources */,
+				5AD975502A4A30F400168B28 /* Mimosa_SwiftApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -901,10 +964,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = Mimosa/Assets.xcassets;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
 					"SUPPORTS_METAL_3=1",
 				);
@@ -937,6 +1000,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = Mimosa/Assets.xcassets;
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
@@ -996,7 +1060,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
+				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-IOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx14.0;
 				SUPPORTED_PLATFORMS = "xrsimulator xros watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
@@ -1007,7 +1071,7 @@
 				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -1045,7 +1109,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
+				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-IOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx14.0;
 				SUPPORTED_PLATFORMS = "xrsimulator xros watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
@@ -1055,7 +1119,117 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "./Mimosa-Swift/-Bridging-Header.h";
 				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Release;
+		};
+		5AD9756C2A4A30F400168B28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Mimosa-Swift/Mimosa_Swift.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mimosa-Swift/Preview Content\"";
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"HAS_SWIFT_UI=1",
+					"SUPPORTS_METAL_3=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Mimosa;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
+				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "./Mimosa-Swift/-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
+			};
+			name = Debug;
+		};
+		5AD9756D2A4A30F400168B28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Mimosa-Swift/Mimosa_Swift.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Mimosa-Swift/Preview Content\"";
+				DEVELOPMENT_TEAM = CAB432FF98;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"HAS_SWIFT_UI=1",
+					"SUPPORTS_METAL_3=1",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Mimosa;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
+				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "./Mimosa-Swift/-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objcxx;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
@@ -1072,7 +1246,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					"$(inherited)",
+					"TARGET_OS_IPHONE=1",
 					"SUPPORTS_METAL_3=1",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1090,6 +1264,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-IOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1109,7 +1284,10 @@
 				DEVELOPMENT_TEAM = CAB432FF98;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"SUPPORTS_METAL_3=1",
+					"TARGET_OS_IPHONE=1",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Mimosa-IOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Mimosa;
@@ -1125,6 +1303,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
+				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-IOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1178,6 +1357,15 @@
 			buildConfigurations = (
 				5AD975102A49D6D900168B28 /* Debug */,
 				5AD975112A49D6D900168B28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5AD9756B2A4A30F400168B28 /* Build configuration list for PBXNativeTarget "Mimosa-Swift-Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5AD9756C2A4A30F400168B28 /* Debug */,
+				5AD9756D2A4A30F400168B28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -190,7 +190,8 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         intersectionFunctions[geometry.intersectionFunctionName] = intersectionFunction;
     }
     
-    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
+#ifdef HAS_SWIFT_UI
+    id <MTLFunction> raytracingFunction;
     
     if (_renderMode == Mats)
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMats"];
@@ -198,6 +199,10 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelNEE"];
     if (_renderMode == MIS)
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
+    
+#else
+    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMats"];
+#endif
     
     // Create the compute pipeline state, which does all the ray tracing.
     _raytracingPipeline = [self newComputePipelineStateWithFunction:raytracingFunction
@@ -613,6 +618,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     uniforms->frameIndex = _frameIndex++;
 
     uniforms->lightCount = (unsigned int)_scene.lightCount;
+//    NSLog(@"lightCount = %d", uniforms->lightCount);
     uniforms->totalLightCount = (unsigned int)_scene.totalLightCount;
     uniforms->instanceCount = (unsigned int)_scene.instanceCount;
 

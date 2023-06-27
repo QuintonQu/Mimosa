@@ -87,7 +87,7 @@ struct ViewControllerView: NSViewControllerRepresentable {
 
 struct RenderView: View {
     let sceneName: String
-    @State private var isInspectorPresented = true
+    @State private var isInspectorPresented = false
     @State private var selectedIndex = 2
     
     var body: some View {

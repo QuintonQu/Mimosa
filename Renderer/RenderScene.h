@@ -207,6 +207,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Create test scene for MIS Implementation
 + (RenderScene *)newTestSceneMIS:(id <MTLDevice>)device;
 
+// Create test scene for EnvMap
++ (RenderScene *)newTestSceneEnv:(id <MTLDevice>)device;
+
 #pragma endregion CreateScene }
 
 // Add a piece of geometry to the scene.

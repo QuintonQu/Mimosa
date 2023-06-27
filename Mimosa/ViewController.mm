@@ -60,7 +60,7 @@ The implementation of the cross-platform view controller.
 //    Scene *scene = [Scene newInstancedCornellBoxSceneWithDevice:_view.device
 //                                       useIntersectionFunctions:YES];
     
-//    RenderScene *scene = [RenderScene newTestScene:_view.device];
+#ifdef HAS_SWIFT_UI
     RenderScene *scene;
     if([_sceneName  isEqual: @"Scene 1"])
         scene = [RenderScene newTestScene:_view.device];
@@ -68,7 +68,10 @@ The implementation of the cross-platform view controller.
         scene = [RenderScene newTestSceneObj:_view.device];
     if([_sceneName  isEqual: @"Scene 3"])
         scene = [RenderScene newTestSceneMIS:_view.device];
-
+#else
+    RenderScene *scene = [RenderScene newTestSceneEnv:_view.device];
+#endif
+    
     _renderer = [[Renderer alloc] initWithDevice:_view.device
                                            scene:scene];
 

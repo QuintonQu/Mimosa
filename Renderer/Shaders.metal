@@ -565,7 +565,7 @@ kernel void raytracingKernelMats(
 
     float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
     
-    float3 background_color = float3(0.0f, 0.0f, 0.0f);
+    float3 background_color = float3(1.0f, 1.0f, 1.0f);
 
     // Create an intersector to test for intersection between the ray and the geometry in the scene.
     intersector<triangle_data, instancing> i;
@@ -720,15 +720,16 @@ kernel void raytracingKernelMats(
             scatter_record = metallicScatter(worldSpaceSurfaceNormal, ray.direction);
             if(scatter_record.accept){
                 ray.direction = scatter_record.out_direction;
+                color *= material.color;
             }else{
                 break;
             }
         } else if(material.is_glass){
             float random_variable = r.x;
             scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
-            
             if(scatter_record.accept){
                 ray.direction = scatter_record.out_direction;
+                color *= material.color;
             }else{
                 break;
             }
@@ -1046,6 +1047,7 @@ kernel void raytracingKernelMIS(
      constant unsigned int                                 *lightCounts               [[buffer(7)]]
 )
 {
+    
     // The sample aligns the thread count to the threadgroup size, which means the thread count
     // may be different than the bounds of the texture. Test to make sure this thread
     // is referencing a pixel within the bounds of the texture.
@@ -1064,7 +1066,7 @@ kernel void raytracingKernelMIS(
 
     float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
     
-    float3 background_color = float3(0.0f, 0.0f, 0.0f);
+    float3 background_color = float3(1.0f, 1.0f, 1.0f);
     
     float Le_weight = 1.f;
     float nee_pdf = 1.f;
@@ -1080,6 +1082,10 @@ kernel void raytracingKernelMIS(
     typename intersector<triangle_data, instancing>::result_type intersection;
     
     ScatterRecord scatter_record;
+    
+    // IF LIGHT_COUNT == 0, DO NOT NEED TO DO LIGHT SAMPLING
+    bool no_light = uniforms.lightCount == 0;
+    last_is_specular = no_light;
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
@@ -1178,42 +1184,7 @@ kernel void raytracingKernelMIS(
             surfaceColor = sphere.material.color;
             material = sphere.material;
         }
-
-        // Sample a random light instance
-        EmitterRecord emitter_record;
-        float light_instance_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 7);
-        unsigned int light_instance_index = min((unsigned int)(light_instance_sample * uniforms.lightCount), uniforms.lightCount - 1);
-        unsigned int light_instance = lightIndexs[light_instance_index];
         
-        unsigned int geometries_index = instances[light_instance].accelerationStructureIndex;
-        unsigned int light_mask = instances[light_instance_index].mask;
-        
-        float4x4 lightToWorldSpaceTransform(1.0f);
-
-        for (int column = 0; column < 4; column++)
-            for (int row = 0; row < 3; row++)
-                lightToWorldSpaceTransform[column][row] = instances[instanceIndex].transformationMatrix[column][row];
-        
-        // Sample a random light geometry from one instance.
-        float light_geometry_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 8);
-        unsigned int light_geometry_index = min((unsigned int)(light_geometry_sample * lightCounts[light_instance_index]), lightCounts[light_instance_index] - 1);
-        
-        // Choose a random point to sample on the light source.
-        float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),
-                          halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 2));
-        
-        if(light_mask & GEOMETRY_MASK_SPHERE_LIGHT){
-            device SphereResources & sphereResources = *(device SphereResources *)((device char *)resources + resourcesStride * geometries_index);
-            Sphere sphere = sphereResources.spheres[light_geometry_index];
-            emitter_record = sampleSphereLight(sphere, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
-        }
-        if(light_mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
-            device TriangleResources & triangleResources = *(device TriangleResources *)((device char *)resources + resourcesStride * geometries_index);
-            Triangle triangle = triangleResources.triangles[light_geometry_index];
-            emitter_record = sampleTriangleLight(triangle, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
-        }
-        
-
         // Choose a random direction to continue the path of the ray. This causes light to
         // bounce between surfaces. An app might evaluate a more complicated equation to
         // calculate the amount of light that reflects between intersection points.  However,
@@ -1221,8 +1192,8 @@ kernel void raytracingKernelMIS(
         // BRDF and samples the rays with a cosine distribution over the hemisphere (importance
         // sampling). This requires that the kernel only multiply the colors together. This
         // sampling strategy also reduces the amount of noise in the output image.
-        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
-                   halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
+        float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
+                          halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
         
         ray.origin = worldSpaceIntersectionPoint;
         float3 in_direction = ray.direction;
@@ -1264,6 +1235,43 @@ kernel void raytracingKernelMIS(
         // Scale the ray color by the color of the surface to simulate the surface absorbing light.
         color *= surfaceColor;
         ray.direction = normalize(ray.direction);
+        
+        // IF LIGHT_COUNT == 0, DO NOT NEED TO DO LIGHT SAMPLING
+        if(no_light) continue;
+
+        // Sample a random light instance
+        EmitterRecord emitter_record;
+        float light_instance_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 7);
+        unsigned int light_instance_index = min((unsigned int)(light_instance_sample * uniforms.lightCount), uniforms.lightCount - 1);
+        unsigned int light_instance = lightIndexs[light_instance_index];
+        
+        unsigned int geometries_index = instances[light_instance].accelerationStructureIndex;
+        unsigned int light_mask = instances[light_instance_index].mask;
+        
+        float4x4 lightToWorldSpaceTransform(1.0f);
+
+        for (int column = 0; column < 4; column++)
+            for (int row = 0; row < 3; row++)
+                lightToWorldSpaceTransform[column][row] = instances[instanceIndex].transformationMatrix[column][row];
+        
+        // Sample a random light geometry from one instance.
+        float light_geometry_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 8);
+        unsigned int light_geometry_index = min((unsigned int)(light_geometry_sample * lightCounts[light_instance_index]), lightCounts[light_instance_index] - 1);
+        
+        // Choose a random point to sample on the light source.
+        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),
+                   halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 2));
+        
+        if(light_mask & GEOMETRY_MASK_SPHERE_LIGHT){
+            device SphereResources & sphereResources = *(device SphereResources *)((device char *)resources + resourcesStride * geometries_index);
+            Sphere sphere = sphereResources.spheres[light_geometry_index];
+            emitter_record = sampleSphereLight(sphere, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
+        }
+        if(light_mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
+            device TriangleResources & triangleResources = *(device TriangleResources *)((device char *)resources + resourcesStride * geometries_index);
+            Triangle triangle = triangleResources.triangles[light_geometry_index];
+            emitter_record = sampleTriangleLight(triangle, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
+        }
         
         // Deal with light sampling
         if(material.is_metal){

@@ -6,12 +6,13 @@ The implementation of the class that describes objects in a scene.
 */
 
 #import "RenderScene.h"
-
 #import <vector>
 #import <set>
 #import <iostream>
-
 #import <ModelIO/ModelIO.h>
+#import <CoreGraphics/CoreGraphics.h>
+#import <ImageIO/ImageIO.h>
+#include <random>
 
 using namespace simd;
 
@@ -22,6 +23,179 @@ MTLResourceOptions getManagedBufferStorageMode() {
     return MTLResourceStorageModeShared;
 #endif
 }
+
+#pragma mark - Environment Map Help Functions
+
+static CGImageRef createCGImageFromFile (NSString* path)
+{
+    // Get the URL for the pathname to pass it to
+    // `CGImageSourceCreateWithURL`.
+    NSURL *url = [NSURL fileURLWithPath:path];
+    CGImageRef        myImage = NULL;
+    CGImageSourceRef  myImageSource;
+    CFDictionaryRef   myOptions = NULL;
+    CFStringRef       myKeys[2];
+    CFTypeRef         myValues[2];
+
+    // Set up options if you want them. The options here are for
+    // caching the image in a decoded form and for using floating-point
+    // values if the image format supports them.
+    myKeys[0] = kCGImageSourceShouldCache;
+    myValues[0] = (CFTypeRef)kCFBooleanFalse;
+
+    myKeys[1] = kCGImageSourceShouldAllowFloat;
+    myValues[1] = (CFTypeRef)kCFBooleanTrue;
+
+    // Create the dictionary.
+    myOptions = CFDictionaryCreate(NULL,
+                                   (const void **) myKeys,
+                                   (const void **) myValues, 2,
+                                   &kCFTypeDictionaryKeyCallBacks,
+                                   & kCFTypeDictionaryValueCallBacks);
+
+    // Create an image source from the URL.
+    myImageSource = CGImageSourceCreateWithURL((CFURLRef)url, myOptions);
+    CFRelease(myOptions);
+
+    // Make sure the image source exists before continuing.
+    if (myImageSource == NULL)
+    {
+        fprintf(stderr, "Image source is NULL.");
+        return  NULL;
+    }
+
+    // Create an image from the first item in the image source.
+    myImage = CGImageSourceCreateImageAtIndex(myImageSource, 0, NULL);
+    CFRelease(myImageSource);
+
+    // Make sure the image exists before continuing.
+    if (myImage == NULL)
+    {
+         fprintf(stderr, "Image not created from image source.");
+         return NULL;
+    }
+
+    return myImage;
+}
+
+
+id<MTLTexture> texture_from_radiance_file(NSString * fileName, id<MTLDevice> device, NSError ** error)
+{
+    // Validate the function inputs.
+
+    if (![fileName containsString:@"."])
+    {
+        if (error != NULL)
+        {
+            *error = [[NSError alloc] initWithDomain:@"File load failure."
+                                                code:0xdeadbeef
+                                            userInfo:@{NSLocalizedDescriptionKey : @"No file extension provided."}];
+        }
+        return nil;
+    }
+
+    NSArray * subStrings = [fileName componentsSeparatedByString:@"."];
+
+    if ([subStrings[1] compare:@"hdr"] != NSOrderedSame)
+    {
+        if (error != NULL)
+        {
+            *error = [[NSError alloc] initWithDomain:@"File load failure."
+                                                code:0xdeadbeef
+                                            userInfo:@{NSLocalizedDescriptionKey : @"Only (.hdr) files are supported."}];
+        }
+        return nil;
+    }
+
+    // Load and validate the image.
+
+    NSString* filePath = [[NSBundle mainBundle] pathForResource:subStrings[0] ofType:subStrings[1]];
+    CGImageRef loadedImage = createCGImageFromFile(filePath);
+
+    if (loadedImage == NULL)
+    {
+        if (error != NULL)
+        {
+            *error = [[NSError alloc] initWithDomain:@"File load failure."
+                                                code:0xdeadbeef
+                                            userInfo:@{NSLocalizedDescriptionKey : @"Unable to create CGImage."}];
+        }
+
+        return nil;
+    }
+
+    size_t bpp = CGImageGetBitsPerPixel(loadedImage);
+
+    const size_t kSrcChannelCount = 4;
+    const size_t kBitsPerByte = 8;
+    const size_t kExpectedBitsPerPixel = sizeof(uint16_t) * kSrcChannelCount * kBitsPerByte;
+
+    if (bpp != kExpectedBitsPerPixel)
+    {
+        if (error != NULL)
+        {
+            *error = [[NSError alloc] initWithDomain:@"File load failure."
+                                                code:0xdeadbeef
+                                            userInfo:@{NSLocalizedDescriptionKey : [NSString stringWithFormat:@"Expected %zu bits per pixel, but file returns %zu", kExpectedBitsPerPixel, bpp]}];
+        }
+        CFRelease(loadedImage);
+        return nil;
+    }
+
+    // Copy the image into a tempory buffer.
+
+    size_t width = CGImageGetWidth(loadedImage);
+    size_t height = CGImageGetHeight(loadedImage);
+
+    // Make the CG image data accessible.
+    CFDataRef cgImageData = CGDataProviderCopyData(CGImageGetDataProvider(loadedImage));
+
+    // Get a pointer to the data.
+    const uint16_t * srcData = (const uint16_t * )CFDataGetBytePtr(cgImageData);
+
+    // Metal exposes an RGBA16Float format, but the source data is RGB F16, so
+    // this function adds an extra channel of padding.
+    const size_t kPixelCount = width * height;
+    const size_t kDstChannelCount = 4;
+    const size_t kDstSize = kPixelCount * sizeof(uint16_t) * kDstChannelCount;
+
+    uint16_t * dstData = (uint16_t *)malloc(kDstSize);
+
+    for (size_t texIdx = 0; texIdx < kPixelCount; ++texIdx)
+    {
+        const uint16_t * currSrc = srcData + (texIdx * kSrcChannelCount);
+        uint16_t * currDst = dstData + (texIdx * kDstChannelCount);
+
+        currDst[0] = currSrc[0];
+        currDst[1] = currSrc[1];
+        currDst[2] = currSrc[2];
+        currDst[3] = (uint16_t) 1.f;
+    }
+
+    // Create an `MTLTexture`.
+
+    MTLTextureDescriptor * texDesc = [MTLTextureDescriptor new];
+
+    texDesc.pixelFormat = MTLPixelFormatRGBA16Float;
+    texDesc.width = width;
+    texDesc.height = height;
+
+    id<MTLTexture> texture = [device newTextureWithDescriptor:texDesc];
+
+    const NSUInteger kBytesPerRow = sizeof(uint16_t) * kDstChannelCount * width;
+
+    MTLRegion region = { {0,0,0}, {width, height, 1} };
+
+    [texture replaceRegion:region mipmapLevel:0 withBytes:dstData bytesPerRow:kBytesPerRow];
+
+    // Remember to clean things up.
+    free(dstData);
+    CFRelease(cgImageData);
+    CFRelease(loadedImage);
+
+    return texture;
+}
+
 
 #pragma mark - Geometry
 @implementation Geometry
@@ -512,8 +686,9 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     std::vector<AreaLight> _lights;
     std::vector<unsigned int> _light_indexs;
     std::vector<unsigned int> _light_counts; //_light_indexs.size() = _light_counts.size()
-    
     int _totalLightCount;
+    
+    id<MTLTexture> _env_map;
 }
 
 - (NSArray <Geometry *> *)geometries {
@@ -521,8 +696,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 }
 
 - (NSUInteger)lightCount {
+    if(_light_indexs[0] == -1){
+        return 0;
+    }
     return (NSUInteger)_light_indexs.size();
-
 }
 
 - (NSUInteger)totalLightCount {
@@ -587,6 +764,16 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
         [geometry uploadToBuffers];
 
     MTLResourceOptions options = getManagedBufferStorageMode();
+    
+    if(_lights.size() == 0) {
+        AreaLight light;
+        _lights.push_back(light);
+    }
+    
+    if(_light_indexs.size() == 0){
+        _light_indexs.push_back(-1);
+        _light_counts.push_back(-1);
+    }
 
     _lightBuffer = [_device newBufferWithLength:_lights.size() * sizeof(AreaLight) options:options];
     
@@ -603,6 +790,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     [_lightIndexBuffer didModifyRange:NSMakeRange(0, _lightIndexBuffer.length)];
     [_lightCountBuffer didModifyRange:NSMakeRange(0, _lightCountBuffer.length)];
 #endif
+}
+
+-(void)setEnvmap:(id<MTLTexture>)env_map{
+    _env_map = env_map;
 }
 
 #pragma mark - Create Scene
@@ -1259,11 +1450,6 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
                              color:vector3(0.0f, 0.0f, 0.0f)
                           material:*diffuse_light_4];
     
-//    [lightMesh addSphereWithOrigin:vector3(-3.75f, 0.0f, 0.0f)
-//                            radius:0.89f
-//                             color:vector3(0.0f, 0.0f, 0.0f)
-//                          material:*diffuse_light];
-    
     // Add plate and floor.
     TriangleGeometry *geometryMesh = [[TriangleGeometry alloc] initWithDevice:device];
 
@@ -1347,7 +1533,139 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     [scene addLight:light];
 
     return scene;
+}
+
++ (RenderScene *)newTestSceneEnv:(id<MTLDevice>)device
+{
+    RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
     
+    // Set up the camera
+    scene.cameraPosition = vector3(13.f, 2.f, 3.f);
+    scene.cameraTarget = vector3(0.f, 0.f, 0.f);
+    scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraFov = 20.0f;
+    
+    // Add materials
+    Material* ground_material = new Material;
+    ground_material->color = vector3(0.5f, 0.5f, 0.5f);
+    
+    Material* diffuse_light_4 = new Material;
+    diffuse_light_4->color = vector3(4.23457f, 4.23457f, 4.23457f);
+    
+    matrix_float4x4 non_transform = matrix4x4_translation(0.0f, 0.0f, 0.0f);
+    
+    // Add floor.
+    TriangleGeometry *geometryMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:geometryMesh];
+    
+    [geometryMesh addXYPlane:matrix4x4_rotation(-90.f/180.f*M_PI, vector3(1.0f, 0.0f, 0.0f)) * matrix4x4_scale(100.0f, 100.0f, 0.0f)
+               inwardNormals:false
+                    material:*ground_material];
+    
+    // Add spheres    
+    SphereGeometry *sphereGeometry = [[SphereGeometry alloc] initWithDevice:device];
+    
+    [scene addGeometry:sphereGeometry];
+        
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0, 1);
+
+    for (int a = -11; a < 11; a++)
+    {
+        for (int b = -11; b < 11; b++)
+        {
+            float choose_mat = (float) dis(gen);
+            float r1 = (float) dis(gen);
+            float r2 = (float) dis(gen);
+            float3 origin = vector3(a+0.9f*r1, 0.2f, b+0.9f*r2);
+            if(length(origin-vector3(4.0f, 0.2f, 0.0f)) > 0.9f){
+                if(choose_mat < 0.8f){
+                    // diffuse
+                    float r1 = (float) dis(gen);
+                    float r2 = (float) dis(gen);
+                    float r3 = (float) dis(gen);
+                    float r4 = (float) dis(gen);
+                    float r5 = (float) dis(gen);
+                    float r6 = (float) dis(gen);
+                    Material* diffuse = new Material;
+                    diffuse->color = vector3(r1 * r2, r3 * r4, r5 * r6);
+                    [sphereGeometry addSphereWithOrigin:origin
+                                                 radius:0.2f
+                                                  color:vector3(0.725f, 0.71f, 0.68f)
+                                               material:*diffuse];
+                }else if(choose_mat < 0.95f){
+                    float r1 = (float) dis(gen);
+                    float r2 = (float) dis(gen);
+                    float r3 = (float) dis(gen);
+                    float r4 = (float) dis(gen);
+                    Material* metal = new Material;
+                    metal->color = vector3(0.5f * (1 + r1), 0.5f * (1.0f + r2), 0.5f * (1.0f + r3));
+                    metal->is_metal = true;
+                    [sphereGeometry addSphereWithOrigin:origin
+                                                 radius:0.2f
+                                                  color:vector3(0.725f, 0.71f, 0.68f)
+                                               material:*metal];
+                }else{
+                    Material* glass = new Material;
+                    glass->color = vector3(1.f, 1.f, 1.f);
+                    glass->is_glass = true;
+                    [sphereGeometry addSphereWithOrigin:origin
+                                                 radius:0.2f
+                                                  color:vector3(0.725f, 0.71f, 0.68f)
+                                               material:*glass];
+                }
+            }
+        }
+    }
+    
+    Material* big_glass = new Material;
+    big_glass->color = vector3(1.f, 1.f, 1.f);
+    big_glass->is_glass = true;
+    
+    Material* big_diffuse = new Material;
+    big_diffuse->color = vector3(0.4f, 0.2f, 0.1f);
+    
+    Material* big_metal = new Material;
+    big_metal->color = vector3(0.7f, 0.6f, 0.5f);
+    big_metal->is_metal = true;
+    
+    [sphereGeometry addSphereWithOrigin:vector3(0.0f, 1.0f, 0.0f)
+                                 radius:1.0f
+                                  color:vector3(0.725f, 0.71f, 0.68f)
+                               material:*big_glass];
+    
+    [sphereGeometry addSphereWithOrigin:vector3(-4.0f, 1.0f, 0.0f)
+                                 radius:1.0f
+                                  color:vector3(0.725f, 0.71f, 0.68f)
+                               material:*big_diffuse];
+    
+    [sphereGeometry addSphereWithOrigin:vector3(4.0f, 1.0f, 0.0f)
+                                 radius:1.0f
+                                  color:vector3(0.725f, 0.71f, 0.68f)
+                               material:*big_metal];
+
+    // Create an instance of the Cornell box.
+    GeometryInstance *geometryMeshInstance = [[GeometryInstance alloc] initWithGeometry:geometryMesh
+                                                                              transform:non_transform
+                                                                                   mask:GEOMETRY_MASK_TRIANGLE];
+
+    [scene addInstance:geometryMeshInstance];
+
+    // Create an instance of the sphere.
+    GeometryInstance *sphereGeometryInstance = [[GeometryInstance alloc] initWithGeometry:sphereGeometry
+                                                                                    transform:non_transform
+                                                                                         mask:GEOMETRY_MASK_SPHERE];
+
+    [scene addInstance:sphereGeometryInstance];
+    
+    // Create environment map
+    NSError *error;
+    id<MTLTexture> env_map = texture_from_radiance_file( @"kloppenheim_06_4k.hdr", scene.device, &error );
+    NSAssert( env_map, @"Could not load sky texture: %@", error );
+    [scene setEnvmap:env_map];
+
     return scene;
 }
 
