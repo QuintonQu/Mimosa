@@ -3,3 +3,4 @@ metal-cpp
 metal-cpp-extensions
 *.obj
 *.mtl
+*.hdr
