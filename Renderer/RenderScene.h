@@ -184,6 +184,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Camera field of view
 @property (nonatomic) float cameraFov;
 
+// Environment map texture
+@property (nonatomic) id <MTLTexture> envmapTexture;
+
 // Initializer
 - (instancetype)initWithDevice:(id <MTLDevice>)device;
 

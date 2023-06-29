@@ -150,6 +150,7 @@
 		5A61A2192A3B8A7E00D9DA5B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A66136B2A4CCE15006C2900 /* importantSampling2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = importantSampling2D.cpp; sourceTree = "<group>"; };
 		5A7E016F2A4B8FD20002592C /* cone.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = cone.obj; sourceTree = "<group>"; };
 		5A7E01702A4B8FD20002592C /* bunny-fine.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = "bunny-fine.obj"; sourceTree = "<group>"; };
 		5A7E01712A4B8FD20002592C /* bunny.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = bunny.obj; sourceTree = "<group>"; };
@@ -258,6 +259,7 @@
 		5A426A0B2A2E845900EE9F46 = {
 			isa = PBXGroup;
 			children = (
+				5A66136A2A4CCDED006C2900 /* Notes */,
 				5A7E016D2A4B8FD20002592C /* Resources */,
 				5A84AFFA2A3DFD6E00100842 /* README.md */,
 				5A61A1FB2A3B85D400D9DA5B /* Renderer */,
@@ -346,6 +348,14 @@
 				5A61A2122A3B85FD00D9DA5B /* Info.plist */,
 			);
 			path = macOS;
+			sourceTree = "<group>";
+		};
+		5A66136A2A4CCDED006C2900 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				5A66136B2A4CCE15006C2900 /* importantSampling2D.cpp */,
+			);
+			path = Notes;
 			sourceTree = "<group>";
 		};
 		5A7E016D2A4B8FD20002592C /* Resources */ = {

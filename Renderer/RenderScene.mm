@@ -687,8 +687,6 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     std::vector<unsigned int> _light_indexs;
     std::vector<unsigned int> _light_counts; //_light_indexs.size() = _light_counts.size()
     int _totalLightCount;
-    
-    id<MTLTexture> _env_map;
 }
 
 - (NSArray <Geometry *> *)geometries {
@@ -792,8 +790,23 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 #endif
 }
 
--(void)setEnvmap:(id<MTLTexture>)env_map{
-    _env_map = env_map;
+- (void)setConstantEnvmapTexture:(float3)background_color {
+    MTLTextureDescriptor *textureDescriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA32Float width:512 height:512 mipmapped:NO];
+    
+    id<MTLTexture> texture = [_device newTextureWithDescriptor:textureDescriptor];
+    
+    float color[4] = {background_color.r, background_color.g, background_color.b, 1.0f};
+    float *data = (float *)malloc(512 * 512 * 4 * sizeof(float));
+    for (int i = 0; i < 512 * 512; i++)
+    {
+        memcpy(data + i * 4, color, 4 * sizeof(float));
+    }
+
+    MTLRegion region = MTLRegionMake2D(0, 0, 512, 512);
+    [texture replaceRegion:region mipmapLevel:0 withBytes:data bytesPerRow:512 * 4 * sizeof(float)];
+
+    [self setEnvmapTexture:texture];
+    free(data);
 }
 
 #pragma mark - Create Scene
@@ -1201,23 +1214,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
     [scene addInstance:sphereGeometryInstance];
 
-
-    // Add a light for each box.
-    AreaLight light;
-
-//    light.position = vector3(0.0f, 1.98f, 0.0f);
-//    light.forward = vector3(0.0f, -1.0f, 0.0f);
-//    light.right = vector3(0.25f, 0.0f, 0.0f);
-//    light.up = vector3(0.0f, 0.0f, 0.25f);
-
-//    float r = (float)rand() / (float)RAND_MAX;
-//    float g = (float)rand() / (float)RAND_MAX;
-//    float b = (float)rand() / (float)RAND_MAX;
-//
-//    light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
-//    light.color = vector3(20.0f, 20.0f, 20.0f);
-
-    [scene addLight:light];
+    float3 background_color = vector3(0.0f, 0.0f, 0.0f);
+    [scene setConstantEnvmapTexture:background_color];
 
     return scene;
 }
@@ -1357,22 +1355,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 //
 //    [scene addInstance:sphereGeometryInstance];
 
-    // Add a light for each box.
-    AreaLight light;
-//
-//    light.position = vector3(0.0f, 1.98f, 0.0f);
-//    light.forward = vector3(0.0f, -1.0f, 0.0f);
-//    light.right = vector3(0.25f, 0.0f, 0.0f);
-//    light.up = vector3(0.0f, 0.0f, 0.25f);
-//
-//    float r = (float)rand() / (float)RAND_MAX;
-//    float g = (float)rand() / (float)RAND_MAX;
-//    float b = (float)rand() / (float)RAND_MAX;
-//
-//    light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
-//    light.color = vector3(1.0f, 1.0f, 1.0f);
-//
-    [scene addLight:light];
+    float3 background_color = vector3(0.0f, 0.0f, 0.0f);
+    [scene setConstantEnvmapTexture:background_color];
 
     return scene;
 }
@@ -1515,22 +1499,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 //
 //    [scene addInstance:sphereGeometryInstance];
 
-    // Add a light for each box.
-    AreaLight light;
-//
-//    light.position = vector3(0.0f, 1.98f, 0.0f);
-//    light.forward = vector3(0.0f, -1.0f, 0.0f);
-//    light.right = vector3(0.25f, 0.0f, 0.0f);
-//    light.up = vector3(0.0f, 0.0f, 0.25f);
-//
-//    float r = (float)rand() / (float)RAND_MAX;
-//    float g = (float)rand() / (float)RAND_MAX;
-//    float b = (float)rand() / (float)RAND_MAX;
-//
-//    light.color = vector3(r * 4.0f, g * 4.0f, b * 4.0f);
-//    light.color = vector3(1.0f, 1.0f, 1.0f);
-//
-    [scene addLight:light];
+    float3 background_color = vector3(0.0f, 0.0f, 0.0f);
+    [scene setConstantEnvmapTexture:background_color];
 
     return scene;
 }
@@ -1599,7 +1569,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
                     float r1 = (float) dis(gen);
                     float r2 = (float) dis(gen);
                     float r3 = (float) dis(gen);
-                    float r4 = (float) dis(gen);
+//                    float r4 = (float) dis(gen);
                     Material* metal = new Material;
                     metal->color = vector3(0.5f * (1 + r1), 0.5f * (1.0f + r2), 0.5f * (1.0f + r3));
                     metal->is_metal = true;
@@ -1629,7 +1599,8 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     
     Material* big_metal = new Material;
     big_metal->color = vector3(0.7f, 0.6f, 0.5f);
-    big_metal->is_metal = true;
+    big_metal->is_phong = true;
+    big_metal->exponent = 1000.f;
     
     [sphereGeometry addSphereWithOrigin:vector3(0.0f, 1.0f, 0.0f)
                                  radius:1.0f
@@ -1664,7 +1635,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     NSError *error;
     id<MTLTexture> env_map = texture_from_radiance_file( @"kloppenheim_06_4k.hdr", scene.device, &error );
     NSAssert( env_map, @"Could not load sky texture: %@", error );
-    [scene setEnvmap:env_map];
+    [scene setEnvmapTexture:env_map];
 
     return scene;
 }

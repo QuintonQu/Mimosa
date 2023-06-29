@@ -21,7 +21,8 @@ This is an exercise project for writing ray tracing in Metal shader. The project
 
 ### Light
 - [ ] Point light
-- [ ] Sky box / Environment map
+- [ ] Important Sampling Environment map
+- [x] Sky box / Environment map
 - [x] Area light (Mesh light)
 
 ### Texture
@@ -39,8 +40,8 @@ This is an exercise project for writing ray tracing in Metal shader. The project
 
 ### Other Functions
 - [ ] Moving Camera
-- [ ] Choosing different scene
 - [ ] IOS Deployment
+- [x] Choosing different scene
 
 ## References
 - [Accelerating ray tracing using Metal](https://developer.apple.com/documentation/metal/accelerating_ray_tracing_using_metal)

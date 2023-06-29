@@ -229,7 +229,7 @@ inline EmitterRecord sampleSphereLight(Sphere sphere, float3 hit_point, float2 r
     float area = 2 * M_PI_F * (1-cos_max);
     emitter_record.pdf = abs(1.f / area);
     emitter_record.emit = sphere.material.color;
-    emitter_record.distance = distance;
+    emitter_record.distance = distance - radius;
     return emitter_record;
 }
 
@@ -531,6 +531,47 @@ ray generate_ray(uint2 tid [[thread_position_in_grid]], constant Uniforms &unifo
 
 #pragma endregion GenerateRay }
 
+#pragma mark - Environment Map
+#pragma region EnvironmentMap {
+
+float3 get_env_color(float3 in_direction, texture2d<float> envmapTex [[texture(3)]]){
+    float2 environmentMapUV = float2(atan2(in_direction.z, in_direction.x) / (2 * M_PI_F) + 0.5, 0.5 - asin(in_direction.y) / M_PI_F);
+    constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, filter::linear);
+    float3 color = envmapTex.sample(linearFilterSampler, environmentMapUV).rgb;
+    return color;
+}
+
+EmitterRecord uniform_sample_env(float2 random_variable, texture2d<float> envmapTex [[texture(3)]]){
+    EmitterRecord emitter_record;
+    
+    float u = random_variable.x * 2 * M_PI_F;
+    float v = acos(2 * random_variable.y - 1);
+    
+    emitter_record.out_direction = normalize(float3(-sin(v) * cos(u), cos(v), -sin(v) * sin(u)));
+    emitter_record.emit = get_env_color(emitter_record.out_direction, envmapTex);
+    emitter_record.distance = INFINITY;
+    emitter_record.pdf = 1 / (4 * M_PI_F);
+    
+    return emitter_record;
+}
+
+//EmitterRecord uniform_sample_env(float2 random_variable, texture2d<float> envmapTex [[texture(3)]]){
+//    EmitterRecord emitter_record;
+//
+//    float u = random_variable.x * 2 * M_PI_F;
+//    float v = random_variable.y * M_PI_F;
+//
+//    constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, filter::linear);
+//    emitter_record.emit = envmapTex.sample(linearFilterSampler, random_variable).rgb * cos(v - M_PI_F / 2);
+//    emitter_record.out_direction = normalize(float3(-sin(v) * cos(u), cos(v), -sin(v) * sin(u)));
+//    emitter_record.distance = INFINITY;
+//    emitter_record.pdf = 1 / (4 * M_PI_F);
+//
+//    return emitter_record;
+//}
+
+#pragma endregion EnvironmentMap }
+
 #pragma mark - Ray Tracing Kernel - Mats
 
 // Main ray tracing kernel.
@@ -540,6 +581,7 @@ kernel void raytracingKernelMats(
      texture2d<unsigned int>                                randomTex                 [[texture(0)]],
      texture2d<float>                                       prevTex                   [[texture(1)]],
      texture2d<float, access::write>                        dstTex                    [[texture(2)]],
+     texture2d<float>                                       envmapTex                 [[texture(3)]],
 //     device void                                           *resources                 [[buffer(1), function_constant(useResourcesBuffer)]],
      constant MTLAccelerationStructureInstanceDescriptor   *instances                 [[buffer(2)]],
      constant AreaLight                                    *areaLights                [[buffer(3)]],
@@ -564,8 +606,6 @@ kernel void raytracingKernelMats(
     float3 color = float3(1.0f, 1.0f, 1.0f);
 
     float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
-    
-    float3 background_color = float3(1.0f, 1.0f, 1.0f);
 
     // Create an intersector to test for intersection between the ray and the geometry in the scene.
     intersector<triangle_data, instancing> i;
@@ -597,7 +637,7 @@ kernel void raytracingKernelMats(
 
         // Stop if the ray didn't hit anything and has bounced out of the scene.
         if (intersection.type == intersection_type::none) {
-            accumulatedColor = background_color * color;
+            accumulatedColor = get_env_color(ray.direction, envmapTex) * color;
             break;
         }
             
@@ -776,6 +816,7 @@ kernel void raytracingKernelNEE(
      texture2d<unsigned int>                                randomTex                 [[texture(0)]],
      texture2d<float>                                       prevTex                   [[texture(1)]],
      texture2d<float, access::write>                        dstTex                    [[texture(2)]],
+     texture2d<float>                                       envmapTex                 [[texture(3)]],
      device void                                           *resources                 [[buffer(1)]],
      constant MTLAccelerationStructureInstanceDescriptor   *instances                 [[buffer(2)]],
      constant AreaLight                                    *areaLights                [[buffer(3)]],
@@ -802,8 +843,6 @@ kernel void raytracingKernelNEE(
     float3 color = float3(1.0f, 1.0f, 1.0f);
 
     float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
-    
-    float3 background_color = float3(0.0f, 0.0f, 0.0f);
 
     // Create an intersector to test for intersection between the ray and the geometry in the scene.
     intersector<triangle_data, instancing> i;
@@ -813,6 +852,7 @@ kernel void raytracingKernelNEE(
     ScatterRecord scatter_record;
     
     // Check if last is specular material
+    bool no_light = uniforms.lightCount == 0;
     bool last_is_specular = false;
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
@@ -827,8 +867,8 @@ kernel void raytracingKernelNEE(
         intersection = i.intersect(ray, accelerationStructure, bounce == 0 || last_is_specular ? RAY_MASK_PRIMARY : RAY_MASK_SECONDARY, intersectionFunctionTable);
 
         // Stop if the ray didn't hit anything and has bounced out of the scene.
-        if (intersection.type == intersection_type::none) {
-            accumulatedColor += background_color * color;
+        if (intersection.type == intersection_type::none && (bounce == 0 || last_is_specular)) {
+            accumulatedColor += get_env_color(ray.direction, envmapTex) * color;
             break;
         }
             
@@ -902,42 +942,7 @@ kernel void raytracingKernelNEE(
             surfaceColor = sphere.material.color;
             material = sphere.material;
         }
-
-        // Sample a random light instance
-        EmitterRecord emitter_record;
-        float light_instance_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 7);
-        unsigned int light_instance_index = min((unsigned int)(light_instance_sample * uniforms.lightCount), uniforms.lightCount - 1);
-        unsigned int light_instance = lightIndexs[light_instance_index];
         
-        unsigned int geometries_index = instances[light_instance].accelerationStructureIndex;
-        unsigned int light_mask = instances[light_instance_index].mask;
-        
-        float4x4 lightToWorldSpaceTransform(1.0f);
-
-        for (int column = 0; column < 4; column++)
-            for (int row = 0; row < 3; row++)
-                lightToWorldSpaceTransform[column][row] = instances[instanceIndex].transformationMatrix[column][row];
-        
-        // Sample a random light geometry from one instance.
-        float light_geometry_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 8);
-        unsigned int light_geometry_index = min((unsigned int)(light_geometry_sample * lightCounts[light_instance_index]), lightCounts[light_instance_index] - 1);
-        
-        // Choose a random point to sample on the light source.
-        float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),
-                          halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 2));
-        
-        if(light_mask & GEOMETRY_MASK_SPHERE_LIGHT){
-            device SphereResources & sphereResources = *(device SphereResources *)((device char *)resources + resourcesStride * geometries_index);
-            Sphere sphere = sphereResources.spheres[light_geometry_index];
-            emitter_record = sampleSphereLight(sphere, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
-        }
-        if(light_mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
-            device TriangleResources & triangleResources = *(device TriangleResources *)((device char *)resources + resourcesStride * geometries_index);
-            Triangle triangle = triangleResources.triangles[light_geometry_index];
-            emitter_record = sampleTriangleLight(triangle, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
-        }
-        
-
         // Choose a random direction to continue the path of the ray. This causes light to
         // bounce between surfaces. An app might evaluate a more complicated equation to
         // calculate the amount of light that reflects between intersection points.  However,
@@ -945,8 +950,8 @@ kernel void raytracingKernelNEE(
         // BRDF and samples the rays with a cosine distribution over the hemisphere (importance
         // sampling). This requires that the kernel only multiply the colors together. This
         // sampling strategy also reduces the amount of noise in the output image.
-        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
-                   halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
+        float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
+                          halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
         
         ray.origin = worldSpaceIntersectionPoint;
         float3 in_direction = ray.direction;
@@ -988,6 +993,74 @@ kernel void raytracingKernelNEE(
         
         // Scale the ray color by the color of the surface to simulate the surface absorbing light.
         color *= surfaceColor;
+        ray.direction = normalize(ray.direction);
+        
+        // Sample Environment map
+        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 11),
+                   halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 9));
+        EmitterRecord envmap_record = uniform_sample_env(r, envmapTex);
+        
+        // Deal with Environment map
+        if(material.is_metal){
+            last_is_specular = true;
+        }else if(material.is_glass){
+            last_is_specular = true;
+        }else{
+            last_is_specular = false;
+            // Sample light for diffuse material
+            struct ray shadowRay;
+            shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
+            shadowRay.direction = envmap_record.out_direction;
+            shadowRay.max_distance = envmap_record.distance;
+            i.accept_any_intersection(true);
+            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+            if (intersection.type == intersection_type::none){
+                float material_pdf;
+                if(material.is_phong){
+                    material_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
+                }else{
+                    material_pdf = saturate(dot(worldSpaceSurfaceNormal, shadowRay.direction)) / M_PI_F;
+                }
+                accumulatedColor += envmap_record.emit * color * material_pdf / envmap_record.pdf;
+            }
+        }
+        
+        // IF LIGHT_COUNT == 0, DO NOT NEED TO DO LIGHT SAMPLING
+        if(no_light) continue;
+
+        // Sample a random light instance
+        EmitterRecord emitter_record;
+        float light_instance_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 7);
+        unsigned int light_instance_index = min((unsigned int)(light_instance_sample * uniforms.lightCount), uniforms.lightCount - 1);
+        unsigned int light_instance = lightIndexs[light_instance_index];
+        
+        unsigned int geometries_index = instances[light_instance].accelerationStructureIndex;
+        unsigned int light_mask = instances[light_instance_index].mask;
+        
+        float4x4 lightToWorldSpaceTransform(1.0f);
+
+        for (int column = 0; column < 4; column++)
+            for (int row = 0; row < 3; row++)
+                lightToWorldSpaceTransform[column][row] = instances[instanceIndex].transformationMatrix[column][row];
+        
+        // Sample a random light geometry from one instance.
+        float light_geometry_sample = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 8);
+        unsigned int light_geometry_index = min((unsigned int)(light_geometry_sample * lightCounts[light_instance_index]), lightCounts[light_instance_index] - 1);
+        
+        // Choose a random point to sample on the light source.
+        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),
+                          halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 2));
+        
+        if(light_mask & GEOMETRY_MASK_SPHERE_LIGHT){
+            device SphereResources & sphereResources = *(device SphereResources *)((device char *)resources + resourcesStride * geometries_index);
+            Sphere sphere = sphereResources.spheres[light_geometry_index];
+            emitter_record = sampleSphereLight(sphere, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
+        }
+        if(light_mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
+            device TriangleResources & triangleResources = *(device TriangleResources *)((device char *)resources + resourcesStride * geometries_index);
+            Triangle triangle = triangleResources.triangles[light_geometry_index];
+            emitter_record = sampleTriangleLight(triangle, worldSpaceIntersectionPoint, r, lightToWorldSpaceTransform);
+        }
         
         // Deal with light sampling
         if(material.is_metal){
@@ -1001,8 +1074,8 @@ kernel void raytracingKernelNEE(
             shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
             shadowRay.direction = emitter_record.out_direction;
             shadowRay.max_distance = emitter_record.distance - 1e-3f;
-            i.accept_any_intersection(true);
-            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+//            i.accept_any_intersection(true);
+//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
             if (intersection.type == intersection_type::none){
                 float material_pdf;
                 if(material.is_phong){
@@ -1013,8 +1086,6 @@ kernel void raytracingKernelNEE(
                 accumulatedColor += emitter_record.emit * color * material_pdf / emitter_record.pdf * uniforms.totalLightCount;
             }
         }
-        
-        ray.direction = normalize(ray.direction);
     }
 
     // Average this frame's sample with all of the previous frames.
@@ -1038,6 +1109,7 @@ kernel void raytracingKernelMIS(
      texture2d<unsigned int>                                randomTex                 [[texture(0)]],
      texture2d<float>                                       prevTex                   [[texture(1)]],
      texture2d<float, access::write>                        dstTex                    [[texture(2)]],
+     texture2d<float>                                       envmapTex                 [[texture(3)]],
      device void                                           *resources                 [[buffer(1)]],
      constant MTLAccelerationStructureInstanceDescriptor   *instances                 [[buffer(2)]],
      constant AreaLight                                    *areaLights                [[buffer(3)]],
@@ -1066,8 +1138,6 @@ kernel void raytracingKernelMIS(
 
     float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
     
-    float3 background_color = float3(1.0f, 1.0f, 1.0f);
-    
     float Le_weight = 1.f;
     float nee_pdf = 1.f;
     float brdf_pdf = 1.f;
@@ -1085,7 +1155,6 @@ kernel void raytracingKernelMIS(
     
     // IF LIGHT_COUNT == 0, DO NOT NEED TO DO LIGHT SAMPLING
     bool no_light = uniforms.lightCount == 0;
-    last_is_specular = no_light;
 
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
@@ -1095,7 +1164,14 @@ kernel void raytracingKernelMIS(
 
         // Stop if the ray didn't hit anything and has bounced out of the scene.
         if (intersection.type == intersection_type::none) {
-            accumulatedColor += background_color * color;
+            if(bounce > 0 && !last_is_specular){
+                nee_pdf = 1 / (4 * M_PI_F);
+                Le_weight = 1.f + pow(nee_pdf, mis_power) / pow(brdf_pdf, mis_power);
+                Le_weight = 1.f / Le_weight;
+            }else{
+                Le_weight = 1.f;
+            }
+            accumulatedColor += Le_weight * get_env_color(ray.direction, envmapTex) * color;
             break;
         }
             
@@ -1185,13 +1261,7 @@ kernel void raytracingKernelMIS(
             material = sphere.material;
         }
         
-        // Choose a random direction to continue the path of the ray. This causes light to
-        // bounce between surfaces. An app might evaluate a more complicated equation to
-        // calculate the amount of light that reflects between intersection points.  However,
-        // all the math in this kernel cancels out because this app assumes a simple diffuse
-        // BRDF and samples the rays with a cosine distribution over the hemisphere (importance
-        // sampling). This requires that the kernel only multiply the colors together. This
-        // sampling strategy also reduces the amount of noise in the output image.
+        // Choose a random direction to continue the path of the ray.
         float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3),
                           halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 4));
         
@@ -1209,7 +1279,6 @@ kernel void raytracingKernelMIS(
         } else if(material.is_glass){
             float random_variable = r.x;
             scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
-            
             if(scatter_record.accept){
                 ray.direction = scatter_record.out_direction;
             }else{
@@ -1236,8 +1305,53 @@ kernel void raytracingKernelMIS(
         color *= surfaceColor;
         ray.direction = normalize(ray.direction);
         
+        // Sample Environment map
+        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 11),
+                   halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 9));
+        EmitterRecord envmap_record = uniform_sample_env(r, envmapTex);
+        
+        // Deal with Environment map
+        if(material.is_metal){
+            last_is_specular = true;
+        }else if(material.is_glass){
+            last_is_specular = true;
+        }else{
+            last_is_specular = false;
+            // Sample light for diffuse material
+            struct ray shadowRay;
+            shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
+            shadowRay.direction = envmap_record.out_direction;
+            shadowRay.max_distance = envmap_record.distance - 1e-3f;
+            i.accept_any_intersection(true);
+            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+            if (intersection.type == intersection_type::none){
+                if(material.is_phong){
+                    brdf_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
+                }else{
+                    brdf_pdf = saturate(dot(worldSpaceSurfaceNormal, shadowRay.direction)) / M_PI_F;
+                }
+                nee_pdf = envmap_record.pdf;
+                //                Le_weight = pow(nee_pdf, mis_power) / (pow(nee_pdf, mis_power) + pow(brdf_pdf, mis_power));
+                Le_weight = 1.f + pow(brdf_pdf, mis_power) / pow(nee_pdf, mis_power);
+                Le_weight = 1.f / Le_weight;
+                accumulatedColor += Le_weight * envmap_record.emit * color * brdf_pdf / nee_pdf;
+            }
+        }
+        
         // IF LIGHT_COUNT == 0, DO NOT NEED TO DO LIGHT SAMPLING
-        if(no_light) continue;
+        if(no_light) {
+            // Calculate BRDF_PDF for next trace.
+            if(material.is_metal){
+
+            }else if(material.is_glass){
+
+            }else if(material.is_phong){
+                brdf_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, ray.direction, material);
+            }else{
+                brdf_pdf = max(0.f, dot(ray.direction, worldSpaceSurfaceNormal)) / M_PI_F;
+            }
+            continue;
+        }
 
         // Sample a random light instance
         EmitterRecord emitter_record;
@@ -1285,8 +1399,8 @@ kernel void raytracingKernelMIS(
             shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
             shadowRay.direction = emitter_record.out_direction;
             shadowRay.max_distance = emitter_record.distance - 1e-3f;
-            i.accept_any_intersection(true);
-            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+//            i.accept_any_intersection(true);
+//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
             if (intersection.type == intersection_type::none){
                 if(material.is_phong){
                     brdf_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);

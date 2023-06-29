@@ -201,7 +201,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
     
 #else
-    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMats"];
+    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
 #endif
     
     // Create the compute pipeline state, which does all the ray tracing.
@@ -654,6 +654,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
     NSUInteger width = (NSUInteger)_size.width;
     NSUInteger height = (NSUInteger)_size.height;
+//    NSLog(@"%d", width);
 
     // Launch a rectangular grid of threads on the GPU to perform ray tracing, with one thread per
     // pixel. The sample needs to align the number of threads to a multiple of the threadgroup
@@ -690,6 +691,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     [computeEncoder setTexture:_randomTexture atIndex:0];
     [computeEncoder setTexture:_accumulationTargets[0] atIndex:1];
     [computeEncoder setTexture:_accumulationTargets[1] atIndex:2];
+    [computeEncoder setTexture:_scene.envmapTexture atIndex:3];
 
     // Mark any resources used by intersection functions as "used". The sample does this because
     // it only references these resources indirectly via the resource buffer. Metal makes all the
