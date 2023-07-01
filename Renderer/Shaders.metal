@@ -524,7 +524,7 @@ ray generate_ray(uint2 tid [[thread_position_in_grid]], constant Uniforms &unifo
 
     // Don't limit intersection distance.
     ray.max_distance = INFINITY;
-    ray.min_distance = 0.0001;
+    ray.min_distance = 1e-3;
     
     return ray;
 }
@@ -631,9 +631,13 @@ kernel void raytracingKernelMats(
         // Check for intersection between the ray and the acceleration structure. If the sample
         // isn't using intersection functions, it doesn't need to include one.
         if (useIntersectionFunctions)
-            intersection = i.intersect(ray, accelerationStructure, bounce == 0 ? RAY_MASK_PRIMARY : RAY_MASK_PRIMARY, intersectionFunctionTable);
+            intersection = i.intersect(ray, accelerationStructure, RAY_MASK_PRIMARY, intersectionFunctionTable);
         else
             intersection = i.intersect(ray, accelerationStructure, bounce == 0 ? RAY_MASK_PRIMARY : RAY_MASK_SECONDARY);
+        
+        intersection = i.intersect(ray, accelerationStructure, RAY_MASK_SHADOW_ALL, intersectionFunctionTable);
+        
+        intersection = i.intersect(ray, accelerationStructure, RAY_MASK_SHADOW_ALL, intersectionFunctionTable);
 
         // Stop if the ray didn't hit anything and has bounced out of the scene.
         if (intersection.type == intersection_type::none) {
@@ -1074,8 +1078,8 @@ kernel void raytracingKernelNEE(
             shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
             shadowRay.direction = emitter_record.out_direction;
             shadowRay.max_distance = emitter_record.distance - 1e-3f;
-//            i.accept_any_intersection(true);
-//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+            i.accept_any_intersection(true);
+            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
             if (intersection.type == intersection_type::none){
                 float material_pdf;
                 if(material.is_phong){
@@ -1323,7 +1327,7 @@ kernel void raytracingKernelMIS(
             shadowRay.direction = envmap_record.out_direction;
             shadowRay.max_distance = envmap_record.distance - 1e-3f;
             i.accept_any_intersection(true);
-            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW_ALL, intersectionFunctionTable);
             if (intersection.type == intersection_type::none){
                 if(material.is_phong){
                     brdf_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);
@@ -1399,8 +1403,8 @@ kernel void raytracingKernelMIS(
             shadowRay.origin = worldSpaceIntersectionPoint + worldSpaceSurfaceNormal * 1e-3f;;
             shadowRay.direction = emitter_record.out_direction;
             shadowRay.max_distance = emitter_record.distance - 1e-3f;
-//            i.accept_any_intersection(true);
-//            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
+            i.accept_any_intersection(true);
+            intersection = i.intersect(shadowRay, accelerationStructure, RAY_MASK_SHADOW, intersectionFunctionTable);
             if (intersection.type == intersection_type::none){
                 if(material.is_phong){
                     brdf_pdf = phongPdf(worldSpaceSurfaceNormal, in_direction, shadowRay.direction, material);

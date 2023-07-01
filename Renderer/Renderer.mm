@@ -201,7 +201,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
     
 #else
-    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
+    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMats"];
 #endif
     
     // Create the compute pipeline state, which does all the ray tracing.
@@ -672,9 +672,6 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
     // Bind buffers.
     [computeEncoder setBuffer:_uniformBuffer            offset:_uniformBufferOffset atIndex:0];
-//    if (!_usePerPrimitiveData) {
-//        [computeEncoder setBuffer:_resourceBuffer           offset:0                    atIndex:1];
-//    }
     [computeEncoder setBuffer:_resourceBuffer           offset:0                    atIndex:1];
     [computeEncoder setBuffer:_instanceBuffer           offset:0                    atIndex:2];
     [computeEncoder setBuffer:_scene.lightBuffer        offset:0                    atIndex:3];
