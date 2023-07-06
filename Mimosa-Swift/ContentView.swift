@@ -170,7 +170,8 @@ struct ScenesUI: View {
     let scenes = [
         ("Scene 1", "1 hour ago", "01"),
         ("Scene 2", "2 hours ago", "02"),
-        ("Scene 3", "3 hours ago", "03")
+        ("Scene 3", "3 hours ago", "03"),
+        ("Scene 4", "3 hours ago", "04")
     ]
     
     var body: some View {

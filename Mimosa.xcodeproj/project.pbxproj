@@ -57,6 +57,7 @@
 		5A7E01A12A4B8FFC0002592C /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017E2A4B8FD20002592C /* plate3.mtl */; };
 		5A7E01A22A4B8FFC0002592C /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017F2A4B8FD20002592C /* plate1.mtl */; };
 		5A7E01A32A4B8FFC0002592C /* kloppenheim_06_4k.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01812A4B8FD20002592C /* kloppenheim_06_4k.hdr */; };
+		5A9EAB502A57438500873B56 /* 04.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A9EAB4F2A57438500873B56 /* 04.png */; };
 		5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AD974A82A475E8E00168B28 /* Main.storyboard */; };
 		5AD975072A49D6D700168B28 /* Mimosa_SwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD975062A49D6D700168B28 /* Mimosa_SwiftApp.swift */; };
 		5AD975092A49D6D700168B28 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD975082A49D6D700168B28 /* ContentView.swift */; };
@@ -170,6 +171,7 @@
 		5A7E01812A4B8FD20002592C /* kloppenheim_06_4k.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = kloppenheim_06_4k.hdr; sourceTree = "<group>"; };
 		5A7E01A42A4B91390002592C /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		5A84AFFA2A3DFD6E00100842 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5A9EAB4F2A57438500873B56 /* 04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 04.png; sourceTree = "<group>"; };
 		5AD974A82A475E8E00168B28 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5AD975042A49D6D700168B28 /* Mimosa-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mimosa-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AD975062A49D6D700168B28 /* Mimosa_SwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mimosa_SwiftApp.swift; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 		5AD9752E2A49FDB800168B28 /* scene_image */ = {
 			isa = PBXGroup;
 			children = (
+				5A9EAB4F2A57438500873B56 /* 04.png */,
 				5AD975312A49FEB900168B28 /* 01.png */,
 				5AD975302A49FEB900168B28 /* 02.png */,
 				5AD9752F2A49FEB900168B28 /* 03.png */,
@@ -670,6 +673,7 @@
 				5AD975612A4A30F400168B28 /* 01.png in Resources */,
 				5AD975652A4A30F400168B28 /* RenderScene.storyboard in Resources */,
 				5AD975672A4A30F400168B28 /* 02.png in Resources */,
+				5A9EAB502A57438500873B56 /* 04.png in Resources */,
 				5AD975692A4A30F400168B28 /* Preview Assets.xcassets in Resources */,
 				5AD9756A2A4A30F400168B28 /* Assets.xcassets in Resources */,
 			);
@@ -1148,7 +1152,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"HAS_SWIFT_UI=1",
 					"SUPPORTS_METAL_3=1",
@@ -1171,7 +1175,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
@@ -1204,7 +1208,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"HAS_SWIFT_UI=1",
 					"SUPPORTS_METAL_3=1",
@@ -1226,7 +1230,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
