@@ -201,7 +201,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
     
 #else
-    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMats"];
+    id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelVOL"];
 #endif
     
     // Create the compute pipeline state, which does all the ray tracing.

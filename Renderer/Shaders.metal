@@ -17,7 +17,7 @@ constant unsigned int resourcesStride   [[function_constant(0)]];
 constant bool useIntersectionFunctions  [[function_constant(1)]];
 constant bool usePerPrimitiveData       [[function_constant(2)]];
 //constant bool useResourcesBuffer = !usePerPrimitiveData
-constant int max_bounce = 4;
+constant int max_bounce = 8;
 
 constant unsigned int primes[] = {
     2,   3,  5,  7,
@@ -110,6 +110,17 @@ inline float3 sampleCosineWeightedHemisphere(float2 u) {
 
     return float3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
 }
+
+// Sample uniform sphere
+inline float3 sampleUniformSphere(float2 u) {
+    float z = 1.0f - 2.0f * u.x;
+    float r = sqrt(max(0.0f, 1.0f - z * z));
+    float phi = 2.0f * M_PI_F * u.y;
+    float x = r * cos(phi);
+    float y = r * sin(phi);
+    return float3(x, y, z);
+}
+
 
 // Sample cosine weighted hemisphere with power
 inline float3 sampleCosineWeightedHemisphereWithPower(float2 u, float exponent) {
@@ -296,6 +307,8 @@ struct ScatterRecord {
     float3 attenuation;
     float pdf;
     bool test = false;
+    // for glass
+    bool is_refract = false;
 };
 
 // Material scatter function -> Metallic
@@ -361,6 +374,7 @@ inline ScatterRecord glossyScatter(float3 normal, float3 in_direction, float ran
     } else {
         scatter_record.out_direction = refract(in_direction, normal, 1.0f/ior);
         scatter_record.attenuation = float3(1.0f, 1.0f, 1.0f);
+        scatter_record.is_refract = true;
     }
     scatter_record.accept = true;
     
@@ -1438,6 +1452,264 @@ kernel void raytracingKernelMIS(
 
     dstTex.write(float4(accumulatedColor, 1.0f), tid);
 }
+
+#pragma mark - Ray Tracing Kernel - Vol
+
+// Main ray tracing kernel.
+kernel void raytracingKernelVOL(
+     uint2                                                  tid                       [[thread_position_in_grid]],
+     constant Uniforms &                                    uniforms                  [[buffer(0)]],
+     texture2d<unsigned int>                                randomTex                 [[texture(0)]],
+     texture2d<float>                                       prevTex                   [[texture(1)]],
+     texture2d<float, access::write>                        dstTex                    [[texture(2)]],
+     texture2d<float>                                       envmapTex                 [[texture(3)]],
+//     device void                                           *resources                 [[buffer(1), function_constant(useResourcesBuffer)]],
+     constant MTLAccelerationStructureInstanceDescriptor   *instances                 [[buffer(2)]],
+     constant AreaLight                                    *areaLights                [[buffer(3)]],
+     instance_acceleration_structure                        accelerationStructure     [[buffer(4)]],
+     intersection_function_table<triangle_data, instancing> intersectionFunctionTable [[buffer(5)]]
+)
+{
+    // The sample aligns the thread count to the threadgroup size, which means the thread count
+    // may be different than the bounds of the texture. Test to make sure this thread
+    // is referencing a pixel within the bounds of the texture.
+    if (tid.x > uniforms.width || tid.y > uniforms.height) return;
+    
+    // Apply a random offset to the random number index to decorrelate pixels.
+    unsigned int offset = randomTex.read(tid).x;
+    
+    // Generate Ray.
+    ray ray = generate_ray(tid, uniforms, randomTex);
+
+    // Start with a fully white color. The kernel scales the light each time the
+    // ray bounces off of a surface, based on how much of each light component
+    // the surface absorbs.
+    float3 color = float3(1.0f, 1.0f, 1.0f);
+
+    float3 accumulatedColor = float3(0.0f, 0.0f, 0.0f);
+
+    // Create an intersector to test for intersection between the ray and the geometry in the scene.
+    intersector<triangle_data, instancing> i;
+
+    // If the sample isn't using intersection functions, provide some hints to Metal for
+    // better performance.
+//    if (!useIntersectionFunctions) {
+//        i.assume_geometry_type(geometry_type::triangle);
+//        i.force_opacity(forced_opacity::opaque);
+//    }
+
+    typename intersector<triangle_data, instancing>::result_type intersection;
+    
+    ScatterRecord scatter_record;
+
+    // Simulate up to three ray bounces. Each bounce propagates light backward along the
+    // ray's path toward the camera.
+    for (int bounce = 0; bounce < max_bounce + 1; bounce++) {
+        // Get the closest intersection, not the first intersection. This is the default, but
+        // the sample adjusts this property below when it casts shadow rays.
+        i.accept_any_intersection(false);
+
+        // Check for intersection between the ray and the acceleration structure. If the sample
+        // isn't using intersection functions, it doesn't need to include one.
+        intersection = i.intersect(ray, accelerationStructure, RAY_MASK_PRIMARY, intersectionFunctionTable);
+
+        // Stop if the ray didn't hit anything and has bounced out of the scene.
+        if (intersection.type == intersection_type::none) {
+            accumulatedColor = get_env_color(ray.direction, envmapTex) * color;
+            break;
+        }
+            
+        unsigned int instanceIndex = intersection.instance_id;
+
+        // Look up the mask for this instance, which indicates what type of geometry the ray hit.
+        unsigned int mask = instances[instanceIndex].mask;
+
+        // If the ray hit a light source, set the color to white, and stop immediately.
+        if(mask & GEOMETRY_MASK_LIGHT){
+            if(mask & GEOMETRY_MASK_SPHERE_LIGHT){
+                Sphere area_light;
+                area_light = *(const device Sphere*)intersection.primitive_data;
+                float3 light_color = area_light.material.color;
+                accumulatedColor = color * light_color;
+                break;
+            }
+            if(mask & GEOMETRY_MASK_TRIANGLE_LIGHT){
+                Triangle area_light;
+                area_light = *(const device Triangle*)intersection.primitive_data;
+                float3 light_color = area_light.material.color;
+                accumulatedColor = color * light_color;
+                break;
+            }
+        }
+
+
+        // The ray hit something. Look up the transformation matrix for this instance.
+        float4x4 objectToWorldSpaceTransform(1.0f);
+
+        for (int column = 0; column < 4; column++)
+            for (int row = 0; row < 3; row++)
+                objectToWorldSpaceTransform[column][row] = instances[instanceIndex].transformationMatrix[column][row];
+
+        // Compute the intersection point in world space.
+        float3 worldSpaceIntersectionPoint = ray.origin + ray.direction * intersection.distance;
+
+        float2 barycentric_coords = intersection.triangle_barycentric_coord;
+
+        float3 worldSpaceSurfaceNormal = 0.0f;
+        float3 surfaceColor = 0.0f;
+        Material material;
+
+        if (mask & GEOMETRY_MASK_TRIANGLE) {
+            Triangle triangle;
+            
+            float3 objectSpaceSurfaceNormal;
+            
+            triangle = *(const device Triangle*)intersection.primitive_data;
+
+            // Interpolate the vertex normal at the intersection point.
+            objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
+
+            // Interpolate the vertex color at the intersection point.
+//            surfaceColor = interpolateVertexAttribute(triangle.colors, barycentric_coords);
+            surfaceColor = triangle.material.color;
+            material = triangle.material;
+
+            // Transform the normal from object to world space.
+            worldSpaceSurfaceNormal = normalize(transformDirection(objectSpaceSurfaceNormal, objectToWorldSpaceTransform));
+        }
+        else if (mask & GEOMETRY_MASK_SPHERE) {
+            Sphere sphere;
+            
+            sphere = *(const device Sphere*)intersection.primitive_data;
+
+            // Transform the sphere's origin from object space to world space.
+            float3 worldSpaceOrigin = transformPoint(sphere.origin, objectToWorldSpaceTransform);
+
+            // Compute the surface normal directly in world space.
+            worldSpaceSurfaceNormal = normalize(worldSpaceIntersectionPoint - worldSpaceOrigin);
+
+            // The sphere is a uniform color, so you don't need to interpolate the color across the surface.
+            surfaceColor = sphere.color;
+            surfaceColor = sphere.material.color;
+            material = sphere.material;
+        }
+
+        // Choose a random point to sample on the light source.
+        float2 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 1),
+                          halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 2));
+        
+        ray.origin = worldSpaceIntersectionPoint;
+        bool in = false;
+        
+        // Deal with scattering.
+        if(material.is_metal){
+            scatter_record = metallicScatter(worldSpaceSurfaceNormal, ray.direction);
+            if(scatter_record.accept){
+                ray.direction = scatter_record.out_direction;
+                color *= material.color;
+            }else{
+                break;
+            }
+        } else if(material.is_glass){
+            float random_variable = r.x;
+            scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
+            if(scatter_record.accept){
+                if(scatter_record.is_refract) in=true;
+                ray.direction = scatter_record.out_direction;
+                color *= material.color;
+            }else{
+                break;
+            }
+        } else if(material.is_phong){
+            float2 random_variable = r;
+            scatter_record = phongScatter(worldSpaceSurfaceNormal, ray.direction, random_variable, material);
+            if(scatter_record.accept){
+                ray.direction = scatter_record.out_direction;
+            }else{
+                break;
+            }
+            color *= scatter_record.attenuation;
+        } else if(material.is_contain_volume){
+            in = true;
+        } else{
+            if(dot(worldSpaceSurfaceNormal, ray.direction) > 0){
+//                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
+            }
+            float3 worldSpaceSampleDirection = sampleCosineWeightedHemisphere(r);
+            worldSpaceSampleDirection = alignHemisphereWithNormal(worldSpaceSampleDirection, worldSpaceSurfaceNormal);
+            ray.direction = worldSpaceSampleDirection;
+            color *= material.color;
+        }
+        
+        ray.direction = normalize(ray.direction);
+        
+        if(in && material.is_contain_volume){
+            bool out = false;
+//            ray.origin = ray.origin + 1e-3f;
+            for (int volume_bounce = 0; volume_bounce < max_bounce*5 + 1; volume_bounce++){
+                float t = -log(1.f - halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3)) / material.density;
+                float3 sigma_t = float3(material.density, material.density, material.density);
+                float3 sigma_s = material.albedo * material.density;
+                float3 sigma_a = sigma_t - sigma_s;
+                ray.max_distance = t;
+                i.accept_any_intersection(true);
+                intersection = i.intersect(ray, accelerationStructure, GEOMETRY_MASK_VOLUME_CONTAINER, intersectionFunctionTable);
+                if(intersection.type == intersection_type::none){
+                    r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
+                                      halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
+                    ray.origin = ray.origin + ray.direction * t;
+                    color *= sigma_s/sigma_t;
+                    accumulatedColor += sigma_a/sigma_t * material.emission;
+                    ray.direction = sampleUniformSphere(r); // CHANGE PHASE FUNCTION HERE
+                }else{
+                    ray.origin = ray.origin + ray.direction * (intersection.distance);
+                    if(material.is_glass){
+                        float random_variable = r.x;
+                        if (mask & GEOMETRY_MASK_TRIANGLE) {
+                            Triangle triangle;
+                            float3 objectSpaceSurfaceNormal;
+                            triangle = *(const device Triangle*)intersection.primitive_data;
+                            objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
+                            worldSpaceSurfaceNormal = normalize(transformDirection(objectSpaceSurfaceNormal, objectToWorldSpaceTransform));
+                        }
+                        else if (mask & GEOMETRY_MASK_SPHERE) {
+                            Sphere sphere;
+                            sphere = *(const device Sphere*)intersection.primitive_data;
+                            float3 worldSpaceOrigin = transformPoint(sphere.origin, objectToWorldSpaceTransform);
+                            worldSpaceSurfaceNormal = normalize(worldSpaceIntersectionPoint - worldSpaceOrigin);
+                        }
+                        scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
+                        out = scatter_record.is_refract;
+                        ray.direction = scatter_record.out_direction;
+                        color *= material.color;
+                        if(out) {
+                            ray.max_distance = INFINITY;
+                            break;
+                        }
+                    }else{
+                        //                    color *= exp(-material.density * intersection.distance);
+                        ray.max_distance = INFINITY;
+                        out = true;
+                        break;
+                    }
+                }
+            }
+            if(!out) break;
+        }
+    }
+
+    // Average this frame's sample with all of the previous frames.
+    if (uniforms.frameIndex > 0) {
+        float3 prevColor = prevTex.read(tid).xyz;
+        prevColor *= uniforms.frameIndex;
+
+        accumulatedColor += prevColor;
+        accumulatedColor /= (uniforms.frameIndex + 1);
+    }
+
+    dstTex.write(float4(accumulatedColor, 1.0f), tid);
+}
+
 
 // Screen filling quad in normalized device coordinates.
 constant float2 quadVertices[] = {

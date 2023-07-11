@@ -10,13 +10,16 @@ The header that contains the types and enumeration constants that the Metal shad
 
 #include <simd/simd.h>
 
-#define GEOMETRY_MASK_TRIANGLE 1
-#define GEOMETRY_MASK_SPHERE   2
 #define GEOMETRY_MASK_TRIANGLE_LIGHT    4
 #define GEOMETRY_MASK_SPHERE_LIGHT    8
+#define GEOMETRY_MASK_VOLUME_CONTAINER_TRIANGLE    16
+#define GEOMETRY_MASK_VOLUME_CONTAINER_SPHERE    32
+#define GEOMETRY_MASK_TRIANGLE (1 | GEOMETRY_MASK_VOLUME_CONTAINER_TRIANGLE)
+#define GEOMETRY_MASK_SPHERE   (2 | GEOMETRY_MASK_VOLUME_CONTAINER_SPHERE)
 
+#define GEOMETRY_MASK_VOLUME_CONTAINER (GEOMETRY_MASK_VOLUME_CONTAINER_TRIANGLE | GEOMETRY_MASK_VOLUME_CONTAINER_SPHERE)
 #define GEOMETRY_MASK_LIGHT (GEOMETRY_MASK_TRIANGLE_LIGHT | GEOMETRY_MASK_SPHERE_LIGHT)
-#define GEOMETRY_MASK_GEOMETRY (GEOMETRY_MASK_TRIANGLE | GEOMETRY_MASK_SPHERE)
+#define GEOMETRY_MASK_GEOMETRY (GEOMETRY_MASK_TRIANGLE | GEOMETRY_MASK_SPHERE | GEOMETRY_MASK_VOLUME_CONTAINER)
 
 #define RAY_MASK_PRIMARY   (GEOMETRY_MASK_GEOMETRY | GEOMETRY_MASK_LIGHT)
 #define RAY_MASK_SHADOW_ALL   (GEOMETRY_MASK_GEOMETRY | GEOMETRY_MASK_LIGHT)
@@ -62,12 +65,23 @@ struct Uniforms {
 };
 
 struct Material {
+    // color of surface
     vector_float3 color;
+    
+    // material type
     bool is_metal = false;
     bool is_glass = false;
-//    float metallic;
     bool is_phong = false;
+    bool is_contain_volume = false;
+    
+    // phong parameter
     float exponent;
+    
+    // volume parameters
+    float density;
+    vector_float3 albedo;
+    vector_float3 emission;
+    
 };
 
 struct Sphere {

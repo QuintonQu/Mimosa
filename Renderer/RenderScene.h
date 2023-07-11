@@ -213,6 +213,12 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Create test scene for EnvMap
 + (RenderScene *)newTestSceneEnv:(id <MTLDevice>)device;
 
+// Create test scene for Homogeneous Media
++ (RenderScene *)newTestSceneVolHomo:(id <MTLDevice>)device;
+
+// Create test scene for Hetreogeneous Media (VDB File)
++ (RenderScene *)newTestSceneVolHetero:(id <MTLDevice>)device;
+
 #pragma endregion CreateScene }
 
 // Add a piece of geometry to the scene.
