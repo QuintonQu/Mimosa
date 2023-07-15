@@ -83,6 +83,22 @@ inline T interpolateVertexAttribute(thread T *attributes, float2 uv) {
     return (1.0f - uv.x - uv.y) * T0 + uv.x * T1 + uv.y * T2;
 }
 
+#pragma mark - Inline Utility Inverse
+inline float4x4 inverse(float4x4 matrix) {
+    float det = determinant(matrix);
+    float4x4 inv;
+    
+    if(det == 0.f) return inv; // something could be wrong here
+    
+    float invdet = 1 / det;
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++)
+            inv[i][j] = ((matrix[(j + 1) % 4][(i + 1) % 4] * matrix[(j + 2) % 4][(i + 2) % 4] * matrix[(j + 3) % 4][(i + 3) % 4]) - (matrix[(j + 1) % 4][(i + 3) % 4] * matrix[(j + 2) % 4][(i + 2) % 4] * matrix[(j +3 )%4][(i+1)%4]))*invdet;
+    }
+
+    return inv;
+}
+
 #pragma mark - Inline Utility Transform
 
 __attribute__((always_inline))
@@ -585,6 +601,13 @@ EmitterRecord uniform_sample_env(float2 random_variable, texture2d<float> envmap
 //}
 
 #pragma endregion EnvironmentMap }
+
+#pragma mark - VDB Data
+half4 get_vdb_data(float3 local_position, texture3d<half> vdbvolTex [[texture(4)]]){
+    float3 uv = local_position + float3(0.5f);
+    constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, filter::linear);
+    return vdbvolTex.sample(linearFilterSampler, uv);
+}
 
 #pragma mark - Ray Tracing Kernel - Mats
 
@@ -1463,11 +1486,13 @@ kernel void raytracingKernelVOL(
      texture2d<float>                                       prevTex                   [[texture(1)]],
      texture2d<float, access::write>                        dstTex                    [[texture(2)]],
      texture2d<float>                                       envmapTex                 [[texture(3)]],
+     texture3d<half>                                        vdbvolTex                 [[texture(4)]],
 //     device void                                           *resources                 [[buffer(1), function_constant(useResourcesBuffer)]],
      constant MTLAccelerationStructureInstanceDescriptor   *instances                 [[buffer(2)]],
      constant AreaLight                                    *areaLights                [[buffer(3)]],
      instance_acceleration_structure                        accelerationStructure     [[buffer(4)]],
-     intersection_function_table<triangle_data, instancing> intersectionFunctionTable [[buffer(5)]]
+     intersection_function_table<triangle_data, instancing> intersectionFunctionTable [[buffer(5)]],
+     constant float                                        *maxDensity                [[buffer(8)]]
 )
 {
     // The sample aligns the thread count to the threadgroup size, which means the thread count
@@ -1643,24 +1668,100 @@ kernel void raytracingKernelVOL(
         
         ray.direction = normalize(ray.direction);
         
-        if(in && material.is_contain_volume){
+//        // For Homogeneous Medium (with or without glass)
+//        if(in && material.is_contain_volume && *maxDensity == 0.f){
+//            bool out = false;
+////            ray.origin = ray.origin + 1e-3f;
+//            for (int volume_bounce = 0; volume_bounce < max_bounce + 1; volume_bounce++){
+//        r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
+//                                              halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
+//        
+//                float t = -log(1.f - halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 3)) / material.density;
+//                float3 sigma_t = float3(material.density, material.density, material.density);
+//                float3 sigma_s = material.albedo * material.density;
+//                float3 sigma_a = sigma_t - sigma_s;
+//                ray.max_distance = t;
+//                i.accept_any_intersection(true);
+//                intersection = i.intersect(ray, accelerationStructure, GEOMETRY_MASK_VOLUME_CONTAINER, intersectionFunctionTable);
+//                if(intersection.type == intersection_type::none){
+//
+//                    ray.origin = ray.origin + ray.direction * t;
+//                    accumulatedColor += sigma_a/sigma_t * material.emission * color;
+//                    color *= sigma_s/sigma_t;
+//                    ray.direction = sampleUniformSphere(r); // CHANGE PHASE FUNCTION HERE
+//                }else{
+//                    ray.origin = ray.origin + ray.direction * (intersection.distance);
+//                    if(material.is_glass){
+//                        float random_variable = r.x;
+//                        if (mask & GEOMETRY_MASK_TRIANGLE) {
+//                            Triangle triangle;
+//                            float3 objectSpaceSurfaceNormal;
+//                            triangle = *(const device Triangle*)intersection.primitive_data;
+//                            objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
+//                            worldSpaceSurfaceNormal = normalize(transformDirection(objectSpaceSurfaceNormal, objectToWorldSpaceTransform));
+//                        }
+//                        else if (mask & GEOMETRY_MASK_SPHERE) {
+//                            Sphere sphere;
+//                            sphere = *(const device Sphere*)intersection.primitive_data;
+//                            float3 worldSpaceOrigin = transformPoint(sphere.origin, objectToWorldSpaceTransform);
+//                            worldSpaceSurfaceNormal = normalize(worldSpaceIntersectionPoint - worldSpaceOrigin);
+//                        }
+//                        scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
+//                        out = scatter_record.is_refract;
+//                        ray.direction = scatter_record.out_direction;
+//                        color *= material.color;
+//                        if(out) {
+//                            ray.max_distance = INFINITY;
+//                            break;
+//                        }
+//                    }else{
+//                        //                    color *= exp(-material.density * intersection.distance);
+//                        ray.max_distance = INFINITY;
+//                        out = true;
+//                        break;
+//                    }
+//                }
+//            }
+//            if(!out) break;
+//        }
+        
+        if(in && material.is_contain_volume && *maxDensity != 0.f){
             bool out = false;
-//            ray.origin = ray.origin + 1e-3f;
-            for (int volume_bounce = 0; volume_bounce < max_bounce*5 + 1; volume_bounce++){
-                float t = -log(1.f - halton(offset + uniforms.frameIndex, 2 + bounce * 5 + 3)) / material.density;
-                float3 sigma_t = float3(material.density, material.density, material.density);
-                float3 sigma_s = material.albedo * material.density;
+            float4x4 worldToObjectSpaceTransform = inverse(objectToWorldSpaceTransform);
+            for (int volume_bounce = 0; volume_bounce < max_bounce*8 + 1; volume_bounce++){
+                r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
+                           halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
+                
+                float t = -log(1.f - halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 3)) / *maxDensity;
+                float3 localSpaceIntersectionPoint = transformPoint(ray.origin, worldToObjectSpaceTransform);
+                half4 vdb_data = get_vdb_data(localSpaceIntersectionPoint, vdbvolTex);
+                float density = (float)vdb_data.a;
+                float3 albedo = (float3)vdb_data.rgb;
+                
+                float3 sigma_t = float3(density);
+                float3 sigma_s = albedo * density;
                 float3 sigma_a = sigma_t - sigma_s;
+                float prob_null = (*maxDensity - (float)vdb_data.a) / *maxDensity;
+                float prob_s = sigma_s.x / *maxDensity;
+                float prob_a = sigma_a.x / *maxDensity;
+                
                 ray.max_distance = t;
-                i.accept_any_intersection(true);
+                i.accept_any_intersection(false);
                 intersection = i.intersect(ray, accelerationStructure, GEOMETRY_MASK_VOLUME_CONTAINER, intersectionFunctionTable);
+                
                 if(intersection.type == intersection_type::none){
-                    r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
-                                      halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
+                    float random_variable = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 4);
                     ray.origin = ray.origin + ray.direction * t;
-                    color *= sigma_s/sigma_t;
-                    accumulatedColor += sigma_a/sigma_t * material.emission;
-                    ray.direction = sampleUniformSphere(r); // CHANGE PHASE FUNCTION HERE
+                    if(random_variable <= prob_null){
+
+                    }else if( prob_null < random_variable <= prob_null + prob_s){
+                        color *= albedo;
+                        ray.direction = sampleUniformSphere(r);
+                    }else {
+//                        accumulatedColor += sigma_a/sigma_t * material.emission * color;
+//                        color *= sigma_a/sigma_t * exp(-sigma_a * t);
+                        color *= albedo;
+                    }
                 }else{
                     ray.origin = ray.origin + ray.direction * (intersection.distance);
                     if(material.is_glass){

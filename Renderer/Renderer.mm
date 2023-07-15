@@ -677,6 +677,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     [computeEncoder setBuffer:_scene.lightBuffer        offset:0                    atIndex:3];
     [computeEncoder setBuffer:_scene.lightIndexBuffer   offset:0                    atIndex:6];
     [computeEncoder setBuffer:_scene.lightCountBuffer   offset:0                    atIndex:7];
+    [computeEncoder setBuffer:_scene.maxDensityBuffer   offset:0                    atIndex:8];
 
     // Bind acceleration structure and intersection function table. These bind to normal buffer
     // binding slots.
@@ -689,6 +690,7 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     [computeEncoder setTexture:_accumulationTargets[0] atIndex:1];
     [computeEncoder setTexture:_accumulationTargets[1] atIndex:2];
     [computeEncoder setTexture:_scene.envmapTexture atIndex:3];
+    [computeEncoder setTexture:_scene.volumeDensityGridTex atIndex:4];
 
     // Mark any resources used by intersection functions as "used". The sample does this because
     // it only references these resources indirectly via the resource buffer. Metal makes all the

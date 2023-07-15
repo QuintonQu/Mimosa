@@ -13,6 +13,11 @@ The implementation of the class that describes objects in a scene.
 #import <CoreGraphics/CoreGraphics.h>
 #import <ImageIO/ImageIO.h>
 #include <random>
+#include <stdint.h>
+#include <openvdb/openvdb.h>
+#include <openvdb/tools/Interpolation.h>
+#include <openvdb/tools/ValueTransformer.h>
+#import <Foundation/Foundation.h>
 
 using namespace simd;
 
@@ -196,6 +201,129 @@ id<MTLTexture> texture_from_radiance_file(NSString * fileName, id<MTLDevice> dev
     return texture;
 }
 
+#pragma mark - VDB density grid Help Functions
+uint16_t floatToHalf(float value)
+{
+    uint32_t bits = *(uint32_t *)&value;
+    uint32_t sign = (bits >> 31) & 0x1;
+    int32_t exponent = ((bits >> 23) & 0xFF) - 127;
+    uint32_t mantissa = bits & 0x7FFFFF;
+
+    if(exponent == 128)
+    {
+        // NaN or Infinity
+        exponent = 16;
+        mantissa >>= 13;
+    }
+    else if(exponent > 15)
+    {
+        // Overflow
+        return sign << 15 | 0x7C00;
+    }
+    else if(exponent > -15)
+    {
+        // Normalized number
+        exponent += 15;
+        mantissa >>= 13;
+    }
+    else if(exponent > -25)
+    {
+        // Subnormal number
+        mantissa |= 0x800000;
+        mantissa >>= -14 - exponent;
+        exponent = -15 + 1;
+    }
+    else
+    {
+        // Underflow
+        return sign << 15;
+    }
+
+    return sign << 15 | exponent << 10 | mantissa;
+}
+
+id<MTLTexture> createVolume(NSString * fileName, id<MTLDevice> device, float &_maxDensity, float3 &size, float scale){
+    openvdb::initialize();
+    openvdb::io::File file([fileName UTF8String]);
+    file.open();
+    
+    openvdb::GridBase::Ptr base_grid;
+    std::string gridname = "";
+    
+    for (openvdb::io::File::NameIterator name_iter = file.beginName();
+        name_iter != file.endName(); ++name_iter)
+    {
+        // Read in only the grid we are interested in.
+        if (gridname == "" || name_iter.gridName() == gridname) {
+            std::cout << "reading grid " << name_iter.gridName() << std::endl;
+            base_grid = file.readGrid(name_iter.gridName());
+            if (gridname == "")
+                break;
+        } else {
+            std::cout << "skipping grid " << name_iter.gridName() << std::endl;
+        }
+    }
+    std::cout << "vdb file reading done!" << std::endl;
+    
+    file.close();
+    openvdb::FloatGrid::Ptr grid = openvdb::gridPtrCast<openvdb::FloatGrid>(base_grid);
+    auto bbox = grid->evalActiveVoxelBoundingBox();
+    openvdb::FloatGrid::Accessor accessor = grid->getAccessor();
+
+    int width = bbox.max().x() - bbox.min().x();
+    int height = bbox.max().y() - bbox.min().y();
+    int depth = bbox.max().z() - bbox.min().z();
+    
+    size[0] = width;
+    size[1] = height;
+    size[2] = depth;
+
+    uint16_t* values = (uint16_t*)malloc(sizeof(uint16_t) * width * height * depth * 4);
+    int value_index = 0;
+    float max_density = 0.f;
+    for (int k = bbox.min().z(); k < bbox.max().z(); ++k) {
+        for (int j = bbox.min().y(); j < bbox.max().y(); ++j) {
+            for (int i = bbox.min().x(); i < bbox.max().x(); ++i) {
+                // albedo
+//                values[value_index] = floatToHalf(float((k - bbox.min().z()))/(bbox.max().z()-bbox.min().z()) / 2 + 0.5);
+//                values[value_index + 1] = floatToHalf(float((j - bbox.min().y()))/(bbox.max().y()-bbox.min().y()));
+//                values[value_index + 2] = floatToHalf(float((i - bbox.min().x()))/(bbox.max().x()-bbox.min().x()) / 2 + 0.5);
+                
+                values[value_index] = floatToHalf(1.f);
+                values[value_index + 1] = floatToHalf(1.f);
+                values[value_index + 2] = floatToHalf(1.f);
+                
+                // density
+                float density = accessor.getValue(openvdb::Coord(i, j, k)) * scale;
+                if(density > max_density) max_density = density;
+                values[value_index + 3] = floatToHalf(density);
+                
+                // next voxel
+                value_index += 4;
+            }
+        }
+    }
+    _maxDensity = max_density;
+    std::cout << "vdb data extraction done!" << std::endl;
+    
+    MTLTextureDescriptor* textureDescriptor = [MTLTextureDescriptor new];
+    textureDescriptor.pixelFormat = MTLPixelFormatRGBA16Float;
+    textureDescriptor.textureType = MTLTextureType3D;
+    textureDescriptor.width = width;
+    textureDescriptor.height = height;
+    textureDescriptor.depth = depth;
+    
+    id<MTLTexture> texture = [device newTextureWithDescriptor:textureDescriptor];
+    [texture replaceRegion:MTLRegionMake3D(0, 0, 0, width, height, depth)
+               mipmapLevel:    0
+                     slice: 0
+                 withBytes:values
+               bytesPerRow:sizeof(uint16_t) * width * 4
+             bytesPerImage:sizeof(uint16_t) * width * height * 4];
+    
+    free(values);
+    return texture;
+}
 
 #pragma mark - Geometry
 @implementation Geometry
@@ -686,7 +814,9 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     std::vector<AreaLight> _lights;
     std::vector<unsigned int> _light_indexs;
     std::vector<unsigned int> _light_counts; //_light_indexs.size() = _light_counts.size()
+    
     int _totalLightCount;
+    float _maxDensity;
 }
 
 - (NSArray <Geometry *> *)geometries {
@@ -724,6 +854,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
         _cameraUp = vector3(0.0f, 1.0f, 0.0f);
         
         _totalLightCount = 0;
+        _maxDensity = 0.f;
     }
 
     return self;
@@ -782,11 +913,15 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     memcpy(_lightBuffer.contents, &_lights[0], _lightBuffer.length);
     memcpy(_lightIndexBuffer.contents, &_light_indexs[0], _lightIndexBuffer.length);
     memcpy(_lightCountBuffer.contents, &_light_counts[0], _lightCountBuffer.length);
+    
+    _maxDensityBuffer = [_device newBufferWithLength:sizeof(float) options:options];
+    memcpy(_maxDensityBuffer.contents, &_maxDensity, _maxDensityBuffer.length);
 
 #if !TARGET_OS_IPHONE
     [_lightBuffer didModifyRange:NSMakeRange(0, _lightBuffer.length)];
     [_lightIndexBuffer didModifyRange:NSMakeRange(0, _lightIndexBuffer.length)];
     [_lightCountBuffer didModifyRange:NSMakeRange(0, _lightCountBuffer.length)];
+    [_maxDensityBuffer didModifyRange:NSMakeRange(0, _maxDensityBuffer.length)];
 #endif
 }
 
@@ -809,7 +944,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     free(data);
 }
 
-#pragma mark - Create Scene
+#pragma mark - Create Scene (Default)
 + (RenderScene *)newInstancedMultipleCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions
 {
@@ -953,6 +1088,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
+#pragma mark - Create Scene Cornell Box
 + (RenderScene *)newInstancedCornellBoxSceneWithDevice:(id <MTLDevice>)device
                         useIntersectionFunctions:(BOOL)useIntersectionFunctions
 {
@@ -1113,6 +1249,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
+#pragma mark - Create Scene Woj-example
 + (RenderScene *)newTestScene:(id<MTLDevice>)device
 {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
@@ -1220,6 +1357,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
+#pragma mark - Create Scene Rabbit
 + (RenderScene *)newTestSceneObj:(id <MTLDevice>)device
 {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
@@ -1361,6 +1499,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
+#pragma mark - Create Scene MIS-Woj-example
 + (RenderScene *)newTestSceneMIS:(id<MTLDevice>)device
 {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
@@ -1505,6 +1644,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
+#pragma mark - Create Scene Environment Map
 + (RenderScene *)newTestSceneEnv:(id<MTLDevice>)device
 {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
@@ -1640,6 +1780,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
+#pragma mark - Create Scene Homo-Vol
 + (RenderScene *)newTestSceneVolHomo:(id <MTLDevice>)device
 {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
@@ -1669,7 +1810,14 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     tall_box_material->is_metal = true;
     sphere_material->color = vector3(1.0f, 1.0f, 1.0f);
     sphere_material->is_glass = true;
-    back_wall_material->color = vector3(0.4f, 0.3f, 0.68f);
+    back_wall_material->color = vector3(0.38f, 0.68f, 0.98f);
+    
+    back_wall_material->is_phong = true;
+    back_wall_material->exponent = 500;
+//    right_wall_material->is_metal = true;
+//    left_wall_material->is_metal = true;
+//    default_material->is_metal = true;
+    
     light_material->color = vector3(20.f, 20.f, 20.f);
     glass->is_glass = true;
     glass->color = vector3(1.0f, 1.0f, 1.0f);
@@ -1803,6 +1951,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     return scene;
 }
 
+#pragma mark - Create Scene Hetero-Vol
 + (RenderScene *)newTestSceneVolHetero:(id <MTLDevice>)device
 {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
@@ -1832,14 +1981,11 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     tall_box_material->is_metal = true;
     sphere_material->color = vector3(1.0f, 1.0f, 1.0f);
     sphere_material->is_glass = true;
-    back_wall_material->color = vector3(0.4f, 0.3f, 0.68f);
+    back_wall_material->color = vector3(0.2f, 0.1f, 0.3f);
     light_material->color = vector3(20.f, 20.f, 20.f);
     glass->is_glass = true;
     glass->color = vector3(1.0f, 1.0f, 1.0f);
     glass->is_contain_volume = true;
-    glass->density = 3.0f;
-    glass->albedo = vector3(0.8f, 0.7f, 0.1f);
-//    glass->emission = vector3(0.7f, 0.8f, 0.7f);
 
     // Create a piece of triangle geometry for the light source.
     TriangleGeometry *lightMesh = [[TriangleGeometry alloc] initWithDevice:device];
@@ -1890,9 +2036,9 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
                      inwardNormals:true
                           material:*right_wall_material];
     
-//    TriangleGeometry *volumeMesh = [[TriangleGeometry alloc] initWithDevice:device];
-//
-//    [scene addGeometry:volumeMesh];
+    TriangleGeometry *volumeMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:volumeMesh];
     
 //     Import the OBJ File
 //    NSURL *URL = [[NSBundle mainBundle] URLForResource:@"bunny-fine" withExtension:@"obj"];
@@ -1901,11 +2047,12 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 //                            material:*glass];
     
     // Add a cube in the center
-//    [volumeMesh addCubeWithFaces:FACE_MASK_ALL
-//                             color:vector3(0.14f, 0.45f, 0.091f)
-//                         transform:transform * matrix4x4_scale(0.3f, 0.3f, 0.3f)
-//                     inwardNormals:true
-//                          material:*glass];
+    // ASSUME THE VOL CONTAINER IS ALWAYS A STANDARD CUBE WITHOUT TRANSFORM, ALL THE TRANSFORM NEED TO BE DONE ON THE INSTANCE SIDE
+    [volumeMesh addCubeWithFaces:FACE_MASK_ALL
+                             color:vector3(0.14f, 0.45f, 0.091f)
+                         transform:matrix4x4_translation(0.0f, 0.0f, 0.0f)
+                     inwardNormals:true
+                          material:*glass];
 
 //    transform = matrix4x4_translation(-0.335f, 0.6f, -0.29f) *
 //                matrix4x4_rotation(0.3f, vector3(0.0f, 1.0f, 0.0f)) *
@@ -1946,26 +2093,26 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
 
     [scene addInstance:geometryMeshInstance];
     
-//    // Create volume
-//    GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh
-//                                                                              transform:transform
-//                                                                                   mask:GEOMETRY_MASK_VOLUME_CONTAINER_TRIANGLE];
-
-//    [scene addInstance:volumeMeshInstance];
-
-    // Create an instance of the sphere.
-    GeometryInstance *sphereGeometryInstance = [[GeometryInstance alloc] initWithGeometry:sphereGeometry
-                                                                                    transform:transform
-                                                                                         mask:GEOMETRY_MASK_VOLUME_CONTAINER_SPHERE];
-
-    [scene addInstance:sphereGeometryInstance];
-
     float3 background_color = vector3(0.0f, 0.0f, 0.0f);
     [scene setConstantEnvmapTexture:background_color];
+    
+    // create volume from VDB file
+    float3 size;
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"cloud_01" ofType:@"vdb"];
+    [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 20.f)];
+    std::cout << "Max density: " << scene->_maxDensity << std::endl;
+    size = size / MIN(MIN(size.x, size.y), size.z);
+    
+    transform = matrix4x4_translation(0.0f, 0.99f, 0.0f) * matrix4x4_rotation(0.1 * M_PI, vector3(0.f, 0.f, 1.f)) * matrix4x4_scale(0.618, 0.618, 0.618);
+    // Create volume
+    GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh
+                                                                            transform:transform * matrix4x4_scale(size.x / 2, size.y / 2, size.z / 2)
+                                                                                   mask:GEOMETRY_MASK_VOLUME_CONTAINER_TRIANGLE];
 
+    [scene addInstance:volumeMeshInstance];
+    
     return scene;
 }
-
 
 @end
 

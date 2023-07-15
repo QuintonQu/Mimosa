@@ -163,6 +163,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Buffer containing light counts
 @property (nonatomic, readonly) id <MTLBuffer> lightCountBuffer;
 
+// Buffer containing max volume density
+@property (nonatomic, readonly) id <MTLBuffer> maxDensityBuffer;
+
 // Number of light instances.
 @property (nonatomic, readonly) NSUInteger lightCount;
 
@@ -186,6 +189,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 // Environment map texture
 @property (nonatomic) id <MTLTexture> envmapTexture;
+
+// Volume 3D density grid
+@property (nonatomic) id <MTLTexture> volumeDensityGridTex;
 
 // Initializer
 - (instancetype)initWithDevice:(id <MTLDevice>)device;

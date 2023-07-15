@@ -23,6 +23,16 @@
 		5A61A2922A3B8E2C00D9DA5B /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
 		5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */; };
 		5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
+		5A75D80B2A5DFBB60072532A /* libopenvdb.10.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A75D80A2A5DFBB60072532A /* libopenvdb.10.0.1.dylib */; };
+		5A75D80D2A5DFBEB0072532A /* libtbb.12.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A75D80C2A5DFBEB0072532A /* libtbb.12.9.dylib */; };
+		5A75D80F2A5DFC900072532A /* libtbb.12.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A75D80C2A5DFBEB0072532A /* libtbb.12.9.dylib */; };
+		5A75D8132A5DFDE50072532A /* bunny_cloud.vdb in Resources */ = {isa = PBXBuildFile; fileRef = 5A75D8112A5DFDE50072532A /* bunny_cloud.vdb */; };
+		5A75D8142A5DFDE50072532A /* bunny_cloud.vdb in Resources */ = {isa = PBXBuildFile; fileRef = 5A75D8112A5DFDE50072532A /* bunny_cloud.vdb */; };
+		5A75D8152A5DFDE50072532A /* cloud_01.vdb in Resources */ = {isa = PBXBuildFile; fileRef = 5A75D8122A5DFDE50072532A /* cloud_01.vdb */; };
+		5A75D8162A5DFDE50072532A /* cloud_01.vdb in Resources */ = {isa = PBXBuildFile; fileRef = 5A75D8122A5DFDE50072532A /* cloud_01.vdb */; };
+		5A75D8172A5DFFE50072532A /* libopenvdb.10.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A75D80A2A5DFBB60072532A /* libopenvdb.10.0.1.dylib */; };
+		5A75D8182A5DFFFD0072532A /* libopenvdb.10.0.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5A75D80A2A5DFBB60072532A /* libopenvdb.10.0.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5A75D81A2A5DFFFE0072532A /* libtbb.12.9.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5A75D80C2A5DFBEB0072532A /* libtbb.12.9.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5A7E01822A4B8FEA0002592C /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E016F2A4B8FD20002592C /* cone.obj */; };
 		5A7E01832A4B8FEA0002592C /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01702A4B8FD20002592C /* bunny-fine.obj */; };
 		5A7E01842A4B8FEA0002592C /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01712A4B8FD20002592C /* bunny.obj */; };
@@ -123,6 +133,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		5A75D8192A5DFFFD0072532A /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5A75D81A2A5DFFFE0072532A /* libtbb.12.9.dylib in Embed Libraries */,
+				5A75D8182A5DFFFD0072532A /* libopenvdb.10.0.1.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -152,6 +174,10 @@
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A66136B2A4CCE15006C2900 /* importantSampling2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = importantSampling2D.cpp; sourceTree = "<group>"; };
+		5A75D80A2A5DFBB60072532A /* libopenvdb.10.0.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopenvdb.10.0.1.dylib; path = ../../../../usr/local/lib/libopenvdb.10.0.1.dylib; sourceTree = "<group>"; };
+		5A75D80C2A5DFBEB0072532A /* libtbb.12.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtbb.12.9.dylib; path = ../../../../usr/local/Cellar/tbb/2021.9.0/lib/libtbb.12.9.dylib; sourceTree = "<group>"; };
+		5A75D8112A5DFDE50072532A /* bunny_cloud.vdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny_cloud.vdb; sourceTree = "<group>"; };
+		5A75D8122A5DFDE50072532A /* cloud_01.vdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = cloud_01.vdb; sourceTree = "<group>"; };
 		5A7E016F2A4B8FD20002592C /* cone.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = cone.obj; sourceTree = "<group>"; };
 		5A7E01702A4B8FD20002592C /* bunny-fine.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = "bunny-fine.obj"; sourceTree = "<group>"; };
 		5A7E01712A4B8FD20002592C /* bunny.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = bunny.obj; sourceTree = "<group>"; };
@@ -223,6 +249,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A75D80F2A5DFC900072532A /* libtbb.12.9.dylib in Frameworks */,
+				5A75D8172A5DFFE50072532A /* libopenvdb.10.0.1.dylib in Frameworks */,
 				5AF235122A3E4E5F00CD623D /* ModelIO.framework in Frameworks */,
 				5A61A2952A3B8E4500D9DA5B /* MetalKit.framework in Frameworks */,
 			);
@@ -241,6 +269,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A75D80D2A5DFBEB0072532A /* libtbb.12.9.dylib in Frameworks */,
+				5A75D80B2A5DFBB60072532A /* libopenvdb.10.0.1.dylib in Frameworks */,
 				5AD975522A4A30F400168B28 /* ModelIO.framework in Frameworks */,
 				5AD975532A4A30F400168B28 /* MetalKit.framework in Frameworks */,
 			);
@@ -306,6 +336,8 @@
 		5A426A1E2A2E84EF00EE9F46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A75D80C2A5DFBEB0072532A /* libtbb.12.9.dylib */,
+				5A75D80A2A5DFBB60072532A /* libopenvdb.10.0.1.dylib */,
 				5A7E01A42A4B91390002592C /* ImageIO.framework */,
 				5AE195512A44A7C200DD9520 /* MetalKit.framework */,
 				5AF235102A3E4C2700CD623D /* ModelIO.framework */,
@@ -360,9 +392,19 @@
 			path = Notes;
 			sourceTree = "<group>";
 		};
+		5A75D8102A5DFDE50072532A /* VDB */ = {
+			isa = PBXGroup;
+			children = (
+				5A75D8112A5DFDE50072532A /* bunny_cloud.vdb */,
+				5A75D8122A5DFDE50072532A /* cloud_01.vdb */,
+			);
+			path = VDB;
+			sourceTree = "<group>";
+		};
 		5A7E016D2A4B8FD20002592C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5A75D8102A5DFDE50072532A /* VDB */,
 				5A7E016E2A4B8FD20002592C /* Model */,
 				5A7E01802A4B8FD20002592C /* Texture */,
 			);
@@ -497,6 +539,7 @@
 				5A61A2752A3B8DBC00D9DA5B /* Sources */,
 				5A61A2762A3B8DBC00D9DA5B /* Frameworks */,
 				5A61A2772A3B8DBC00D9DA5B /* Resources */,
+				5A75D8192A5DFFFD0072532A /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -628,10 +671,12 @@
 				5A7E018E2A4B8FEA0002592C /* floor.obj in Resources */,
 				5A7E018F2A4B8FEA0002592C /* plate2.mtl in Resources */,
 				5A7E01902A4B8FEA0002592C /* plate3.mtl in Resources */,
+				5A75D8132A5DFDE50072532A /* bunny_cloud.vdb in Resources */,
 				5A7E01912A4B8FEA0002592C /* plate1.mtl in Resources */,
 				5A7E01922A4B8FEA0002592C /* kloppenheim_06_4k.hdr in Resources */,
 				5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */,
 				5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */,
+				5A75D8152A5DFDE50072532A /* cloud_01.vdb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,7 +717,9 @@
 				5AD975552A4A30F400168B28 /* 03.png in Resources */,
 				5AD975612A4A30F400168B28 /* 01.png in Resources */,
 				5AD975652A4A30F400168B28 /* RenderScene.storyboard in Resources */,
+				5A75D8142A5DFDE50072532A /* bunny_cloud.vdb in Resources */,
 				5AD975672A4A30F400168B28 /* 02.png in Resources */,
+				5A75D8162A5DFDE50072532A /* cloud_01.vdb in Resources */,
 				5A9EAB502A57438500873B56 /* 04.png in Resources */,
 				5AD975692A4A30F400168B28 /* Preview Assets.xcassets in Resources */,
 				5AD9756A2A4A30F400168B28 /* Assets.xcassets in Resources */,
@@ -994,12 +1041,22 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/tbb/2021.9.0/lib,
+					/usr/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = Q.Mimosa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/tbb/2021.9.0/include,
+					/usr/local/Cellar/boost/1.81.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_1/include,
+				);
 			};
 			name = Debug;
 		};
@@ -1027,12 +1084,22 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/tbb/2021.9.0/lib,
+					/usr/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				MTL_PREPROCESSOR_DEFINITIONS = "SUPPORTS_METAL_3=1";
 				PRODUCT_BUNDLE_IDENTIFIER = Q.Mimosa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/tbb/2021.9.0/include,
+					/usr/local/Cellar/boost/1.81.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_1/include,
+				);
 			};
 			name = Release;
 		};
@@ -1174,6 +1241,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/tbb/2021.9.0/lib,
+				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
@@ -1229,6 +1300,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/tbb/2021.9.0/lib,
+				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;

@@ -70,8 +70,10 @@ The implementation of the cross-platform view controller.
         scene = [RenderScene newTestSceneMIS:_view.device];
     if([_sceneName  isEqual: @"Scene 4"])
         scene = [RenderScene newTestSceneEnv:_view.device];
+    if([_sceneName  isEqual: @"Scene 5"])
+        scene = [RenderScene newTestSceneVolHomo:_view.device];
 #else
-    RenderScene *scene = [RenderScene newTestSceneVolHomo:_view.device];
+    RenderScene *scene = [RenderScene newTestSceneVolHetero:_view.device];
 #endif
     
     _renderer = [[Renderer alloc] initWithDevice:_view.device
