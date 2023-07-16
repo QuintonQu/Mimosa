@@ -10,6 +10,29 @@
 		5A087F632A350E1300BDCA99 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A087F642A350E2000BDCA99 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A087F652A350E2600BDCA99 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A292A2E856200EE9F46 /* QuartzCore.framework */; };
+		5A32C0742A64887D002327BC /* 05.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A32C0722A64887C002327BC /* 05.png */; };
+		5A32C0752A64887D002327BC /* 05.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A32C0722A64887C002327BC /* 05.png */; };
+		5A32C0762A64887D002327BC /* 06.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A32C0732A64887D002327BC /* 06.png */; };
+		5A32C0772A64887D002327BC /* 06.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A32C0732A64887D002327BC /* 06.png */; };
+		5A32C0782A648D7A002327BC /* cone.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E016F2A4B8FD20002592C /* cone.obj */; };
+		5A32C0792A648D7A002327BC /* bunny-fine.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01702A4B8FD20002592C /* bunny-fine.obj */; };
+		5A32C07A2A648D7A002327BC /* bunny.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01712A4B8FD20002592C /* bunny.obj */; };
+		5A32C07B2A648D7A002327BC /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01722A4B8FD20002592C /* cube.obj */; };
+		5A32C07C2A648D7A002327BC /* teapot.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01732A4B8FD20002592C /* teapot.obj */; };
+		5A32C07D2A648D7A002327BC /* cylinder.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01742A4B8FD20002592C /* cylinder.obj */; };
+		5A32C07E2A648D7A002327BC /* floor.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01762A4B8FD20002592C /* floor.mtl */; };
+		5A32C07F2A648D7A002327BC /* plate4.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01772A4B8FD20002592C /* plate4.obj */; };
+		5A32C0802A648D7A002327BC /* plate1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01782A4B8FD20002592C /* plate1.obj */; };
+		5A32C0812A648D7A002327BC /* plate2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01792A4B8FD20002592C /* plate2.obj */; };
+		5A32C0822A648D7A002327BC /* plate3.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017A2A4B8FD20002592C /* plate3.obj */; };
+		5A32C0832A648D7A002327BC /* plate4.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017B2A4B8FD20002592C /* plate4.mtl */; };
+		5A32C0842A648D7A002327BC /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017C2A4B8FD20002592C /* floor.obj */; };
+		5A32C0852A648D7A002327BC /* plate2.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017D2A4B8FD20002592C /* plate2.mtl */; };
+		5A32C0862A648D7A002327BC /* plate3.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017E2A4B8FD20002592C /* plate3.mtl */; };
+		5A32C0872A648D7A002327BC /* plate1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E017F2A4B8FD20002592C /* plate1.mtl */; };
+		5A32C0882A648D7A002327BC /* kloppenheim_06_4k.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E01812A4B8FD20002592C /* kloppenheim_06_4k.hdr */; };
+		5A32C0892A64A064002327BC /* libopenvdb.10.0.1.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5A75D80A2A5DFBB60072532A /* libopenvdb.10.0.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		5A32C08B2A64A066002327BC /* libtbb.12.9.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 5A75D80C2A5DFBEB0072532A /* libtbb.12.9.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		5A43D6FD2A37ABC60048C4B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A2B2A2E857500EE9F46 /* Foundation.framework */; };
 		5A43D6FE2A37ABCD0048C4B4 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A426A1F2A2E84EF00EE9F46 /* Metal.framework */; };
 		5A43D6FF2A37ABCD0048C4B4 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A087F482A3508C100BDCA99 /* MetalKit.framework */; };
@@ -124,6 +147,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		5A32C08A2A64A064002327BC /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5A32C08B2A64A066002327BC /* libtbb.12.9.dylib in Embed Libraries */,
+				5A32C0892A64A064002327BC /* libopenvdb.10.0.1.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5A43D6F42A37AB5A0048C4B4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -150,6 +185,8 @@
 /* Begin PBXFileReference section */
 		5A087F482A3508C100BDCA99 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		5A087F5B2A350CA000BDCA99 /* helloMetal */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloMetal; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A32C0722A64887C002327BC /* 05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 05.png; sourceTree = "<group>"; };
+		5A32C0732A64887D002327BC /* 06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 06.png; sourceTree = "<group>"; };
 		5A426A1F2A2E84EF00EE9F46 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		5A426A292A2E856200EE9F46 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5A426A2B2A2E857500EE9F46 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -476,6 +513,8 @@
 		5AD9752E2A49FDB800168B28 /* scene_image */ = {
 			isa = PBXGroup;
 			children = (
+				5A32C0722A64887C002327BC /* 05.png */,
+				5A32C0732A64887D002327BC /* 06.png */,
 				5A9EAB4F2A57438500873B56 /* 04.png */,
 				5AD975312A49FEB900168B28 /* 01.png */,
 				5AD975302A49FEB900168B28 /* 02.png */,
@@ -574,6 +613,7 @@
 				5AD975492A4A30F400168B28 /* Sources */,
 				5AD975512A4A30F400168B28 /* Frameworks */,
 				5AD975542A4A30F400168B28 /* Resources */,
+				5A32C08A2A64A064002327BC /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -656,6 +696,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A32C0742A64887D002327BC /* 05.png in Resources */,
 				5A7E01822A4B8FEA0002592C /* cone.obj in Resources */,
 				5A7E01832A4B8FEA0002592C /* bunny-fine.obj in Resources */,
 				5A7E01842A4B8FEA0002592C /* bunny.obj in Resources */,
@@ -674,6 +715,7 @@
 				5A75D8132A5DFDE50072532A /* bunny_cloud.vdb in Resources */,
 				5A7E01912A4B8FEA0002592C /* plate1.mtl in Resources */,
 				5A7E01922A4B8FEA0002592C /* kloppenheim_06_4k.hdr in Resources */,
+				5A32C0762A64887D002327BC /* 06.png in Resources */,
 				5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */,
 				5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */,
 				5A75D8152A5DFDE50072532A /* cloud_01.vdb in Resources */,
@@ -714,6 +756,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A32C0782A648D7A002327BC /* cone.obj in Resources */,
+				5A32C0792A648D7A002327BC /* bunny-fine.obj in Resources */,
+				5A32C07A2A648D7A002327BC /* bunny.obj in Resources */,
+				5A32C07B2A648D7A002327BC /* cube.obj in Resources */,
+				5A32C07C2A648D7A002327BC /* teapot.obj in Resources */,
+				5A32C07D2A648D7A002327BC /* cylinder.obj in Resources */,
+				5A32C07E2A648D7A002327BC /* floor.mtl in Resources */,
+				5A32C07F2A648D7A002327BC /* plate4.obj in Resources */,
+				5A32C0802A648D7A002327BC /* plate1.obj in Resources */,
+				5A32C0812A648D7A002327BC /* plate2.obj in Resources */,
+				5A32C0822A648D7A002327BC /* plate3.obj in Resources */,
+				5A32C0832A648D7A002327BC /* plate4.mtl in Resources */,
+				5A32C0842A648D7A002327BC /* floor.obj in Resources */,
+				5A32C0852A648D7A002327BC /* plate2.mtl in Resources */,
+				5A32C0862A648D7A002327BC /* plate3.mtl in Resources */,
+				5A32C0872A648D7A002327BC /* plate1.mtl in Resources */,
+				5A32C0882A648D7A002327BC /* kloppenheim_06_4k.hdr in Resources */,
+				5A32C0752A64887D002327BC /* 05.png in Resources */,
 				5AD975552A4A30F400168B28 /* 03.png in Resources */,
 				5AD975612A4A30F400168B28 /* 01.png in Resources */,
 				5AD975652A4A30F400168B28 /* RenderScene.storyboard in Resources */,
@@ -721,6 +781,7 @@
 				5AD975672A4A30F400168B28 /* 02.png in Resources */,
 				5A75D8162A5DFDE50072532A /* cloud_01.vdb in Resources */,
 				5A9EAB502A57438500873B56 /* 04.png in Resources */,
+				5A32C0772A64887D002327BC /* 06.png in Resources */,
 				5AD975692A4A30F400168B28 /* Preview Assets.xcassets in Resources */,
 				5AD9756A2A4A30F400168B28 /* Assets.xcassets in Resources */,
 			);
@@ -1244,6 +1305,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/tbb/2021.9.0/lib,
+					/usr/local/lib,
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -1260,6 +1322,11 @@
 				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/tbb/2021.9.0/include,
+					/usr/local/Cellar/boost/1.81.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_1/include,
+				);
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
@@ -1303,6 +1370,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/tbb/2021.9.0/lib,
+					/usr/local/lib,
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -1318,6 +1386,11 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "./Mimosa-Swift/-Bridging-Header.h";
 				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/tbb/2021.9.0/include,
+					/usr/local/Cellar/boost/1.81.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_1/include,
+				);
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;

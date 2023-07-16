@@ -72,8 +72,10 @@ The implementation of the cross-platform view controller.
         scene = [RenderScene newTestSceneEnv:_view.device];
     if([_sceneName  isEqual: @"Scene 5"])
         scene = [RenderScene newTestSceneVolHomo:_view.device];
+    if([_sceneName  isEqual: @"Scene 6"])
+        scene = [RenderScene newTestSceneVolHetero:_view.device];
 #else
-    RenderScene *scene = [RenderScene newTestSceneVolHetero:_view.device];
+    RenderScene *scene = [RenderScene newTestSceneVolHomo:_view.device];
 #endif
     
     _renderer = [[Renderer alloc] initWithDevice:_view.device
@@ -94,6 +96,10 @@ The implementation of the cross-platform view controller.
 - (void)setSceneName:(NSString *)sceneName {
     _sceneName = sceneName;
     std::cout << "load scene: " << [sceneName UTF8String] << std::endl;
+}
+
+- (void)setRenderVolume:(bool)renderVolume {
+    
 }
 
 @end

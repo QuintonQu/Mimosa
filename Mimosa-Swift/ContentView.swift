@@ -26,6 +26,7 @@ struct ContentView: View {
 struct ViewControllerView: NSViewControllerRepresentable {
     let sceneName: String
     let selectedIndex: Int
+    let renderVolume: Bool
     
     func makeNSViewController(context: Context) -> NSViewController {
         let storyboard = NSStoryboard(name: "RenderScene", bundle: nil)
@@ -33,6 +34,7 @@ struct ViewControllerView: NSViewControllerRepresentable {
             // pass sceneName to viewController
             viewController.sceneName = sceneName
             viewController.setRenderMode(Int32(selectedIndex))
+            viewController.setRenderVolume(renderVolume)
             return viewController
         } else {
             fatalError("Failed to instantiate initial view controller from storyboard")
@@ -88,11 +90,13 @@ struct ViewControllerView: NSViewControllerRepresentable {
 struct RenderView: View {
     let sceneName: String
     @State private var isInspectorPresented = false
-    @State private var selectedIndex = 2
+    @State private var selectedIndex = 0
+    
+    @State private var renderVolume: Bool = UserDefaults.standard.bool(forKey: "RenderVolume")
     
     var body: some View {
         ZStack(alignment: .trailing) {
-            ViewControllerView(sceneName: sceneName, selectedIndex: selectedIndex)
+            ViewControllerView(sceneName: sceneName, selectedIndex: selectedIndex, renderVolume: renderVolume)
                 .navigationTitle("Rendering")
                 .toolbar {
                     Button(action: { isInspectorPresented.toggle() }) {
@@ -101,10 +105,13 @@ struct RenderView: View {
                 }
             
             if isInspectorPresented {
-                InspectorView(selectedIndex: $selectedIndex)
+                InspectorView(selectedIndex: $selectedIndex, renderVolume: $renderVolume)
                     .frame(width: 300)
 //                    .transition(.move(edge: .trailing))
             }
+        }
+        .onDisappear {
+            UserDefaults.standard.set(renderVolume, forKey: "RenderVolume")
         }
     }
 }
@@ -112,7 +119,8 @@ struct RenderView: View {
 
 struct InspectorView: View {
     @Binding var selectedIndex: Int
-//    @State private var selection: Int = 0
+    @Binding var renderVolume: Bool
+    @State private var previousSelectedIndex: Int = 0
     
     var body: some View {
         List {
@@ -124,9 +132,19 @@ struct InspectorView: View {
                 Text("MIS").tag(2)
             }
             .pickerStyle(SegmentedPickerStyle())
+            .disabled(renderVolume)
+            
 //            .onChange(of: selectedIndex){
 //                print("change selection")
 //            }
+            Toggle("Render Volume", isOn: $renderVolume)
+                .onChange(of: renderVolume) { value in
+                                    if value {
+                                        selectedIndex = 3
+                                    } else {
+                                        selectedIndex = 0
+                                    }
+                                }
             Divider()
 //            Picker(selection: $selection, label: Text("Picker Label")) {
 //                Text("Option 1").tag(0)
@@ -171,7 +189,9 @@ struct ScenesUI: View {
         ("Scene 1", "1 hour ago", "01"),
         ("Scene 2", "2 hours ago", "02"),
         ("Scene 3", "3 hours ago", "03"),
-        ("Scene 4", "3 hours ago", "04")
+        ("Scene 4", "3 hours ago", "04"),
+        ("Scene 5", "3 hours ago", "05"),
+        ("Scene 6", "3 hours ago", "06")
     ]
     
     var body: some View {

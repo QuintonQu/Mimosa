@@ -14,7 +14,8 @@ typedef NS_ENUM( uint8_t, RenderMode )
 {
     Mats = 0,
     NEE = 1,
-    MIS = 2
+    MIS = 2,
+    VOL = 3
 };
 
 

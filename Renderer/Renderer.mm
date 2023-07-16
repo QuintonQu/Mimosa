@@ -199,6 +199,8 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelNEE"];
     if (_renderMode == MIS)
         raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelMIS"];
+    if (_renderMode == VOL)
+        raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelVOL"];
     
 #else
     id <MTLFunction> raytracingFunction = [self specializedFunctionWithName:@"raytracingKernelVOL"];

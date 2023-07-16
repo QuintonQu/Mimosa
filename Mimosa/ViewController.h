@@ -20,6 +20,7 @@ The header for the cross-platform view controller.
 @property (nonatomic, strong) NSString *sceneName;
 
 - (void)setRenderMode:(int)renderModeIndex;
+- (void)setRenderVolume:(bool)renderVolume;
 
 #else
 @interface ViewController : UIViewController
