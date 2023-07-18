@@ -225,6 +225,9 @@ MTLResourceOptions getManagedBufferStorageMode();
 // Create test scene for Hetreogeneous Media (VDB File)
 + (RenderScene *)newTestSceneVolHetero:(id <MTLDevice>)device;
 
+// Create test scene for Hetreogeneous Media (VDB File)
++ (RenderScene *)newTestSceneVolHeteroBunny:(id <MTLDevice>)device;
+
 #pragma endregion CreateScene }
 
 // Add a piece of geometry to the scene.

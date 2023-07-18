@@ -131,7 +131,13 @@ id<MTLTexture> texture_from_radiance_file(NSString * fileName, id<MTLDevice> dev
 
     size_t bpp = CGImageGetBitsPerPixel(loadedImage);
 
-    const size_t kSrcChannelCount = 4;
+    size_t kSrcChannelCount;
+    if (@available(macOS 14, *)) {
+        kSrcChannelCount = 4;
+    }else{
+        kSrcChannelCount = 3;
+    }
+    
     const size_t kBitsPerByte = 8;
     const size_t kExpectedBitsPerPixel = sizeof(uint16_t) * kSrcChannelCount * kBitsPerByte;
 
@@ -242,7 +248,7 @@ uint16_t floatToHalf(float value)
     return sign << 15 | exponent << 10 | mantissa;
 }
 
-id<MTLTexture> createVolume(NSString * fileName, id<MTLDevice> device, float &_maxDensity, float3 &size, float scale){
+id<MTLTexture> createVolume(NSString * fileName, id<MTLDevice> device, float &_maxDensity, float3 &size, float scale, bool is_grad){
     openvdb::initialize();
     openvdb::io::File file([fileName UTF8String]);
     file.open();
@@ -285,13 +291,15 @@ id<MTLTexture> createVolume(NSString * fileName, id<MTLDevice> device, float &_m
         for (int j = bbox.min().y(); j < bbox.max().y(); ++j) {
             for (int i = bbox.min().x(); i < bbox.max().x(); ++i) {
                 // albedo
-//                values[value_index] = floatToHalf(float((k - bbox.min().z()))/(bbox.max().z()-bbox.min().z()) / 2 + 0.5);
-//                values[value_index + 1] = floatToHalf(float((j - bbox.min().y()))/(bbox.max().y()-bbox.min().y()));
-//                values[value_index + 2] = floatToHalf(float((i - bbox.min().x()))/(bbox.max().x()-bbox.min().x()) / 2 + 0.5);
-                
-                values[value_index] = floatToHalf(1.f);
-                values[value_index + 1] = floatToHalf(1.f);
-                values[value_index + 2] = floatToHalf(1.f);
+                if(is_grad){
+                    values[value_index] = floatToHalf((float((k - bbox.min().z()))/(bbox.max().z()-bbox.min().z()) / 2 + 0.5));
+                    values[value_index + 1] = floatToHalf((float((j - bbox.min().y()))/(bbox.max().y()-bbox.min().y()) / 4 + 0.75));
+                    values[value_index + 2] = floatToHalf((float((i - bbox.min().x()))/(bbox.max().x()-bbox.min().x()) / 3 + 0.66));
+                }else{
+                    values[value_index] = floatToHalf(1.f);
+                    values[value_index + 1] = floatToHalf(1.f);
+                    values[value_index + 2] = floatToHalf(1.f);
+                }
                 
                 // density
                 float density = accessor.getValue(openvdb::Coord(i, j, k)) * scale;
@@ -2099,11 +2107,174 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     // create volume from VDB file
     float3 size;
     NSString *path = [[NSBundle mainBundle] pathForResource:@"cloud_01" ofType:@"vdb"];
-    [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 20.f)];
+    [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 20.f, false)];
     std::cout << "Max density: " << scene->_maxDensity << std::endl;
     size = size / MIN(MIN(size.x, size.y), size.z);
     
     transform = matrix4x4_translation(0.0f, 0.99f, 0.0f) * matrix4x4_rotation(0.f* M_PI, vector3(0.f, 1.f, 0.f)) * matrix4x4_scale(0.618, 0.618, 0.618);
+    // Create volume
+    GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh
+                                                                            transform:transform * matrix4x4_scale(size.x, size.y, size.z)
+                                                                                   mask:GEOMETRY_MASK_VOLUME_CONTAINER_TRIANGLE];
+
+    [scene addInstance:volumeMeshInstance];
+    
+    return scene;
+}
+
+#pragma mark - Create Scene Hetero-Vol
++ (RenderScene *)newTestSceneVolHeteroBunny:(id <MTLDevice>)device
+{
+    RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
+
+    // Set up the camera.
+    scene.cameraPosition = vector3(0.0f, 1.0f, 3.5f);
+    scene.cameraTarget = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
+    scene.cameraFov = 45.0f;
+    
+    // Add a default material
+    Material* default_material = new Material();
+    default_material->color = vector3(0.8f, 0.8f, 0.8f);
+    
+    // Add multiple materials
+    Material* left_wall_material = new Material();
+    Material* right_wall_material = new Material();
+    Material* tall_box_material = new Material();
+    Material* sphere_material = new Material();
+    Material* back_wall_material  = new Material();
+    Material* light_material = new Material();
+    Material* glass = new Material();
+    
+    left_wall_material->color = vector3(0.63f, 0.065f, 0.05f);
+    right_wall_material->color = vector3(0.14f, 0.45f, 0.091f);
+    tall_box_material->color = vector3(1.0f, 1.0f, 1.0f);
+    tall_box_material->is_metal = true;
+    sphere_material->color = vector3(1.0f, 1.0f, 1.0f);
+    sphere_material->is_glass = true;
+    back_wall_material->color = vector3(0.9f, 0.6f, 0.6f);
+    light_material->color = vector3(20.f, 20.f, 20.f);
+    glass->is_glass = false;
+    glass->color = vector3(1.0f, 1.0f, 1.0f);
+    glass->is_contain_volume = true;
+
+    // Create a piece of triangle geometry for the light source.
+    TriangleGeometry *lightMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:lightMesh];
+
+    matrix_float4x4 transform = matrix4x4_translation(0.0f, 1.0f, 0.0f) * matrix4x4_scale(0.5f, 1.98f, 0.5f);
+
+    // Add the light source.
+    [lightMesh addCubeWithFaces:FACE_MASK_POSITIVE_Y
+                          color:vector3(1.0f, 1.0f, 1.0f)
+                      transform:transform
+                  inwardNormals:true
+                    material:*light_material];
+
+    // Create a piece of triangle geometry for the Cornell box.
+    TriangleGeometry *geometryMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:geometryMesh];
+
+    transform = matrix4x4_translation(0.0f, 1.0f, 0.0f) * matrix4x4_scale(2.0f, 2.0f, 2.0f);
+
+    // Add the top, bottom walls.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_Y | FACE_MASK_POSITIVE_Y
+                             color:vector3(0.725f, 0.71f, 0.68f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*default_material];
+    
+    // Add the back wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_Z
+                             color:vector3(0.725f, 0.71f, 0.68f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*back_wall_material];
+
+    // Add the left wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_NEGATIVE_X
+                             color:vector3(0.63f, 0.065f, 0.05f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*left_wall_material];
+
+    // Add the right wall.
+    [geometryMesh addCubeWithFaces:FACE_MASK_POSITIVE_X
+                             color:vector3(0.14f, 0.45f, 0.091f)
+                         transform:transform
+                     inwardNormals:true
+                          material:*right_wall_material];
+    
+    TriangleGeometry *volumeMesh = [[TriangleGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:volumeMesh];
+    
+//     Import the OBJ File
+//    NSURL *URL = [[NSBundle mainBundle] URLForResource:@"bunny-fine" withExtension:@"obj"];
+//    [volumeMesh addGeometryWithURL:URL
+//                           transform:transform * matrix4x4_scale(0.5f, 0.5f, 0.5f) * matrix4x4_translation(0.0f, -1.0f, 0.0f)
+//                            material:*glass];
+    
+    // Add a cube in the center
+    // ASSUME THE VOL CONTAINER IS ALWAYS A STANDARD CUBE WITHOUT TRANSFORM, ALL THE TRANSFORM NEED TO BE DONE ON THE INSTANCE SIDE
+    [volumeMesh addCubeWithFaces:FACE_MASK_ALL
+                             color:vector3(0.14f, 0.45f, 0.091f)
+                         transform:matrix4x4_translation(0.0f, 0.0f, 0.0f)
+                     inwardNormals:true
+                          material:*glass];
+
+//    transform = matrix4x4_translation(-0.335f, 0.6f, -0.29f) *
+//                matrix4x4_rotation(0.3f, vector3(0.0f, 1.0f, 0.0f)) *
+//                matrix4x4_scale(0.6f, 1.2f, 0.6f);
+//
+//    // Add the tall box.
+//    [geometryMesh addCubeWithFaces:FACE_MASK_ALL
+//                             color:vector3(0.725f, 0.71f, 0.68f)
+//                         transform:transform
+//                     inwardNormals:false
+//                          material:*tall_box_material];
+
+    SphereGeometry *sphereGeometry = nil;
+
+    // Otherwise, create a piece of sphere geometry.
+    sphereGeometry = [[SphereGeometry alloc] initWithDevice:device];
+
+    [scene addGeometry:sphereGeometry];
+
+    [sphereGeometry addSphereWithOrigin:vector3(0.0f, 1.0f, 0.0f)
+                                 radius:0.4f
+                                  color:vector3(0.725f, 0.71f, 0.68f)
+                               material:*glass];
+
+    transform = matrix4x4_translation(0.0f, 0.0f, 0.0f);
+
+    // Create an instance of the light.
+    GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
+                                                                           transform:transform
+                                                                                mask:GEOMETRY_MASK_TRIANGLE_LIGHT];
+
+    [scene addInstance:lightMeshInstance];
+
+    // Create an instance of the Cornell box.
+    GeometryInstance *geometryMeshInstance = [[GeometryInstance alloc] initWithGeometry:geometryMesh
+                                                                              transform:transform
+                                                                                   mask:GEOMETRY_MASK_TRIANGLE];
+
+    [scene addInstance:geometryMeshInstance];
+    
+    float3 background_color = vector3(0.0f, 0.0f, 0.0f);
+    [scene setConstantEnvmapTexture:background_color];
+    
+    // create volume from VDB file
+    float3 size;
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"bunny_cloud" ofType:@"vdb"];
+    [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 30.f, true)];
+    std::cout << "Max density: " << scene->_maxDensity << std::endl;
+    size = size / MIN(MIN(size.x, size.y), size.z);
+    
+    transform = matrix4x4_translation(0.0f, 0.6f, 0.2f) * matrix4x4_rotation(0.1* M_PI, vector3(0.f, 1.f, 0.f)) * matrix4x4_scale(0.618, 0.618, 0.618) * matrix4x4_scale(1.3f, 1.3f, 1.3f);
     // Create volume
     GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh
                                                                             transform:transform * matrix4x4_scale(size.x, size.y, size.z)

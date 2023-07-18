@@ -186,12 +186,13 @@ struct ScenesUI: View {
     @State private var isCardView = true
     
     let scenes = [
-        ("Scene 1", "1 hour ago", "01"),
-        ("Scene 2", "2 hours ago", "02"),
-        ("Scene 3", "3 hours ago", "03"),
-        ("Scene 4", "3 hours ago", "04"),
-        ("Scene 5", "3 hours ago", "05"),
-        ("Scene 6", "3 hours ago", "06")
+        ("Scene 1", "1 hour ago", "01", "Test Scene"),
+        ("Scene 2", "2 hours ago", "02", "Glass Bunny"),
+        ("Scene 3", "3 hours ago", "03", "NEE & MIS Test"),
+        ("Scene 4", "3 hours ago", "04", "Environment Map"),
+        ("Scene 5", "3 hours ago", "05", "Homogeneous Bunny"),
+        ("Scene 6", "3 hours ago", "06", "Heterogeneous Cloud"),
+        ("Scene 7", "3 hours ago", "07", "Heterogeneous Bunny")
     ]
     
     var body: some View {
@@ -220,12 +221,12 @@ struct ScenesUI: View {
                                             .frame(height: 50)
                                         
                                         VStack(alignment: .leading) {
-                                            Text(scene.0)
+                                            Text(scene.3)
                                                 .font(.headline)
                                                 .foregroundColor(.white)
-                                            Text("Last opened: \(scene.1)")
-                                                .font(.subheadline)
-                                                .foregroundColor(.white)
+//                                            Text("Last opened: \(scene.1)")
+//                                                .font(.subheadline)
+//                                                .foregroundColor(.white)
                                         }
                                         .padding()
                                     }
@@ -238,7 +239,7 @@ struct ScenesUI: View {
                         }
                     }
                 }
-                .background(Color.white)
+//                .background(Color.white)
             } else {
                 List {
                     ForEach(scenes, id: \.0) { scene in
@@ -258,10 +259,10 @@ struct ScenesUI: View {
                                 }
                                 
                                 VStack(alignment: .leading) {
-                                    Text(scene.0)
-                                    Text("Last opened: \(scene.1)")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                                    Text(scene.3)
+//                                    Text("Last opened: \(scene.1)")
+//                                        .font(.subheadline)
+//                                        .foregroundColor(.secondary)
                                 }
                             }
                         }
