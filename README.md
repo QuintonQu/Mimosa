@@ -4,6 +4,23 @@ Quinton's Ray Tracer with Metal
 ## Introduction
 This is an exercise project for writing ray tracing in Metal shader. The project is based on sample code [Accelerating ray tracing using Metal](https://developer.apple.com/documentation/metal/accelerating_ray_tracing_using_metal) from Apple. The sample code is written in Objective-C and Metal Shading Language. Hopefully, I will add Metal-CPP support to this project in the future.
 
+## App Viewer
+The app viewer is written in Swift. It is a simple app that can load a scene and render it. You can simply choose different scenes and path tracing algorithms.
+<p float="left">
+  <img src="./Results/App View/01.png" height="200" />
+  <img src="./Results/App View/06.png" height="200" />
+  <img src="./Results/App View/02.png" height="200" />
+  <img src="./Results/App View/03.png" height="200" />
+  <img src="./Results/App View/04.png" height="200" />
+  <img src="./Results/App View/07.png" height="200" />
+</p>
+Here's a little video to help you learn how to operate the app.
+<p float="left">
+  <img src="./Results/App View/08.gif" width="400" />
+  <img src="./Results/App View/09.gif" width="400" />
+  <img src="./Results/App View/10.gif" width="400" />
+</p>
+
 ## Features
 ### Geometry
 - [ ] OpenVDB
