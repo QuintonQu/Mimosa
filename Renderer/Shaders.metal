@@ -696,8 +696,9 @@ EmitterRecord uniform_sample_env(float2 random_variable, texture2d<float> envmap
 #pragma mark - VDB Data
 half4 get_vdb_data(float3 local_position, texture3d<half> vdbvolTex [[texture(4)]]){
     float3 uv = local_position + float3(0.5f);
-    constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, filter::linear);
-    return vdbvolTex.sample(linearFilterSampler, uv);
+//    constexpr sampler linearFilterSampler(coord::normalized, address::clamp_to_edge, filter::linear);
+    constexpr sampler nearestFilterSampler(coord::normalized, address::clamp_to_edge, filter::nearest);
+    return vdbvolTex.sample(nearestFilterSampler, uv);
 }
 
 #pragma mark - Ray Tracing Kernel - Mats
@@ -737,6 +738,8 @@ kernel void raytracingKernelMats(
 
     // Create an intersector to test for intersection between the ray and the geometry in the scene.
     intersector<triangle_data, instancing> i;
+    
+    i.accept_any_intersection(false);
 
     // If the sample isn't using intersection functions, provide some hints to Metal for
     // better performance.
@@ -752,10 +755,6 @@ kernel void raytracingKernelMats(
     // Simulate up to three ray bounces. Each bounce propagates light backward along the
     // ray's path toward the camera.
     for (int bounce = 0; bounce < max_bounce + 1; bounce++) {
-        // Get the closest intersection, not the first intersection. This is the default, but
-        // the sample adjusts this property below when it casts shadow rays.
-        i.accept_any_intersection(false);
-
         // Check for intersection between the ray and the acceleration structure. If the sample
         // isn't using intersection functions, it doesn't need to include one.
         if (useIntersectionFunctions)
@@ -911,7 +910,8 @@ kernel void raytracingKernelMats(
             }
             color *= scatter_record.attenuation;
         } else if(material.is_contain_volume){
-            
+            ray.origin += ray.direction * 1e-3f;
+            bounce--;
         } else{
             if(dot(worldSpaceSurfaceNormal, ray.direction) > 0){
 //                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
@@ -1749,6 +1749,8 @@ kernel void raytracingKernelVOL(
             color *= scatter_record.attenuation;
         } else if(material.is_contain_volume){
             in = true;
+            ray.origin += ray.direction * 1e-3f;
+            bounce--;
         } else{
             if(dot(worldSpaceSurfaceNormal, ray.direction) > 0){
 //                worldSpaceSurfaceNormal = -worldSpaceSurfaceNormal;
@@ -1764,7 +1766,6 @@ kernel void raytracingKernelVOL(
 //        // For Homogeneous Medium (with or without glass)
         if(in && material.is_contain_volume && *maxDensity == 0.f){
             bool out = false;
-//            ray.origin = ray.origin + 1e-3f;
             for (int volume_bounce = 0; volume_bounce < max_bounce + 1; volume_bounce++){
                 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
                                                       halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
@@ -1777,13 +1778,12 @@ kernel void raytracingKernelVOL(
                 i.accept_any_intersection(true);
                 intersection = i.intersect(ray, accelerationStructure, GEOMETRY_MASK_VOLUME_CONTAINER, intersectionFunctionTable);
                 if(intersection.type == intersection_type::none){
-
-                    ray.origin = ray.origin + ray.direction * t;
+                    ray.origin += ray.direction * (t - 1e-3f);
                     accumulatedColor += sigma_a/sigma_t * material.emission * color;
                     color *= sigma_s/sigma_t;
                     ray.direction = sampleUniformSphere(r); // CHANGE PHASE FUNCTION HERE
                 }else{
-                    ray.origin = ray.origin + ray.direction * (intersection.distance);
+                    ray.origin += ray.direction * (intersection.distance + 1e-3f);
                     if(material.is_glass){
                         float random_variable = r.x;
                         if (mask & GEOMETRY_MASK_TRIANGLE) {
@@ -1844,7 +1844,7 @@ kernel void raytracingKernelVOL(
                 
                 if(intersection.type == intersection_type::none){
                     float random_variable = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 4);
-                    ray.origin = ray.origin + ray.direction * t;
+                    ray.origin += ray.direction * (t - 1e-3f);
                     if(random_variable <= prob_null){
 
                     }else if( prob_null < random_variable <= prob_null + prob_s){
@@ -1856,7 +1856,7 @@ kernel void raytracingKernelVOL(
                         color *= albedo;
                     }
                 }else{
-                    ray.origin = ray.origin + ray.direction * (intersection.distance);
+                    ray.origin += ray.direction * (intersection.distance + 1e-2f);
                     if(material.is_glass){
                         float random_variable = r.x;
                         if (mask & GEOMETRY_MASK_TRIANGLE) {
@@ -1890,6 +1890,8 @@ kernel void raytracingKernelVOL(
             }
             if(!out) break;
         }
+        
+        ray.direction = normalize(ray.direction);
     }
 
     // Average this frame's sample with all of the previous frames.

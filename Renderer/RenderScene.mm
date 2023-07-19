@@ -2274,7 +2274,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     std::cout << "Max density: " << scene->_maxDensity << std::endl;
     size = size / MIN(MIN(size.x, size.y), size.z);
     
-    transform = matrix4x4_translation(0.0f, 0.6f, 0.2f) * matrix4x4_rotation(0.1* M_PI, vector3(0.f, 1.f, 0.f)) * matrix4x4_scale(0.618, 0.618, 0.618) * matrix4x4_scale(1.3f, 1.3f, 1.3f);
+    transform = matrix4x4_translation(0.0f, 0.6f, 0.2f) * matrix4x4_rotation(0.f* M_PI, vector3(0.f, 1.f, 0.f)) * matrix4x4_scale(0.618, 0.618, 0.618) * matrix4x4_scale(1.3f, 1.3f, 1.3f);
     // Create volume
     GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh
                                                                             transform:transform * matrix4x4_scale(size.x, size.y, size.z)
