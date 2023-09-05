@@ -54,6 +54,13 @@ constant unsigned int primes[] = {
     7867, 7873, 7877, 7879, 7883, 7901, 7907, 7919, 7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009, 8011, 8017, 8039, 8053, 8059, 8069, 8081, 8087, 8089, 8093, 8101, 8111, 8117, 8123, 8147, 8161
 };
 
+inline bool isBetweenZeroAndOne(float3 localspaceintersectionpoint) {
+    localspaceintersectionpoint += float3(0.5f);
+    return (localspaceintersectionpoint.x >= 0.0 && localspaceintersectionpoint.x <= 1.0) &&
+           (localspaceintersectionpoint.y >= 0.0 && localspaceintersectionpoint.y <= 1.0) &&
+           (localspaceintersectionpoint.z >= 0.0 && localspaceintersectionpoint.z <= 1.0);
+}
+
 #pragma mark - Generate Random Sample
 // Returns the i'th element of the Halton sequence using the d'th prime number as a
 // base. The Halton sequence is a low discrepency sequence: the values appear
@@ -1764,64 +1771,65 @@ kernel void raytracingKernelVOL(
         ray.direction = normalize(ray.direction);
         
 //        // For Homogeneous Medium (with or without glass)
-        if(in && material.is_contain_volume && *maxDensity == 0.f){
-            bool out = false;
-            for (int volume_bounce = 0; volume_bounce < max_bounce + 1; volume_bounce++){
-                r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
-                                                      halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
+//        if(in && material.is_contain_volume && *maxDensity == 0.f){
+//            bool out = false;
+//            for (int volume_bounce = 0; volume_bounce < max_bounce + 1; volume_bounce++){
+//                r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
+//                                                      halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
+//        
+//                float t = -log(1.f - halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 3)) / material.density;
+//                float3 sigma_t = float3(material.density, material.density, material.density);
+//                float3 sigma_s = material.albedo * material.density;
+//                float3 sigma_a = sigma_t - sigma_s;
+//                ray.max_distance = t;
+//                i.accept_any_intersection(true);
+//                intersection = i.intersect(ray, accelerationStructure, GEOMETRY_MASK_VOLUME_CONTAINER, intersectionFunctionTable);
+//                if(intersection.type == intersection_type::none){
+//                    ray.origin += ray.direction * (t - 1e-3f);
+//                    accumulatedColor += sigma_a/sigma_t * material.emission * color;
+//                    color *= sigma_s/sigma_t;
+//                    ray.direction = sampleUniformSphere(r); // CHANGE PHASE FUNCTION HERE
+//                }else{
+//                    ray.origin += ray.direction * (intersection.distance + 1e-3f);
+//                    if(material.is_glass){
+//                        float random_variable = r.x;
+//                        if (mask & GEOMETRY_MASK_TRIANGLE) {
+//                            Triangle triangle;
+//                            float3 objectSpaceSurfaceNormal;
+//                            triangle = *(const device Triangle*)intersection.primitive_data;
+//                            objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
+//                            worldSpaceSurfaceNormal = normalize(transformDirection(objectSpaceSurfaceNormal, objectToWorldSpaceTransform));
+//                        }
+//                        else if (mask & GEOMETRY_MASK_SPHERE) {
+//                            Sphere sphere;
+//                            sphere = *(const device Sphere*)intersection.primitive_data;
+//                            float3 worldSpaceOrigin = transformPoint(sphere.origin, objectToWorldSpaceTransform);
+//                            worldSpaceSurfaceNormal = normalize(worldSpaceIntersectionPoint - worldSpaceOrigin);
+//                        }
+//                        scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
+//                        out = scatter_record.is_refract;
+//                        ray.direction = scatter_record.out_direction;
+//                        color *= material.color;
+//                        if(out) {
+//                            ray.max_distance = INFINITY;
+//                            break;
+//                        }
+//                    }else{
+//                        //                    color *= exp(-material.density * intersection.distance);
+//                        ray.max_distance = INFINITY;
+//                        out = true;
+//                        break;
+//                    }
+//                }
+//            }
+//            if(!out) break;
+//        }
         
-                float t = -log(1.f - halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 3)) / material.density;
-                float3 sigma_t = float3(material.density, material.density, material.density);
-                float3 sigma_s = material.albedo * material.density;
-                float3 sigma_a = sigma_t - sigma_s;
-                ray.max_distance = t;
-                i.accept_any_intersection(true);
-                intersection = i.intersect(ray, accelerationStructure, GEOMETRY_MASK_VOLUME_CONTAINER, intersectionFunctionTable);
-                if(intersection.type == intersection_type::none){
-                    ray.origin += ray.direction * (t - 1e-3f);
-                    accumulatedColor += sigma_a/sigma_t * material.emission * color;
-                    color *= sigma_s/sigma_t;
-                    ray.direction = sampleUniformSphere(r); // CHANGE PHASE FUNCTION HERE
-                }else{
-                    ray.origin += ray.direction * (intersection.distance + 1e-3f);
-                    if(material.is_glass){
-                        float random_variable = r.x;
-                        if (mask & GEOMETRY_MASK_TRIANGLE) {
-                            Triangle triangle;
-                            float3 objectSpaceSurfaceNormal;
-                            triangle = *(const device Triangle*)intersection.primitive_data;
-                            objectSpaceSurfaceNormal = interpolateVertexAttribute(triangle.normals, barycentric_coords);
-                            worldSpaceSurfaceNormal = normalize(transformDirection(objectSpaceSurfaceNormal, objectToWorldSpaceTransform));
-                        }
-                        else if (mask & GEOMETRY_MASK_SPHERE) {
-                            Sphere sphere;
-                            sphere = *(const device Sphere*)intersection.primitive_data;
-                            float3 worldSpaceOrigin = transformPoint(sphere.origin, objectToWorldSpaceTransform);
-                            worldSpaceSurfaceNormal = normalize(worldSpaceIntersectionPoint - worldSpaceOrigin);
-                        }
-                        scatter_record = glossyScatter(worldSpaceSurfaceNormal, ray.direction, random_variable);
-                        out = scatter_record.is_refract;
-                        ray.direction = scatter_record.out_direction;
-                        color *= material.color;
-                        if(out) {
-                            ray.max_distance = INFINITY;
-                            break;
-                        }
-                    }else{
-                        //                    color *= exp(-material.density * intersection.distance);
-                        ray.max_distance = INFINITY;
-                        out = true;
-                        break;
-                    }
-                }
-            }
-            if(!out) break;
-        }
-        
+        // for heterogeneous volume
         if(in && material.is_contain_volume && *maxDensity != 0.f){
             bool out = false;
             float4x4 worldToObjectSpaceTransform = inverse(objectToWorldSpaceTransform);
-            for (int volume_bounce = 0; volume_bounce < max_bounce*32 + 1; volume_bounce++){
+            for (int volume_bounce = 0; volume_bounce < max_bounce*64 + 1; volume_bounce++){
                 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
                            halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
                 
@@ -1841,10 +1849,11 @@ kernel void raytracingKernelVOL(
                 ray.max_distance = t;
                 i.accept_any_intersection(false);
                 intersection = i.intersect(ray, accelerationStructure, GEOMETRY_MASK_VOLUME_CONTAINER, intersectionFunctionTable);
+                float3 tmpLocalSpaceIntersectionPoint = transformPoint(ray.origin + ray.direction*t, worldToObjectSpaceTransform);
                 
-                if(intersection.type == intersection_type::none){
+                if(intersection.type == intersection_type::none && isBetweenZeroAndOne(tmpLocalSpaceIntersectionPoint)){
                     float random_variable = halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 4);
-                    ray.origin += ray.direction * (t - 1e-3f);
+                    ray.origin += ray.direction * t;
                     if(random_variable <= prob_null){
 
                     }else if( prob_null < random_variable <= prob_null + prob_s){
@@ -1856,7 +1865,11 @@ kernel void raytracingKernelVOL(
                         color *= albedo;
                     }
                 }else{
-                    ray.origin += ray.direction * (intersection.distance + 1e-2f);
+                    if(isBetweenZeroAndOne(tmpLocalSpaceIntersectionPoint)){
+                        ray.origin += ray.direction * (t + 1e-3f);
+                    }else{
+                        ray.origin += ray.direction * (intersection.distance + 1e-3f);
+                    }
                     if(material.is_glass){
                         float random_variable = r.x;
                         if (mask & GEOMETRY_MASK_TRIANGLE) {

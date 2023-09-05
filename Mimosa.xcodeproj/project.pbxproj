@@ -1207,8 +1207,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SYSTEM_HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/tbb/2021.9.0/include,
-					/usr/local/Cellar/boost/1.81.0_1/include,
-					/usr/local/Cellar/openvdb/10.0.1_1/include,
+					/usr/local/Cellar/boost/1.82.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_2/include,
 				);
 			};
 			name = Debug;
@@ -1254,8 +1254,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SYSTEM_HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/tbb/2021.9.0/include,
-					/usr/local/Cellar/boost/1.81.0_1/include,
-					/usr/local/Cellar/openvdb/10.0.1_1/include,
+					/usr/local/Cellar/boost/1.82.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_2/include,
 				);
 			};
 			name = Release;
@@ -1306,9 +1306,9 @@
 					"$(inherited)",
 					/usr/local/Cellar/tbb/2021.9.0/lib,
 					/usr/local/lib,
-					/usr/local/Cellar/boost/1.81.0_1/lib,
+					/usr/local/Cellar/boost/1.82.0_1/lib,
 					"$(PROJECT_DIR)",
-					/usr/local/Cellar/openvdb/10.0.1_1/lib,
+					/usr/local/Cellar/openvdb/10.0.1_2/lib,
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -1328,8 +1328,8 @@
 				SWIFT_VERSION = 5.0;
 				SYSTEM_HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/tbb/2021.9.0/include,
-					/usr/local/Cellar/boost/1.81.0_1/include,
-					/usr/local/Cellar/openvdb/10.0.1_1/include,
+					/usr/local/Cellar/boost/1.82.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_2/include,
 				);
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
@@ -1380,9 +1380,9 @@
 					"$(inherited)",
 					/usr/local/Cellar/tbb/2021.9.0/lib,
 					/usr/local/lib,
-					/usr/local/Cellar/boost/1.81.0_1/lib,
+					/usr/local/Cellar/boost/1.82.0_1/lib,
 					"$(PROJECT_DIR)",
-					/usr/local/Cellar/openvdb/10.0.1_1/lib,
+					/usr/local/Cellar/openvdb/10.0.1_2/lib,
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -1400,8 +1400,8 @@
 				SWIFT_VERSION = 5.0;
 				SYSTEM_HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/tbb/2021.9.0/include,
-					/usr/local/Cellar/boost/1.81.0_1/include,
-					/usr/local/Cellar/openvdb/10.0.1_1/include,
+					/usr/local/Cellar/boost/1.82.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_2/include,
 				);
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
@@ -1566,8 +1566,8 @@
 					"/usr/local/Cellar/c-blosc/1.21.3/lib/libblosc.a",
 					/usr/local/Cellar/zlib/1.2.13/lib/libz.a,
 					/usr/local/Cellar/tbb/2021.9.0/lib/libtbb.a,
-					/usr/local/Cellar/boost/1.81.0_1/lib/libboost_iostreams.a,
-					/usr/local/Cellar/openvdb/10.0.1_1/lib/libopenvdb.a,
+					/usr/local/Cellar/boost/1.82.0_1/lib/libboost_iostreams.a,
+					/usr/local/Cellar/openvdb/10.0.1_2/lib/libopenvdb.a,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1581,8 +1581,8 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					/usr/local/Cellar/openvdb/10.0.1_1/include,
-					/usr/local/Cellar/boost/1.81.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_2/include,
+					/usr/local/Cellar/boost/1.82.0_1/include,
 					/usr/local/Cellar/tbb/2021.9.0/include,
 				);
 				TARGETED_DEVICE_FAMILY = "1,2,6";
@@ -1647,8 +1647,8 @@
 					"/usr/local/Cellar/c-blosc/1.21.3/lib/libblosc.a",
 					/usr/local/Cellar/zlib/1.2.13/lib/libz.a,
 					/usr/local/Cellar/tbb/2021.9.0/lib/libtbb.a,
-					/usr/local/Cellar/boost/1.81.0_1/lib/libboost_iostreams.a,
-					/usr/local/Cellar/openvdb/10.0.1_1/lib/libopenvdb.a,
+					/usr/local/Cellar/boost/1.82.0_1/lib/libboost_iostreams.a,
+					/usr/local/Cellar/openvdb/10.0.1_2/lib/libopenvdb.a,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "QuintonQ.Mimosa-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1661,8 +1661,8 @@
 				SWIFT_OBJC_INTEROP_MODE = objcxx;
 				SWIFT_VERSION = 5.0;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					/usr/local/Cellar/openvdb/10.0.1_1/include,
-					/usr/local/Cellar/boost/1.81.0_1/include,
+					/usr/local/Cellar/openvdb/10.0.1_2/include,
+					/usr/local/Cellar/boost/1.82.0_1/include,
 					/usr/local/Cellar/tbb/2021.9.0/include,
 				);
 				TARGETED_DEVICE_FAMILY = "1,2,6";

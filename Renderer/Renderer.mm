@@ -537,6 +537,8 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size
 {
+    size.width = 256;
+    size.height = 256;
     _size = size;
 
     // Create a pair of textures that the ray tracing kernel uses to accumulate
