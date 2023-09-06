@@ -6,6 +6,7 @@ The implementation of the renderer class that performs Metal setup and per-frame
 */
 
 #import <simd/simd.h>
+#import <CoreImage/CoreImage.h>
 
 #import "Renderer.h"
 #import "Transforms.h"
@@ -749,6 +750,121 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         // Present the drawable to the screen.
         [commandBuffer presentDrawable:view.currentDrawable];
     }
+    
+    // Save drawable texture into image
+    if(view.currentDrawable){
+//        MTLTextureDescriptor *textureDescriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA32Float
+//                                                                                                     width:width
+//                                                                                                    height:height
+//                                                                                                 mipmapped:NO];
+//        textureDescriptor.storageMode = MTLStorageModeManaged;
+//        id<MTLTexture> texture = [_device newTextureWithDescriptor:textureDescriptor];
+//        
+//        id<MTLBlitCommandEncoder> blitEncoder = [commandBuffer blitCommandEncoder];
+//
+//        [blitEncoder copyFromTexture:_accumulationTargets[0] sourceSlice:0 sourceLevel:0 sourceOrigin:(MTLOrigin){0, 0, 0} sourceSize:(MTLSize){width, height, 1} toTexture:texture destinationSlice:0 destinationLevel:0 destinationOrigin:(MTLOrigin){0, 0, 0}];
+//
+//        [blitEncoder endEncoding];
+        
+        CIImage *image = [[CIImage alloc] initWithMTLTexture:_accumulationTargets[0] options:nil];
+
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+
+        CIContext *context = [[CIContext alloc] initWithOptions:nil];
+        CGImageRef cgImage = [context createCGImage:image fromRect:image.extent];
+
+        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+        NSData *pngData = [bitmapRep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+        NSString *path = [NSString stringWithUTF8String:"./test_save_image.png"];
+        [pngData writeToFile:path atomically:NO];
+
+        CGImageRelease(cgImage);
+        CGColorSpaceRelease(colorSpace);
+//
+//        NSUInteger width  = texture.width;
+//        NSUInteger height = texture.height;
+//        NSUInteger bytesPerRow = width * 4 * 16;
+//        NSUInteger imageSize = bytesPerRow * height;
+//        NSMutableData *data = [NSMutableData dataWithLength:imageSize];
+//        [texture getBytes:data.mutableBytes
+//              bytesPerRow:bytesPerRow
+//               fromRegion:MTLRegionMake2D(0, 0, 256, 256)
+//              mipmapLevel:0];
+//        
+//        // 获取浮点数数组
+//        float *floats = (float *)data.bytes;
+//        NSUInteger count = data.length / 16;
+//        NSLog(@"count: %lu", (unsigned long)count);
+//
+//        // 创建一个可变字符串来保存文本数据
+//        NSMutableString *string = [NSMutableString string];
+//
+//        // 遍历浮点数数组并将每个元素添加到字符串中
+//        for (NSUInteger i = 0; i < count; i++) {
+//            [string appendFormat:@"%f\n", floats[i]];
+//        }
+//
+//        // 将字符串写入文件
+//        NSError *error;
+//        BOOL success = [string writeToFile:@"data.txt" atomically:YES encoding:NSUTF8StringEncoding error:&error];
+//
+//        if (!success) {
+//            NSLog(@"Error writing to file: %@", error);
+//        }
+
+        // Save texture data to PNG file
+//        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+//        CGContextRef context = CGBitmapContextCreate(data.bytes, width, height, 32, bytesPerRow, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapFloatComponents);
+//        CGImageRef cgImage = CGBitmapContextCreateImage(context);
+//        NSImage *image = [[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize];
+//        NSBitmapImageRep *bitmapRep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+//        NSData *tiffData = [bitmapRep representationUsingType:NSBitmapImageFileTypeTIFF properties:@{}];
+//        NSString *path = [NSString stringWithUTF8String:"./test_save_image.tiff"];
+//        [tiffData writeToFile:path atomically:YES];
+//
+//        // Clean up
+//        CGImageRelease(cgImage);
+//        CGContextRelease(context);
+//        CGColorSpaceRelease(colorSpace);
+        
+//        MTLPixelFormat pixelFormat = tmp_texture.pixelFormat;
+//        switch (pixelFormat)
+//        {
+//            case MTLPixelFormatBGRA8Unorm:
+//            case MTLPixelFormatR32Uint:
+//            case MTLPixelFormatRGBA32Float:
+//                break;
+//            default:
+//                NSAssert(0, @"Unsupported pixel format: 0x%X.", (uint32_t)pixelFormat);
+//        }
+//
+//        NSUInteger bytesPerPixel = sizeofPixelFormat(tmp_texture.pixelFormat);
+//        NSUInteger bytesPerRow   = width * bytesPerPixel;
+//        NSUInteger bytesPerImage = height * bytesPerRow;
+//
+//        id<MTLBuffer> readBuffer = [tmp_texture.device newBufferWithLength:bytesPerImage options:MTLResourceStorageModeShared];
+//        
+//        id<MTLBlitCommandEncoder> blitEncoder = [commandBuffer blitCommandEncoder];
+//        [blitEncoder copyFromTexture:tmp_texture
+//                         sourceSlice:0
+//                         sourceLevel:0
+//                        sourceOrigin:MTLOriginMake(0, 0, 0)
+//                          sourceSize:MTLSizeMake(width, height, 1)
+//                            toBuffer:readBuffer
+//                   destinationOffset:0
+//              destinationBytesPerRow:width * bytesPerPixel
+//            destinationBytesPerImage:bytesPerImage];
+//
+//        [blitEncoder endEncoding];
+//        
+//        id<MTLBuffer> convertedBuffer = [tmp_texture.device newBufferWithLength:width * height * 4 options:MTLResourceStorageModeShared];
+//        convertMTLBuffer(readBuffer, convertedBuffer, width, height);
+//        
+//        NSString *path = [NSString stringWithUTF8String:"./test_save_image.png"];
+//
+//        saveMTLBufferToPNG(convertedBuffer, width, height, path, bytesPerPixel);
+        
+    }
 
     // Finally, commit the command buffer so that the GPU can start executing.
     [commandBuffer commit];
@@ -761,5 +877,54 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     _frameIndex = 0;
     [self createPipelines];
 }
+
+//#pragma mark - Utils
+//static inline uint32_t sizeofPixelFormat(NSUInteger format)
+//{
+//    return ((format) == MTLPixelFormatBGRA8Unorm ? 4 :
+//            (format) == MTLPixelFormatR32Uint    ? 4 :
+//            (format) == MTLPixelFormatRGBA32Float? 16 : 0);
+//}
+//
+//void saveMTLBufferToPNG(id<MTLBuffer> buffer, NSUInteger width, NSUInteger height, NSString *path, NSInteger bytesPerPixel) {
+//    void *data = buffer.contents;
+//    NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:nil
+//                                                                           pixelsWide:width
+//                                                                           pixelsHigh:height
+//                                                                        bitsPerSample:8
+//                                                                      samplesPerPixel:4
+//                                                                             hasAlpha:YES
+//                                                                             isPlanar:NO
+//                                                                       colorSpaceName:NSDeviceRGBColorSpace
+//                                                                          bytesPerRow:width * 4
+//                                                                         bitsPerPixel:32];
+//    memcpy(imageRep.bitmapData, data, width * height * 4);
+//    
+//    NSImage *image = [[NSImage alloc] initWithSize:imageRep.size];
+//    [image addRepresentation:imageRep];
+//    
+//    CGImageRef cgImage = [image CGImageForProposedRect:nil context:nil hints:nil];
+//    NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+//    NSData *pngData = [bitmapRep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+//    [pngData writeToFile:path atomically:YES];
+//}
+//
+//void convertMTLBuffer(id<MTLBuffer> srcBuffer, id<MTLBuffer> dstBuffer, NSUInteger width, NSUInteger height) {
+//    float *srcData = (float *)srcBuffer.contents;
+//    uint8_t *dstData = (uint8_t *)dstBuffer.contents;
+//    
+//    for (NSUInteger y = 0; y < height; y++) {
+//        for (NSUInteger x = 0; x < width; x++) {
+//            NSUInteger srcIndex = (y * width + x) * 4;
+//            NSUInteger dstIndex = (y * width + x) * 4;
+//            
+//            for (NSUInteger i = 0; i < 4; i++) {
+//                float srcValue = srcData[srcIndex + i];
+//                uint8_t dstValue = round(srcValue * 255.0);
+//                dstData[dstIndex + i] = dstValue;
+//            }
+//        }
+//    }
+//}
 
 @end
