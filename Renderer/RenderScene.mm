@@ -2293,7 +2293,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
 
     // Set up the camera.
-    scene.cameraPosition = vector3(0.0f, 0.0f, 1.5f);
+    scene.cameraPosition = vector3(0.0f, 0.0f, 3.5f);
     scene.cameraTarget = vector3(0.0f, 0.0f, 0.0f);
     scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
     scene.cameraFov = 45.0f;
@@ -2423,12 +2423,12 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     
     // create volume from VDB file
     float3 size;
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"bunny_cloud" ofType:@"vdb"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"cloud_01" ofType:@"vdb"];
     [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 30.f, false)];
     std::cout << "Max density: " << scene->_maxDensity << std::endl;
     size = size / MIN(MIN(size.x, size.y), size.z);
     
-    transform = matrix4x4_rotation(0.f* M_PI, vector3(0.f, 1.f, 0.f)) * matrix4x4_scale(0.618, 0.618, 0.618) * matrix4x4_scale(1.3f, 1.3f, 1.3f);
+    transform = matrix4x4_rotation(90.f/180.f* M_PI, vector3(0.f, 0.f, 1.f)) * matrix4x4_rotation(90.f/180.f* M_PI, vector3(0.f, 1.f, 0.f));
     
     // Create volume
     GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh

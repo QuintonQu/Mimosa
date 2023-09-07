@@ -118,7 +118,7 @@ MTLResourceOptions getManagedBufferStorageMode();
 
 // Transformation matrix describing where to place the geometry in the
 // scene.
-@property (nonatomic, readonly) matrix_float4x4 transform;
+@property (nonatomic) matrix_float4x4 transform;
 
 // Mask used to filter out intersections between rays and different
 // types of geometry.

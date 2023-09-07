@@ -98,4 +98,8 @@ struct Triangle {
     vector_float3 positions[3];
     Material material;
 };
+
+//struct InverseTransformMatrix {
+//    vector_float3 invMatrix[3];
+//};
 #endif

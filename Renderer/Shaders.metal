@@ -118,84 +118,84 @@ inline T interpolateVertexAttribute(thread T *attributes, float2 uv) {
 
 #pragma mark - Inline Utility Inverse
 
-inline float4x4 inverse(float4x4 matrix) {
-//    float det = determinant(matrix);
-    float4x4 inv;
-    
-    float E_Matrix[4][4];
-    float mik;
-    for(int i = 0; i < 4; i++)
-    {
-        for(int j = 0; j < 4; j++)
-        {
-            if(i == j)
-                E_Matrix[i][j] = 1.f;
-            else
-                E_Matrix[i][j] = 0.f;
-        }
-    }
-    float CalcuMatrix[4][8];
-    for(int i = 0; i < 4; i++)
-    {
-        for(int j = 0; j < 4; j++)
-        {
-            CalcuMatrix[i][j] = matrix[i][j];
-        }
-        for(int k = 4; k < 8; k++)
-        {
-            CalcuMatrix[i][k] = E_Matrix[i][k-4];
-        }
-    }
-
-    for(int i = 1; i <= 4-1; i++)
-    {
-        for(int j = i+1; j <= 4; j++)
-        {
-            mik = CalcuMatrix[j-1][i-1]/CalcuMatrix[i-1][i-1];
-            for(int k = i+1;k <= 8; k++)
-            {
-                CalcuMatrix[j-1][k-1] -= mik*CalcuMatrix[i-1][k-1];
-            }
-        }
-    }
-    for(int i=1;i<=4;i++)
-    {
-        float temp = CalcuMatrix[i-1][i-1];
-        for(int j=1;j<=8;j++)
-        {
-            CalcuMatrix[i-1][j-1] = CalcuMatrix[i-1][j-1]/temp;
-        }
-    }
-    for(int k=4-1;k>=1;k--)
-    {
-        for(int i=k;i>=1;i--)
-        {
-            mik = CalcuMatrix[i-1][k];
-            for(int j=k+1;j<=8;j++)
-            {
-                CalcuMatrix[i-1][j-1] -= mik*CalcuMatrix[k][j-1];
-            }
-        }
-    }
-    float InverseMatrix[4][4];
-    for(int i=0;i<4;i++)
-    {
-        for(int j=0;j<4;j++)
-        {
-            InverseMatrix[i][j] = CalcuMatrix[i][j+4];
-        }
-    }
-
-    for(int i=0;i<4;i++)
-    {
-        for(int j=0;j<4;j++)
-        {
-            inv[i][j] = InverseMatrix[i][j];
-        }
-    }
-
-    return inv;
-}
+//inline float4x4 inverse(float4x4 matrix) {
+////    float det = determinant(matrix);
+//    float4x4 inv;
+//    
+//    float E_Matrix[4][4];
+//    float mik;
+//    for(int i = 0; i < 4; i++)
+//    {
+//        for(int j = 0; j < 4; j++)
+//        {
+//            if(i == j)
+//                E_Matrix[i][j] = 1.f;
+//            else
+//                E_Matrix[i][j] = 0.f;
+//        }
+//    }
+//    float CalcuMatrix[4][8];
+//    for(int i = 0; i < 4; i++)
+//    {
+//        for(int j = 0; j < 4; j++)
+//        {
+//            CalcuMatrix[i][j] = matrix[i][j];
+//        }
+//        for(int k = 4; k < 8; k++)
+//        {
+//            CalcuMatrix[i][k] = E_Matrix[i][k-4];
+//        }
+//    }
+//
+//    for(int i = 1; i <= 4-1; i++)
+//    {
+//        for(int j = i+1; j <= 4; j++)
+//        {
+//            mik = CalcuMatrix[j-1][i-1]/CalcuMatrix[i-1][i-1];
+//            for(int k = i+1;k <= 8; k++)
+//            {
+//                CalcuMatrix[j-1][k-1] -= mik*CalcuMatrix[i-1][k-1];
+//            }
+//        }
+//    }
+//    for(int i=1;i<=4;i++)
+//    {
+//        float temp = CalcuMatrix[i-1][i-1];
+//        for(int j=1;j<=8;j++)
+//        {
+//            CalcuMatrix[i-1][j-1] = CalcuMatrix[i-1][j-1]/temp;
+//        }
+//    }
+//    for(int k=4-1;k>=1;k--)
+//    {
+//        for(int i=k;i>=1;i--)
+//        {
+//            mik = CalcuMatrix[i-1][k];
+//            for(int j=k+1;j<=8;j++)
+//            {
+//                CalcuMatrix[i-1][j-1] -= mik*CalcuMatrix[k][j-1];
+//            }
+//        }
+//    }
+//    float InverseMatrix[4][4];
+//    for(int i=0;i<4;i++)
+//    {
+//        for(int j=0;j<4;j++)
+//        {
+//            InverseMatrix[i][j] = CalcuMatrix[i][j+4];
+//        }
+//    }
+//
+//    for(int i=0;i<4;i++)
+//    {
+//        for(int j=0;j<4;j++)
+//        {
+//            inv[i][j] = InverseMatrix[i][j];
+//        }
+//    }
+//
+//    return inv;
+//}
 
 #pragma mark - Inline Utility Transform
 
@@ -1592,7 +1592,8 @@ kernel void raytracingKernelVOL(
      constant AreaLight                                    *areaLights                [[buffer(3)]],
      instance_acceleration_structure                        accelerationStructure     [[buffer(4)]],
      intersection_function_table<triangle_data, instancing> intersectionFunctionTable [[buffer(5)]],
-     constant float                                        *maxDensity                [[buffer(8)]]
+     constant float                                        *maxDensity                [[buffer(8)]],
+     constant float4x4                                     *invTransformMatrix        [[buffer(9)]]
 )
 {
     // The sample aligns the thread count to the threadgroup size, which means the thread count
@@ -1828,7 +1829,7 @@ kernel void raytracingKernelVOL(
         // for heterogeneous volume
         if(in && material.is_contain_volume && *maxDensity != 0.f){
             bool out = false;
-            float4x4 worldToObjectSpaceTransform = inverse(objectToWorldSpaceTransform);
+            float4x4 worldToObjectSpaceTransform = invTransformMatrix[instanceIndex];
             for (int volume_bounce = 0; volume_bounce < max_bounce*64 + 1; volume_bounce++){
                 r = float2(halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 1),
                            halton(offset + uniforms.frameIndex, 2 + bounce * 5 + volume_bounce * 3 + 2));
