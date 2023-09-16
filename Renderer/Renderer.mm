@@ -520,8 +520,8 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         instanceDescriptors[instanceIndex].mask = (uint32_t)instance.mask;
         
         // FOR RESSEARCH: Change volume transformation
-        if((uint32_t)instance.mask == (uint32_t)16)
-            instance.transform = matrix4x4_rotation(1.f/180.f * M_PI, vector3(0.f, 1.f, 0.f)) * instance.transform;
+//        if((uint32_t)instance.mask == (uint32_t)16)
+//            instance.transform = matrix4x4_rotation(1.f/180.f * M_PI, vector3(0.f, 1.f, 0.f)) * instance.transform;
         
         // Save the inverse matrix
         invMatrix.push_back(simd_inverse(instance.transform));
@@ -785,17 +785,20 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyyMMddHHmmss"];
         NSString *timeStampString = [dateFormatter stringFromDate:currentDate];
-        NSString *path = [NSString stringWithFormat:@"./test_save_image_%@.png", timeStampString];
+        NSString *path = [NSString stringWithFormat:@"./i_%@.png", timeStampString];
+        NSString *directory = @"sphere/naive/lod1/y_rotate/30_fov";
+        [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
+        path = [directory stringByAppendingPathComponent:path];
         
         [pngData writeToFile:path atomically:NO];
 
         CGImageRelease(cgImage);
         CGColorSpaceRelease(colorSpace);
         
-        _frameIndex = 0;
-        _degree += 1;
-        [self createAccelerationStructures];
-        [self createPipelines];
+//        _frameIndex = 0;
+//        _degree += 1;
+//        [self createAccelerationStructures];
+//        [self createPipelines];
     }
     
     if(_degree == 361){

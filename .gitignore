@@ -2,3 +2,4 @@ Tests
 metal-cpp
 metal-cpp-extensions
 *.hdr
+*.npy

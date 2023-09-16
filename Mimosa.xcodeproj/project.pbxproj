@@ -45,6 +45,14 @@
 		5A61A2912A3B8E2C00D9DA5B /* mimosa.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2162A3B8A7E00D9DA5B /* mimosa.m */; };
 		5A61A2922A3B8E2C00D9DA5B /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A2182A3B8A7E00D9DA5B /* ViewController.mm */; };
 		5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */; };
+		5A6769822AAA3BF500687151 /* cloud.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A6769812AAA3BF500687151 /* cloud.npy */; };
+		5A6769832AAA3BF500687151 /* cloud.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A6769812AAA3BF500687151 /* cloud.npy */; };
+		5A6769852AAA432A00687151 /* sphere.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A6769842AAA432900687151 /* sphere.npy */; };
+		5A6769862AAA432A00687151 /* sphere.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A6769842AAA432900687151 /* sphere.npy */; };
+		5A6769882AAA44CD00687151 /* sphere_unet_lod1.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A6769872AAA44CD00687151 /* sphere_unet_lod1.npy */; };
+		5A6769892AAA44CD00687151 /* sphere_unet_lod1.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A6769872AAA44CD00687151 /* sphere_unet_lod1.npy */; };
+		5A67698B2AAA49B600687151 /* sphere_naive_lod1.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A67698A2AAA49B600687151 /* sphere_naive_lod1.npy */; };
+		5A67698C2AAA49B600687151 /* sphere_naive_lod1.npy in Resources */ = {isa = PBXBuildFile; fileRef = 5A67698A2AAA49B600687151 /* sphere_naive_lod1.npy */; };
 		5A69C77A2A67278C00ABA62B /* 07.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A69C7792A67278C00ABA62B /* 07.png */; };
 		5A69C77B2A67278C00ABA62B /* 07.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A69C7792A67278C00ABA62B /* 07.png */; };
 		5A705A8B2A65CB0C00C05171 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */; };
@@ -229,6 +237,11 @@
 		5A61A21D2A3B8B2600D9DA5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A61A2792A3B8DBC00D9DA5B /* Mimosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mimosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A66136B2A4CCE15006C2900 /* importantSampling2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = importantSampling2D.cpp; sourceTree = "<group>"; };
+		5A67697C2AAA368300687151 /* npy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = npy.hpp; sourceTree = "<group>"; };
+		5A6769812AAA3BF500687151 /* cloud.npy */ = {isa = PBXFileReference; lastKnownFileType = file; path = cloud.npy; sourceTree = "<group>"; };
+		5A6769842AAA432900687151 /* sphere.npy */ = {isa = PBXFileReference; lastKnownFileType = file; path = sphere.npy; sourceTree = "<group>"; };
+		5A6769872AAA44CD00687151 /* sphere_unet_lod1.npy */ = {isa = PBXFileReference; lastKnownFileType = file; path = sphere_unet_lod1.npy; sourceTree = "<group>"; };
+		5A67698A2AAA49B600687151 /* sphere_naive_lod1.npy */ = {isa = PBXFileReference; lastKnownFileType = file; path = sphere_naive_lod1.npy; sourceTree = "<group>"; };
 		5A69C7792A67278C00ABA62B /* 07.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 07.png; sourceTree = "<group>"; };
 		5A705AB72A65CB0C00C05171 /* Mimosa-Swift-Mac copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mimosa-Swift-Mac copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A75D8112A5DFDE50072532A /* bunny_cloud.vdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny_cloud.vdb; sourceTree = "<group>"; };
@@ -409,6 +422,7 @@
 		5A61A1FB2A3B85D400D9DA5B /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				5A67697C2AAA368300687151 /* npy.hpp */,
 				5A61A1FC2A3B85D400D9DA5B /* Renderer.h */,
 				5A61A1FD2A3B85D400D9DA5B /* Shaders.metal */,
 				5A61A1FE2A3B85D400D9DA5B /* ShaderTypes.h */,
@@ -448,6 +462,17 @@
 			path = Notes;
 			sourceTree = "<group>";
 		};
+		5A6769802AAA3BF500687151 /* Npy */ = {
+			isa = PBXGroup;
+			children = (
+				5A67698A2AAA49B600687151 /* sphere_naive_lod1.npy */,
+				5A6769872AAA44CD00687151 /* sphere_unet_lod1.npy */,
+				5A6769842AAA432900687151 /* sphere.npy */,
+				5A6769812AAA3BF500687151 /* cloud.npy */,
+			);
+			path = Npy;
+			sourceTree = "<group>";
+		};
 		5A75D8102A5DFDE50072532A /* VDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -460,6 +485,7 @@
 		5A7E016D2A4B8FD20002592C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5A6769802AAA3BF500687151 /* Npy */,
 				5A75D8102A5DFDE50072532A /* VDB */,
 				5A7E016E2A4B8FD20002592C /* Model */,
 				5A7E01802A4B8FD20002592C /* Texture */,
@@ -733,15 +759,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A67698B2AAA49B600687151 /* sphere_naive_lod1.npy in Resources */,
 				5A32C0742A64887D002327BC /* 05.png in Resources */,
 				5A7E01822A4B8FEA0002592C /* cone.obj in Resources */,
 				5A7E01832A4B8FEA0002592C /* bunny-fine.obj in Resources */,
 				5A7E01842A4B8FEA0002592C /* bunny.obj in Resources */,
 				5A7E01852A4B8FEA0002592C /* cube.obj in Resources */,
 				5A7E01862A4B8FEA0002592C /* teapot.obj in Resources */,
+				5A6769882AAA44CD00687151 /* sphere_unet_lod1.npy in Resources */,
 				5A7E01872A4B8FEA0002592C /* cylinder.obj in Resources */,
 				5A7E01882A4B8FEA0002592C /* floor.mtl in Resources */,
 				5A7E01892A4B8FEA0002592C /* plate4.obj in Resources */,
+				5A6769852AAA432A00687151 /* sphere.npy in Resources */,
 				5A7E018A2A4B8FEA0002592C /* plate1.obj in Resources */,
 				5A7E018B2A4B8FEA0002592C /* plate2.obj in Resources */,
 				5A7E018C2A4B8FEA0002592C /* plate3.obj in Resources */,
@@ -754,6 +783,7 @@
 				5A7E01922A4B8FEA0002592C /* kloppenheim_06_4k.hdr in Resources */,
 				5A32C0762A64887D002327BC /* 06.png in Resources */,
 				5A61A2932A3B8E3B00D9DA5B /* Assets.xcassets in Resources */,
+				5A6769822AAA3BF500687151 /* cloud.npy in Resources */,
 				5AD974A72A475E8E00168B28 /* Main.storyboard in Resources */,
 				5A75D8152A5DFDE50072532A /* cloud_01.vdb in Resources */,
 			);
@@ -829,6 +859,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A67698C2AAA49B600687151 /* sphere_naive_lod1.npy in Resources */,
 				5A32C0782A648D7A002327BC /* cone.obj in Resources */,
 				5A32C0792A648D7A002327BC /* bunny-fine.obj in Resources */,
 				5A32C07A2A648D7A002327BC /* bunny.obj in Resources */,
@@ -839,6 +870,7 @@
 				5A32C07F2A648D7A002327BC /* plate4.obj in Resources */,
 				5A32C0802A648D7A002327BC /* plate1.obj in Resources */,
 				5A69C77A2A67278C00ABA62B /* 07.png in Resources */,
+				5A6769892AAA44CD00687151 /* sphere_unet_lod1.npy in Resources */,
 				5A32C0812A648D7A002327BC /* plate2.obj in Resources */,
 				5A32C0822A648D7A002327BC /* plate3.obj in Resources */,
 				5A32C0832A648D7A002327BC /* plate4.mtl in Resources */,
@@ -856,8 +888,10 @@
 				5A75D8162A5DFDE50072532A /* cloud_01.vdb in Resources */,
 				5A9EAB502A57438500873B56 /* 04.png in Resources */,
 				5A32C0772A64887D002327BC /* 06.png in Resources */,
+				5A6769832AAA3BF500687151 /* cloud.npy in Resources */,
 				5AD975692A4A30F400168B28 /* Preview Assets.xcassets in Resources */,
 				5AD9756A2A4A30F400168B28 /* Assets.xcassets in Resources */,
+				5A6769862AAA432A00687151 /* sphere.npy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

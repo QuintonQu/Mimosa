@@ -17,6 +17,7 @@ The implementation of the class that describes objects in a scene.
 #include <openvdb/openvdb.h>
 #include <openvdb/tools/Interpolation.h>
 #include <openvdb/tools/ValueTransformer.h>
+#include "npy.hpp"
 #import <Foundation/Foundation.h>
 
 using namespace simd;
@@ -207,7 +208,7 @@ id<MTLTexture> texture_from_radiance_file(NSString * fileName, id<MTLDevice> dev
     return texture;
 }
 
-#pragma mark - VDB density grid Help Functions
+#pragma mark - VDB density grid Help Functions, Numpy density grid Help Functions
 uint16_t floatToHalf(float value)
 {
     uint32_t bits = *(uint32_t *)&value;
@@ -248,7 +249,7 @@ uint16_t floatToHalf(float value)
     return sign << 15 | exponent << 10 | mantissa;
 }
 
-id<MTLTexture> createVolume(NSString * fileName, id<MTLDevice> device, float &_maxDensity, float3 &size, float scale, bool is_grad){
+id<MTLTexture> createVDBVolume(NSString * fileName, id<MTLDevice> device, float &_maxDensity, float3 &size, float scale, bool is_grad){
     openvdb::initialize();
     openvdb::io::File file([fileName UTF8String]);
     file.open();
@@ -313,6 +314,73 @@ id<MTLTexture> createVolume(NSString * fileName, id<MTLDevice> device, float &_m
     }
     _maxDensity = max_density;
     std::cout << "vdb data extraction done!" << std::endl;
+    
+    MTLTextureDescriptor* textureDescriptor = [MTLTextureDescriptor new];
+    textureDescriptor.pixelFormat = MTLPixelFormatRGBA16Float;
+    textureDescriptor.textureType = MTLTextureType3D;
+    textureDescriptor.width = width;
+    textureDescriptor.height = height;
+    textureDescriptor.depth = depth;
+    
+    id<MTLTexture> texture = [device newTextureWithDescriptor:textureDescriptor];
+    [texture replaceRegion:MTLRegionMake3D(0, 0, 0, width, height, depth)
+               mipmapLevel:    0
+                     slice: 0
+                 withBytes:values
+               bytesPerRow:sizeof(uint16_t) * width * 4
+             bytesPerImage:sizeof(uint16_t) * width * height * 4];
+    
+    free(values);
+    return texture;
+}
+
+id<MTLTexture> createNpyVolume(NSString * fileName, id<MTLDevice> device, float &_maxDensity, float3 &size, float scale, bool is_grad){
+    
+    // Assume Npy only contains density grid
+    std::vector<unsigned long> shape {};
+    bool fortran_order;
+    std::vector<float> data;
+    const std::string path = [fileName UTF8String];
+    npy::LoadArrayFromNumpy(path, shape, fortran_order, data);
+
+    int width = (int)shape[0];
+    int height = (int)shape[1];
+    int depth = (int)shape[2];
+    
+    NSLog(@"width: %d, height: %d, depth: %d", width, height, depth);
+    
+    size[0] = width;
+    size[1] = height;
+    size[2] = depth;
+
+    uint16_t* values = (uint16_t*)malloc(sizeof(uint16_t) * width * height * depth * 4);
+    int value_index = 0;
+    float max_density = 0.f;
+    for (float density : data){
+        density *= scale;
+        values[value_index + 3] = floatToHalf(density);
+        if(density > max_density) max_density = density;
+        value_index += 4;
+    }
+    value_index = 0;
+    for (int k = 0; k < depth; ++k) {
+        for (int j = 0; j < height; ++j) {
+            for (int i = 0; i < width; ++i) {
+                // albedo
+                if(is_grad){
+                    values[value_index] = floatToHalf(0.f);
+                    values[value_index + 1] = floatToHalf(0.f);
+                    values[value_index + 2] = floatToHalf(0.f);
+                }else{
+                    values[value_index] = floatToHalf(0.f);
+                    values[value_index + 1] = floatToHalf(0.f);
+                    values[value_index + 2] = floatToHalf(0.f);
+                }
+            }
+        }
+    }
+    _maxDensity = max_density;
+    std::cout << "npy data extraction done!" << std::endl;
     
     MTLTextureDescriptor* textureDescriptor = [MTLTextureDescriptor new];
     textureDescriptor.pixelFormat = MTLPixelFormatRGBA16Float;
@@ -2107,7 +2175,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     // create volume from VDB file
     float3 size;
     NSString *path = [[NSBundle mainBundle] pathForResource:@"cloud_01" ofType:@"vdb"];
-    [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 20.f, false)];
+    [scene setVolumeDensityGridTex:createVDBVolume(path, device, scene->_maxDensity, size, 20.f, false)];
     std::cout << "Max density: " << scene->_maxDensity << std::endl;
     size = size / MIN(MIN(size.x, size.y), size.z);
     
@@ -2272,7 +2340,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     // create volume from VDB file
     float3 size;
     NSString *path = [[NSBundle mainBundle] pathForResource:@"bunny_cloud" ofType:@"vdb"];
-    [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 30.f, true)];
+    [scene setVolumeDensityGridTex:createVDBVolume(path, device, scene->_maxDensity, size, 30.f, true)];
     std::cout << "Max density: " << scene->_maxDensity << std::endl;
     size = size / MIN(MIN(size.x, size.y), size.z);
     
@@ -2293,10 +2361,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     RenderScene *scene = [[RenderScene alloc] initWithDevice:device];
 
     // Set up the camera.
-    scene.cameraPosition = vector3(0.0f, 0.0f, 3.5f);
+    scene.cameraPosition = vector3(0.0f, 0.0f, 2.5f);
     scene.cameraTarget = vector3(0.0f, 0.0f, 0.0f);
     scene.cameraUp = vector3(0.0f, 1.0f, 0.0f);
-    scene.cameraFov = 45.0f;
+    scene.cameraFov = 30.f;
     
     // Add a default material
     Material* default_material = new Material();
@@ -2405,16 +2473,16 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     transform = matrix4x4_translation(0.0f, 0.0f, 0.0f);
 
     // Create an instance of the light.
-    GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
-                                                                           transform:transform
-                                                                                mask:GEOMETRY_MASK_TRIANGLE_LIGHT];
+//    GeometryInstance *lightMeshInstance = [[GeometryInstance alloc] initWithGeometry:lightMesh
+//                                                                           transform:transform
+//                                                                                mask:GEOMETRY_MASK_TRIANGLE_LIGHT];
 
 //    [scene addInstance:lightMeshInstance];
 
     // Create an instance of the Cornell box.
-    GeometryInstance *geometryMeshInstance = [[GeometryInstance alloc] initWithGeometry:geometryMesh
-                                                                              transform:transform
-                                                                                   mask:GEOMETRY_MASK_TRIANGLE];
+//    GeometryInstance *geometryMeshInstance = [[GeometryInstance alloc] initWithGeometry:geometryMesh
+//                                                                              transform:transform
+//                                                                                   mask:GEOMETRY_MASK_TRIANGLE];
 
 //    [scene addInstance:geometryMeshInstance];
     
@@ -2423,12 +2491,13 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     
     // create volume from VDB file
     float3 size;
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"cloud_01" ofType:@"vdb"];
-    [scene setVolumeDensityGridTex:createVolume(path, device, scene->_maxDensity, size, 30.f, false)];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"sphere_naive_lod1" ofType:@"npy"];
+    [scene setVolumeDensityGridTex:createNpyVolume(path, device, scene->_maxDensity, size, 30.f, false)];
     std::cout << "Max density: " << scene->_maxDensity << std::endl;
     size = size / MIN(MIN(size.x, size.y), size.z);
     
-    transform = matrix4x4_rotation(90.f/180.f* M_PI, vector3(0.f, 0.f, 1.f)) * matrix4x4_rotation(90.f/180.f* M_PI, vector3(0.f, 1.f, 0.f));
+    transform = matrix4x4_rotation(90.f/180.f* M_PI, vector3(0.f, 1.f, 0.f));
+//    matrix4x4_rotation(90.f/180.f* M_PI, vector3(0.f, 0.f, 1.f)) *
     
     // Create volume
     GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh
