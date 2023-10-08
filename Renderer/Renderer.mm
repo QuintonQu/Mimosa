@@ -554,8 +554,8 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
 
 - (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size
 {
-    size.width = 256;
-    size.height = 256;
+//    size.width = 256;
+//    size.height = 256;
     _size = size;
 
     // Create a pair of textures that the ray tracing kernel uses to accumulate
@@ -769,41 +769,41 @@ static const size_t alignedUniformsSize = (sizeof(Uniforms) + 255) & ~255;
     }
     
     // Save drawable texture into image
-    if(view.currentDrawable && _frameIndex % 1024 == 0){
-        
-        CIImage *image = [[CIImage alloc] initWithMTLTexture:_accumulationTargets[0] options:nil];
-
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
-
-        CIContext *context = [[CIContext alloc] initWithOptions:nil];
-        CGImageRef cgImage = [context createCGImage:image fromRect:image.extent];
-
-        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
-        NSData *pngData = [bitmapRep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
-        
-        NSDate *currentDate = [NSDate date];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyyMMddHHmmss"];
-        NSString *timeStampString = [dateFormatter stringFromDate:currentDate];
-        NSString *path = [NSString stringWithFormat:@"./i_%@.png", timeStampString];
-        NSString *directory = @"sphere/naive/lod1/y_rotate/30_fov";
-        [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
-        path = [directory stringByAppendingPathComponent:path];
-        
-        [pngData writeToFile:path atomically:NO];
-
-        CGImageRelease(cgImage);
-        CGColorSpaceRelease(colorSpace);
+//    if(view.currentDrawable && _frameIndex % 1024 == 0){
+//        
+//        CIImage *image = [[CIImage alloc] initWithMTLTexture:_accumulationTargets[0] options:nil];
+//
+//        CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+//
+//        CIContext *context = [[CIContext alloc] initWithOptions:nil];
+//        CGImageRef cgImage = [context createCGImage:image fromRect:image.extent];
+//
+//        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+//        NSData *pngData = [bitmapRep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+//        
+//        NSDate *currentDate = [NSDate date];
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setDateFormat:@"yyyyMMddHHmmss"];
+//        NSString *timeStampString = [dateFormatter stringFromDate:currentDate];
+//        NSString *path = [NSString stringWithFormat:@"./i_%@.png", timeStampString];
+//        NSString *directory = @"saved_image";
+//        [[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
+//        path = [directory stringByAppendingPathComponent:path];
+//        
+//        [pngData writeToFile:path atomically:NO];
+//
+//        CGImageRelease(cgImage);
+//        CGColorSpaceRelease(colorSpace);
         
 //        _frameIndex = 0;
 //        _degree += 1;
 //        [self createAccelerationStructures];
 //        [self createPipelines];
-    }
+//    }
     
-    if(_degree == 361){
-        exit(0);
-    }
+//    if(_degree == 361){
+//        exit(0);
+//    }
 
     // Finally, commit the command buffer so that the GPU can start executing.
     [commandBuffer commit];

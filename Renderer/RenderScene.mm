@@ -297,9 +297,9 @@ id<MTLTexture> createVDBVolume(NSString * fileName, id<MTLDevice> device, float 
                     values[value_index + 1] = floatToHalf((float((j - bbox.min().y()))/(bbox.max().y()-bbox.min().y()) / 4 + 0.75));
                     values[value_index + 2] = floatToHalf((float((i - bbox.min().x()))/(bbox.max().x()-bbox.min().x()) / 3 + 0.66));
                 }else{
-                    values[value_index] = floatToHalf(0.f);
-                    values[value_index + 1] = floatToHalf(0.f);
-                    values[value_index + 2] = floatToHalf(0.f);
+                    values[value_index] = floatToHalf(1.f);
+                    values[value_index + 1] = floatToHalf(1.f);
+                    values[value_index + 2] = floatToHalf(1.f);
                 }
                 
                 // density
@@ -2059,7 +2059,7 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     sphere_material->is_glass = false;
     back_wall_material->color = vector3(0.2f, 0.1f, 0.3f);
     light_material->color = vector3(20.f, 20.f, 20.f);
-    glass->is_glass = false;
+    glass->is_glass = true;
     glass->color = vector3(1.0f, 1.0f, 1.0f);
     glass->is_contain_volume = true;
 
@@ -2179,8 +2179,10 @@ float3 getTriangleNormal(float3 v0, float3 v1, float3 v2) {
     std::cout << "Max density: " << scene->_maxDensity << std::endl;
     size = size / MIN(MIN(size.x, size.y), size.z);
     
-    transform = matrix4x4_translation(0.0f, 0.99f, 0.0f) * matrix4x4_rotation(90.f/180.f* M_PI, vector3(0.f, 1.f, 0.f)) * matrix4x4_scale(0.618, 0.618, 0.618);
-    //BUGHERE * matrix4x4_rotation(75.f/180.f* M_PI, vector3(0.f, 0.f, 1.f))
+    transform = matrix4x4_translation(0.0f, 0.99f, 0.0f) *
+        matrix4x4_rotation(-90.f/180.f* M_PI, vector3(1.f, 0.f, 0.f)) *
+        matrix4x4_rotation(-90.f/180.f* M_PI, vector3(0.f, 0.f, 1.f)) *
+        matrix4x4_scale(0.618, 0.618, 0.618);
     
     // Create volume
     GeometryInstance *volumeMeshInstance = [[GeometryInstance alloc] initWithGeometry:volumeMesh
